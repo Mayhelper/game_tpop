@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gamification App</title>
+    <title>MAY GAMES</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,6 +19,7 @@
             --text-light: #FFFFFF;
             --btn-male: #0288D1;
             --btn-female: #D81B60;
+            --color-neutral-icon: #b0b0b0; /* Нейтральный серый цвет для иконок */
         }
 
         body {
@@ -38,7 +39,15 @@
         }
         .screen.active { opacity: 1; transform: scale(1); pointer-events: auto; }
         
-        h1 { text-align: center; margin-bottom: 30px; font-weight: 700; }
+        h1 { text-align: center; margin-bottom: 30px; margin-top: 10px; font-weight: 700; }
+
+        .brand-title {
+            font-size: 20px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            margin-bottom: 0;
+        }
 
         /* --- ЭКРАН 1: Выбор пола --- */
         body.theme-male-selection, body.theme-female-selection { color: var(--text-light); }
@@ -52,13 +61,33 @@
             border: 3px solid transparent; transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 130px;
         }
+        /* 1. ИЗМЕНЕНИЯ ДЛЯ ИКОНОК */
         .gender-option .image-placeholder {
-            width: 80px; height: 80px; background-color: #ddd; border-radius: 50%;
-            margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 32px;
+            width: 80px; height: 80px;
+            margin: 0 auto 15px;
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 42px; /* Уменьшили размер */
+            font-weight: 700; /* Установили жирность */
+            color: var(--color-neutral-icon); /* Начальный серый цвет */
+            background-color: #e0e0e0;
+            border-radius: 50%;
+            transition: color 0.3s ease, background-color 0.3s ease; /* Плавный переход цвета */
         }
         .gender-option:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+
+        /* 2. ПРАВИЛА ДЛЯ АКТИВНОГО СОСТОЯНИЯ */
         .gender-option.active-male { border-color: var(--btn-male); }
+        .gender-option.active-male .image-placeholder {
+            color: var(--btn-male); /* Окрашиваем значок в синий */
+            background-color: #e3f2fd;
+        }
+
         .gender-option.active-female { border-color: var(--btn-female); }
+        .gender-option.active-female .image-placeholder {
+            color: var(--btn-female); /* Окрашиваем значок в розовый */
+            background-color: #fce4ec;
+        }
+
 
         /* --- Кнопки --- */
         .main-button {
@@ -75,49 +104,24 @@
         /* --- ЭКРАН 2: Выбор персонажа --- */
         #screen-character-select { justify-content: center; color: var(--text-light); }
         
-        /* 1. НОВАЯ АНИМАЦИЯ ДЛЯ ПОЯВЛЕНИЯ ТЕКСТА */
         @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(25px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .character-info {
             width: 100%; text-align: center; padding: 0 20px;
             box-sizing: border-box; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-            opacity: 0; /* Скрываем по умолчанию, анимация покажет */
+            opacity: 0;
         }
-        /* Класс, который будет запускать анимацию */
-        .character-info.animate-in {
-            opacity: 1; /* Делаем видимым */
-            animation: slideInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-        }
+        .character-info.animate-in { opacity: 1; animation: slideInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
 
-        #character-title {
-            font-size: 32px; font-weight: 700;
-            min-height: 40px; margin-bottom: 5px;
-        }
-        #character-description {
-            font-size: 16px; font-weight: 400;
-            min-height: 40px; margin-top: 5px; letter-spacing: 0.5px;
-        }
+        #character-title { font-size: 32px; font-weight: 700; min-height: 40px; margin-bottom: 5px; }
+        #character-description { font-size: 16px; font-weight: 400; min-height: 40px; margin-top: 5px; letter-spacing: 0.5px; }
         
-        /* Стили для слайдера */
         .swiper { width: 100%; height: 60%; max-height: 450px; }
-        .swiper-slide {
-            background: transparent;
-            display: flex; justify-content: center; align-items: center;
-        }
-        .swiper-slide img {
-            display: block; width: 100%; height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 10px 25px rgba(0,0,0,0.3));
-        }
+        .swiper-slide { background: transparent; display: flex; justify-content: center; align-items: center; }
+        .swiper-slide img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 10px 25px rgba(0,0,0,0.3)); }
 
         #btn-confirm-character { background-color: #43A047; }
     </style>
@@ -125,14 +129,15 @@
 <body>
 
     <div id="screen-gender" class="screen active">
-        <!-- ТЕКСТ ИЗМЕНЕН -->
+        <h2 class="brand-title">MAY GAMES</h2>
         <h1>СДЕЛАЙ ВЫБОР</h1>
         <div class="gender-selection-container">
+            <!-- 3. УБРАНЫ ЛИШНИЕ СТИЛИ ИЗ HTML -->
             <div class="gender-option" id="btn-male" onclick="selectGender('male')">
-                <div class="image-placeholder">👨‍💼</div><h3>МУЖЧИНА</h3>
+                <div class="image-placeholder">♂</div><h3>МУЖЧИНА</h3>
             </div>
             <div class="gender-option" id="btn-female" onclick="selectGender('female')">
-                <div class="image-placeholder">👩‍💼</div><h3>ЖЕНЩИНА</h3>
+                <div class="image-placeholder">♀</div><h3>ЖЕНЩИНА</h3>
             </div>
         </div>
     </div>
@@ -151,28 +156,30 @@
 
     <script>
         const tg = window.Telegram.WebApp;
-        // tg.expand();
+        tg.expand();
 
         let selectedGender = null;
         let swiperInstance = null;
         let selectedCharacter = {};
         
-        const GITHUB_REPO_URL = 'https://raw.githubusercontent.com/Mayhelper/vac_may/main/images/';
-        const characters = {
-            male: [
-                { img: GITHUB_REPO_URL + 'male-1.png', bg: '#039BE5', title: 'ВСЕГДА С ИГОЛОЧКИ', description: 'ГОТОВ ПОКОРИТЬ ЛЮБЫЕ ТОЧКИ, ВСЕГДА НЕОТРАЗИМ' },
-                { img: GITHUB_REPO_URL + 'male-2.png', bg: '#FF6F00', title: 'ДУША КОМПАНИИ', description: 'С ЛЕГКОСТЬЮ НАХОДИТ ОБЩИЙ ЯЗЫК С КЕМ УГОДНО' },
-                { img: GITHUB_REPO_URL + 'male-3.png', bg: '#00897B', title: 'КРЕАТИВНЫЙ ГЕНИЙ', description: 'МЫСЛИТ НЕСТАНДАРТНО И ВСЕГДА ПОЛОН ИДЕЙ' },
-                { img: GITHUB_REPO_URL + 'male-4.png', bg: '#5E35B1', title: 'ПРИРОЖДЕННЫЙ ЛИДЕР', description: 'ВЕДЕТ ЗА СОБОЙ КОМАНДУ К НОВЫМ ВЕРШИНАМ' },
-                { img: GITHUB_REPO_URL + 'male-5.png', bg: '#3949AB', title: 'МАСТЕР СВОЕГО ДЕЛА', description: 'ЗНАЕТ ВСЕ ТОНКОСТИ И СЕКРЕТЫ УСПЕХА' },
-            ],
-            female: [
-                { img: GITHUB_REPO_URL + 'female-1.png', bg: '#D81B60', title: 'ЗВЕЗДА ПЕРЕГОВОРОВ', description: 'УБЕДИТ КОГО УГОДНО И ЗАКЛЮЧИТ ЛЮБУЮ СДЕЛКУ' },
-                { img: GITHUB_REPO_URL + 'female-2.png', bg: '#1E88E5', title: 'МИСС ЭЛЕГАНТНОСТЬ', description: 'СОЧЕТАЕТ В СЕБЕ СТИЛЬ, УМ И ДЕЛОВУЮ ХВАТКУ' },
-                { img: GITHUB_REPO_URL + 'female-3.png', bg: '#7CB342', title: 'ГЕНЕРАТОР ИДЕЙ', description: 'ЕЕ КРЕАТИВНОСТЬ НЕ ЗНАЕТ ГРАНИЦ' },
-                { img: GITHUB_REPO_URL + 'female-4.png', bg: '#E53935', title: 'КОРОЛЕВА ТАЙМ-МЕНЕДЖМЕНТА', description: 'УСПЕВАЕТ ВСЕ И ДАЖЕ БОЛЬШЕ' },
-                { img: GITHUB_REPO_URL + 'female-5.png', bg: '#8E24AA', title: 'ЭКСПЕРТ ПО КОММУНИКАЦИЯМ', description: 'СТРОИТ ПРОЧНЫЕ МОСТЫ МЕЖДУ ЛЮДЬМИ' },
-            ]
+        const AppData = {
+            repoUrl: 'https://raw.githubusercontent.com/Mayhelper/game_tpop/main/images/',
+            characters: {
+                male: [
+                    { id: 'male-1', bg: '#039BE5', title: 'ВСЕГДА С ИГОЛОЧКИ', description: 'ГОТОВ ПОКОРИТЬ ЛЮБЫЕ ТОЧКИ' },
+                    { id: 'male-2', bg: '#FF6F00', title: 'ДУША КОМПАНИИ', description: 'НАХОДИТ ОБЩИЙ ЯЗЫК С КЕМ УГОДНО' },
+                    { id: 'male-3', bg: '#00897B', title: 'КРЕАТИВНЫЙ ГЕНИЙ', description: 'МЫСЛИТ НЕСТАНДАРТНО И ПОЛОН ИДЕЙ' },
+                    { id: 'male-4', bg: '#5E35B1', title: 'ПРИРОЖДЕННЫЙ ЛИДЕР', description: 'ВЕДЕТ КОМАНДУ К НОВЫМ ВЕРШИНАМ' },
+                    { id: 'male-5', bg: '#3949AB', title: 'МАСТЕР СВОЕГО ДЕЛА', description: 'ЗНАЕТ ВСЕ ТОНКОСТИ УСПЕХА' },
+                ],
+                female: [
+                    { id: 'female-1', bg: '#D81B60', title: 'ЗВЕЗДА ПЕРЕГОВОРОВ', description: 'УБЕДИТ КОГО УГОДНО И ЗАКЛЮЧИТ СДЕЛКУ' },
+                    { id: 'female-2', bg: '#1E88E5', title: 'МИСС ЭЛЕГАНТНОСТЬ', description: 'СОЧЕТАЕТ СТИЛЬ, УМ И ДЕЛОВУЮ ХВАТКУ' },
+                    { id: 'female-3', bg: '#7CB342', title: 'ГЕНЕРАТОР ИДЕЙ', description: 'ЕЕ КРЕАТИВНОСТЬ НЕ ЗНАЕТ ГРАНИЦ' },
+                    { id: 'female-4', bg: '#E53935', title: 'КОРОЛЕВА ТАЙМ-МЕНЕДЖМЕНТА', description: 'УСПЕВАЕТ ВСЕ И ДАЖЕ БОЛЬШЕ' },
+                    { id: 'female-5', bg: '#8E24AA', title: 'ЭКСПЕРТ ПО КОММУНИКАЦИЯМ', description: 'СТРОИТ ПРОЧНЫЕ МОСТЫ МЕЖДУ ЛЮДЬМИ' },
+                ]
+            }
         };
 
         const bodyEl = document.body;
@@ -199,13 +206,15 @@
         function goToCharacterSelection() {
             if (!selectedGender) return;
 
-            const characterList = characters[selectedGender];
+            const characterList = AppData.characters[selectedGender];
             const swiperWrapper = document.getElementById('character-swiper-wrapper');
             swiperWrapper.innerHTML = '';
+            
             characterList.forEach(char => {
                 const slide = document.createElement('div');
                 slide.className = 'swiper-slide';
-                slide.innerHTML = `<img src="${char.img}" alt="Character">`;
+                const imageUrl = AppData.repoUrl + char.id + '.png';
+                slide.innerHTML = `<img src="${imageUrl}" alt="${char.title}">`;
                 swiperWrapper.appendChild(slide);
             });
             
@@ -220,29 +229,21 @@
         function initSwiper() {
             if (swiperInstance) swiperInstance.destroy(true, true);
             swiperInstance = new Swiper('.swiper', {
-                /* 2. НОВЫЙ ЭФФЕКТ СЛАЙДЕРА */
                 effect: 'fade',
-                fadeEffect: {
-                    crossFade: true // Плавное "растворение" одного в другом
-                },
+                fadeEffect: { crossFade: true },
                 grabCursor: true,
-                loop: true, // Можно листать по кругу
+                loop: true,
                 pagination: { el: '.swiper-pagination', dynamicBullets: true },
-                
-                /* 3. ОБНОВЛЕННАЯ ЛОГИКА АНИМАЦИИ ТЕКСТА */
                 on: {
-                    // Перед началом смены слайда, убираем старый текст
                     slideChangeTransitionStart: function () {
                         characterInfo.title.classList.remove('animate-in');
                         characterInfo.description.classList.remove('animate-in');
                     },
-                    // Когда новый слайд полностью показался, обновляем инфо и анимируем его
                     slideChangeTransitionEnd: function () {
                         updateCharacterInfo();
                     },
-                    // Инициализация первого слайда
                     init: function () {
-                        setTimeout(updateCharacterInfo, 50);
+                        setTimeout(updateCharacterInfo, 100);
                     }
                 },
             });
@@ -251,13 +252,12 @@
         function updateCharacterInfo() {
             if (!swiperInstance || !selectedGender) return;
             const activeIndex = swiperInstance.realIndex;
-            const currentCharacter = characters[selectedGender][activeIndex];
+            const currentCharacter = AppData.characters[selectedGender][activeIndex];
 
             bodyEl.style.backgroundColor = currentCharacter.bg;
             characterInfo.title.textContent = currentCharacter.title;
             characterInfo.description.textContent = currentCharacter.description;
 
-            // Добавляем класс, который запускает CSS-анимацию
             characterInfo.title.classList.add('animate-in');
             characterInfo.description.classList.add('animate-in');
 
@@ -269,6 +269,8 @@
             
             console.log("Пол:", selectedGender);
             console.log("Выбранный персонаж:", selectedCharacter.title);
+            
+            // tg.sendData(JSON.stringify({ gender: selectedGender, character: selectedCharacter }));
             
             screens.character.innerHTML = `<h1 style="color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.4);">ОТЛИЧНО!</h1><p style="color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.3); text-transform: none;">Ваш выбор: <b>${selectedCharacter.title}</b></p>`;
             buttons.confirmCharacter.style.display = 'none';
