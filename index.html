@@ -4,24 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MAY GAMES</title>
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
-
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
     <style>
         :root {
             --font-main: 'Oswald', sans-serif;
             --text-light: #FFFFFF;
             --btn-male: #0288D1;
             --btn-female: #D81B60;
-            --color-neutral-icon: #b0b0b0; /* Нейтральный серый цвет для иконок */
+            --color-neutral-icon: #b0b0b0;
+            --active-tab-color: #4FC3F7; 
         }
-
         body {
             margin: 0; font-family: var(--font-main);
             min-height: 100vh; color: #2c3e50;
@@ -29,31 +26,25 @@
             background-color: #f0f2f5;
             overflow: hidden; text-transform: uppercase;
         }
-
         .screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
             padding: 20px; box-sizing: border-box;
             transition: opacity 0.5s ease, transform 0.5s ease;
             opacity: 0; transform: scale(0.95); pointer-events: none;
         }
         .screen.active { opacity: 1; transform: scale(1); pointer-events: auto; }
-        
+        #screen-gender, #screen-character-select { justify-content: center; }
+
         h1 { text-align: center; margin-bottom: 30px; margin-top: 10px; font-weight: 700; }
-
         .brand-title {
-            font-size: 20px;
-            font-weight: 400;
-            letter-spacing: 2px;
-            opacity: 0.8;
-            margin-bottom: 0;
+            font-size: 20px; font-weight: 400; letter-spacing: 2px;
+            opacity: 0.8; margin-bottom: 0;
         }
-
         /* --- ЭКРАН 1: Выбор пола --- */
         body.theme-male-selection, body.theme-female-selection { color: var(--text-light); }
         body.theme-male-selection { background-color: #4FC3F7; }
         body.theme-female-selection { background-color: #F06292; }
-
         .gender-selection-container { display: flex; gap: 20px; margin-bottom: 40px; }
         .gender-option {
             background: rgba(255, 255, 255, 0.9); color: #2c3e50;
@@ -61,34 +52,18 @@
             border: 3px solid transparent; transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 130px;
         }
-        /* 1. ИЗМЕНЕНИЯ ДЛЯ ИКОНОК */
         .gender-option .image-placeholder {
-            width: 80px; height: 80px;
-            margin: 0 auto 15px;
+            width: 80px; height: 80px; margin: 0 auto 15px;
             display: flex; align-items: center; justify-content: center; 
-            font-size: 42px; /* Уменьшили размер */
-            font-weight: 700; /* Установили жирность */
-            color: var(--color-neutral-icon); /* Начальный серый цвет */
-            background-color: #e0e0e0;
-            border-radius: 50%;
-            transition: color 0.3s ease, background-color 0.3s ease; /* Плавный переход цвета */
+            font-size: 42px; font-weight: 700; color: var(--color-neutral-icon);
+            background-color: #e0e0e0; border-radius: 50%;
+            transition: color 0.3s ease, background-color 0.3s ease;
         }
         .gender-option:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-
-        /* 2. ПРАВИЛА ДЛЯ АКТИВНОГО СОСТОЯНИЯ */
         .gender-option.active-male { border-color: var(--btn-male); }
-        .gender-option.active-male .image-placeholder {
-            color: var(--btn-male); /* Окрашиваем значок в синий */
-            background-color: #e3f2fd;
-        }
-
+        .gender-option.active-male .image-placeholder { color: var(--btn-male); background-color: #e3f2fd; }
         .gender-option.active-female { border-color: var(--btn-female); }
-        .gender-option.active-female .image-placeholder {
-            color: var(--btn-female); /* Окрашиваем значок в розовый */
-            background-color: #fce4ec;
-        }
-
-
+        .gender-option.active-female .image-placeholder { color: var(--btn-female); background-color: #fce4ec; }
         /* --- Кнопки --- */
         .main-button {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
@@ -100,39 +75,134 @@
         #btn-confirm-gender.visible { opacity: 1; pointer-events: auto; transform: translateX(-50%); }
         body.theme-male-selection #btn-confirm-gender { background-color: var(--btn-male); }
         body.theme-female-selection #btn-confirm-gender { background-color: var(--btn-female); }
-
         /* --- ЭКРАН 2: Выбор персонажа --- */
-        #screen-character-select { justify-content: center; color: var(--text-light); }
-        
         @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(25px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); }
         }
-
         .character-info {
-            width: 100%; text-align: center; padding: 0 20px;
-            box-sizing: border-box; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-            opacity: 0;
+            width: 100%; text-align: center; padding: 0 20px; box-sizing: border-box;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); opacity: 0;
         }
         .character-info.animate-in { opacity: 1; animation: slideInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
-
         #character-title { font-size: 32px; font-weight: 700; min-height: 40px; margin-bottom: 5px; }
         #character-description { font-size: 16px; font-weight: 400; min-height: 40px; margin-top: 5px; letter-spacing: 0.5px; }
-        
         .swiper { width: 100%; height: 60%; max-height: 450px; }
-        .swiper-slide { background: transparent; display: flex; justify-content: center; align-items: center; }
         .swiper-slide img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 10px 25px rgba(0,0,0,0.3)); }
-
         #btn-confirm-character { background-color: #43A047; }
+
+        /* --- СТИЛИ: ЭКРАН 3 - Геймификация --- */
+        #screen-gamification { padding: 0; }
+        .game-top-area {
+            position: relative;
+            width: 100%;
+            height: 280px; /* Фиксированная высота для верхней части */
+        }
+        .game-character-display {
+            position: absolute; top: 20px; left: 50%;
+            transform: translateX(-50%); text-align: center; width: 150px;
+        }
+        .game-character-display img {
+            max-width: 100%; height: auto;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+        }
+        .game-character-display h2 {
+            font-size: 14px; font-weight: 700; color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5); margin-top: 10px;
+        }
+        .game-side-panel {
+            position: absolute; top: 30px; width: 30%;
+            max-width: 110px; display: flex;
+            flex-direction: column; gap: 15px;
+        }
+        .panel-left { left: 10px; }
+        .panel-right { right: 10px; }
+        .status-bar {
+            background: rgba(0, 0, 0, 0.25); border-radius: 12px;
+            padding: 10px; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .status-bar label {
+            font-size: 13px; opacity: 0.8; display: flex;
+            justify-content: space-between; align-items: center;
+            font-weight: 400; margin-bottom: 8px;
+        }
+        .status-bar label span {
+            font-size: 12px; font-weight: 700; background: rgba(0,0,0,0.3);
+            padding: 2px 6px; border-radius: 5px;
+        }
+        #status-health .bar-content { font-size: 20px; letter-spacing: 2px; }
+        #status-health .bar-content span { color: #E53935; text-shadow: 0 0 5px rgba(255, 82, 82, 0.7); }
+        .progress-bar-container {
+            background-color: rgba(0, 0, 0, 0.3); border-radius: 5px;
+            height: 10px; overflow: hidden; width: 100%;
+        }
+        .progress-bar-fill { background-color: #7CB342; height: 100%; border-radius: 5px; }
+        #status-gold .bar-content { font-size: 16px; font-weight: 700; color: #FFEB3B; }
+        .clothing-slots { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .clothing-slot {
+            width: 100%; padding-top: 100%;
+            background-color: rgba(0, 0, 0, 0.25); border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2); box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        /* --- ИСПРАВЛЕННЫЙ БЛОК ВКЛАДОК --- */
+        #tabs-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 240px; /* Высота всего блока вкладок */
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            padding: 10px 15px 15px 15px;
+            box-sizing: border-box;
+            color: white;
+            display: none; /* Скрыт по умолчанию */
+        }
+        .tab-buttons {
+            display: flex; gap: 5px; background: rgba(0, 0, 0, 0.25);
+            border-radius: 14px; padding: 5px; box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+        .tab-button {
+            flex: 1; background: none; border: none;
+            color: rgba(255, 255, 255, 0.7); font-family: var(--font-main);
+            font-size: 16px; text-transform: uppercase; padding: 10px 0;
+            cursor: pointer; border-radius: 10px; transition: all 0.3s ease;
+        }
+        .tab-button.active {
+            color: white; font-weight: 700;
+            background-color: var(--active-tab-color);
+        }
+        .tabs-content { height: calc(100% - 65px); }
+        .tab-pane {
+            display: none; height: 100%;
+            align-items: center; justify-content: center;
+        }
+        .tab-pane.active { display: flex; }
+        .cards-swiper, .badges-swiper { width: 100%; height: 100%; }
+        .cards-swiper .swiper-slide, .badges-swiper .swiper-slide {
+            background: rgba(255, 255, 255, 0.1); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; font-weight: bold;
+        }
+        #achievements-list {
+            list-style: none; padding: 0 5px; margin: 0; width: 100%;
+            font-size: 14px; text-transform: none; text-align: left;
+            height: 100%; overflow-y: auto;
+        }
+        #achievements-list li { padding: 8px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        #achievements-list li:last-child { border-bottom: none; }
     </style>
 </head>
 <body>
 
     <div id="screen-gender" class="screen active">
+        <!-- ... (содержимое без изменений) ... -->
         <h2 class="brand-title">MAY GAMES</h2>
         <h1>СДЕЛАЙ ВЫБОР</h1>
         <div class="gender-selection-container">
-            <!-- 3. УБРАНЫ ЛИШНИЕ СТИЛИ ИЗ HTML -->
             <div class="gender-option" id="btn-male" onclick="selectGender('male')">
                 <div class="image-placeholder">♂</div><h3>МУЖЧИНА</h3>
             </div>
@@ -143,12 +213,62 @@
     </div>
 
     <div id="screen-character-select" class="screen">
+        <!-- ... (содержимое без изменений) ... -->
         <div id="character-title" class="character-info"></div>
         <div class="swiper">
             <div class="swiper-wrapper" id="character-swiper-wrapper"></div>
             <div class="swiper-pagination"></div>
         </div>
         <div id="character-description" class="character-info"></div>
+    </div>
+
+    <div id="screen-gamification" class="screen">
+        <div class="game-top-area">
+            <div class="game-character-display">
+                <img id="game-character-image" src="" alt="Character">
+                <h2 id="game-character-title"></h2>
+            </div>
+            <div class="game-side-panel panel-left">
+                <!-- ... (статус-бары) ... -->
+                 <div class="status-bar" id="status-health">
+                    <label>Health</label>
+                    <div class="bar-content"><span>❤</span><span>❤</span><span>❤</span></div>
+                </div>
+                <div class="status-bar" id="status-xp">
+                    <label>XP <span>Level 5</span></label>
+                    <div class="bar-content"><div class="progress-bar-container"><div class="progress-bar-fill" style="width: 60%;"></div></div></div>
+                </div>
+                <div class="status-bar" id="status-gold">
+                    <label>Gold</label>
+                    <div class="bar-content">💰 1250</div>
+                </div>
+            </div>
+            <div class="game-side-panel panel-right">
+                <div class="clothing-slots">
+                    <div class="clothing-slot"></div><div class="clothing-slot"></div>
+                    <div class="clothing-slot"></div><div class="clothing-slot"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="tabs-container">
+            <div class="tab-buttons">
+                <button class="tab-button active" data-color="#4FC3F7" onclick="switchTab('cards', this)">Карточки</button>
+                <button class="tab-button" data-color="#F06292" onclick="switchTab('badges', this)">Значки</button>
+                <button class="tab-button" data-color="#7CB342" onclick="switchTab('achievements', this)">Достижения</button>
+            </div>
+            <div class="tabs-content">
+                <div id="tab-cards" class="tab-pane active">
+                    <div class="swiper-container cards-swiper"><div class="swiper-wrapper" id="cards-swiper-wrapper"></div></div>
+                </div>
+                <div id="tab-badges" class="tab-pane">
+                    <div class="swiper-container badges-swiper"><div class="swiper-wrapper" id="badges-swiper-wrapper"></div></div>
+                </div>
+                <div id="tab-achievements" class="tab-pane">
+                    <ul id="achievements-list"></ul>
+                </div>
+            </div>
+        </div>
     </div>
     
     <button id="btn-confirm-gender" class="main-button" onclick="goToCharacterSelection()">Далее</button>
@@ -161,10 +281,13 @@
         let selectedGender = null;
         let swiperInstance = null;
         let selectedCharacter = {};
-        
+        let cardsSwiperInstance = null;
+        let badgesSwiperInstance = null;
+        let areTabsInitialized = false;
+
         const AppData = {
             repoUrl: 'https://raw.githubusercontent.com/Mayhelper/game_tpop/main/images/',
-            characters: {
+            characters: { 
                 male: [
                     { id: 'male-1', bg: '#039BE5', title: 'ВСЕГДА С ИГОЛОЧКИ', description: 'ГОТОВ ПОКОРИТЬ ЛЮБЫЕ ТОЧКИ' },
                     { id: 'male-2', bg: '#FF6F00', title: 'ДУША КОМПАНИИ', description: 'НАХОДИТ ОБЩИЙ ЯЗЫК С КЕМ УГОДНО' },
@@ -179,20 +302,41 @@
                     { id: 'female-4', bg: '#E53935', title: 'ПРИНЦЕССА ВРЕМЕНИ', description: 'УСПЕВАЕТ ВСЕ И ДАЖЕ БОЛЬШЕ' },
                     { id: 'female-5', bg: '#8E24AA', title: 'КОРОЛЕВА ЛИДЕРСТВА', description: 'СТРОИТ ПРОЧНЫЕ МОСТЫ МЕЖДУ ЛЮДЬМИ' },
                 ]
-            }
+            },
+            cards: [
+                { text: 'Карта 1' }, { text: 'Карта 2' }, { text: 'Карта 3' }, { text: 'Карта 4' }, { text: 'Карта 5' }
+            ],
+            badges: [
+                { text: '⭐' }, { text: '🏆' }, { text: '💎' }, { text: '💡' }, { text: '🚀' }
+            ],
+            achievements: [
+                { text: '✅ Первые шаги: Завершить обучение' }, { text: '✅ Новатор: Предложить 5 идей' },
+                { text: '🔒 Командный игрок: Завершить проект' }, { text: '🔒 Лидер мнений: Выступить на встрече' },
+            ]
         };
-
+        
+        // --- (JS-код без изменений в логике) ---
         const bodyEl = document.body;
-        const screens = { gender: document.getElementById('screen-gender'), character: document.getElementById('screen-character-select') };
-        const buttons = { confirmGender: document.getElementById('btn-confirm-gender'), confirmCharacter: document.getElementById('btn-confirm-character'), male: document.getElementById('btn-male'), female: document.getElementById('btn-female') };
-        const characterInfo = { title: document.getElementById('character-title'), description: document.getElementById('character-description') };
+        const screens = { 
+            gender: document.getElementById('screen-gender'), 
+            character: document.getElementById('screen-character-select'),
+            gamification: document.getElementById('screen-gamification')
+        };
+        const buttons = { 
+            confirmGender: document.getElementById('btn-confirm-gender'), 
+            confirmCharacter: document.getElementById('btn-confirm-character'), 
+            male: document.getElementById('btn-male'), female: document.getElementById('btn-female') 
+        };
+        const characterInfo = { 
+            title: document.getElementById('character-title'), 
+            description: document.getElementById('character-description') 
+        };
 
         function selectGender(gender) {
             selectedGender = gender;
             bodyEl.className = '';
             buttons.male.classList.remove('active-male');
             buttons.female.classList.remove('active-female');
-
             if (gender === 'male') {
                 bodyEl.classList.add('theme-male-selection');
                 buttons.male.classList.add('active-male');
@@ -205,46 +349,35 @@
 
         function goToCharacterSelection() {
             if (!selectedGender) return;
-
             const characterList = AppData.characters[selectedGender];
             const swiperWrapper = document.getElementById('character-swiper-wrapper');
             swiperWrapper.innerHTML = '';
-            
             characterList.forEach(char => {
                 const slide = document.createElement('div');
                 slide.className = 'swiper-slide';
-                const imageUrl = AppData.repoUrl + char.id + '.png';
-                slide.innerHTML = `<img src="${imageUrl}" alt="${char.title}">`;
+                slide.innerHTML = `<img src="${AppData.repoUrl + char.id + '.png'}" alt="${char.title}">`;
                 swiperWrapper.appendChild(slide);
             });
-            
             screens.gender.classList.remove('active');
             buttons.confirmGender.style.display = 'none';
             screens.character.classList.add('active');
             buttons.confirmCharacter.style.display = 'block';
-
             initSwiper();
         }
 
         function initSwiper() {
             if (swiperInstance) swiperInstance.destroy(true, true);
             swiperInstance = new Swiper('.swiper', {
-                effect: 'fade',
-                fadeEffect: { crossFade: true },
-                grabCursor: true,
-                loop: true,
+                effect: 'fade', fadeEffect: { crossFade: true },
+                grabCursor: true, loop: true,
                 pagination: { el: '.swiper-pagination', dynamicBullets: true },
                 on: {
-                    slideChangeTransitionStart: function () {
+                    slideChangeTransitionStart: () => {
                         characterInfo.title.classList.remove('animate-in');
                         characterInfo.description.classList.remove('animate-in');
                     },
-                    slideChangeTransitionEnd: function () {
-                        updateCharacterInfo();
-                    },
-                    init: function () {
-                        setTimeout(updateCharacterInfo, 100);
-                    }
+                    slideChangeTransitionEnd: () => updateCharacterInfo(),
+                    init: () => setTimeout(updateCharacterInfo, 100),
                 },
             });
         }
@@ -253,27 +386,61 @@
             if (!swiperInstance || !selectedGender) return;
             const activeIndex = swiperInstance.realIndex;
             const currentCharacter = AppData.characters[selectedGender][activeIndex];
-
             bodyEl.style.backgroundColor = currentCharacter.bg;
             characterInfo.title.textContent = currentCharacter.title;
             characterInfo.description.textContent = currentCharacter.description;
-
             characterInfo.title.classList.add('animate-in');
             characterInfo.description.classList.add('animate-in');
-
             selectedCharacter = currentCharacter;
         }
 
         function confirmCharacter() {
             if (!selectedCharacter) return;
-            
-            console.log("Пол:", selectedGender);
-            console.log("Выбранный персонаж:", selectedCharacter.title);
-            
-            // tg.sendData(JSON.stringify({ gender: selectedGender, character: selectedCharacter }));
-            
-            screens.character.innerHTML = `<h1 style="color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.4);">ОТЛИЧНО!</h1><p style="color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.3); text-transform: none;">Ваш выбор: <b>${selectedCharacter.title}</b></p>`;
+            document.getElementById('game-character-image').src = AppData.repoUrl + selectedCharacter.id + '.png';
+            document.getElementById('game-character-image').alt = selectedCharacter.title;
+            document.getElementById('game-character-title').textContent = selectedCharacter.title;
+            bodyEl.style.backgroundColor = '#303f5a'; 
+            screens.character.classList.remove('active');
+            screens.gamification.classList.add('active');
             buttons.confirmCharacter.style.display = 'none';
+            
+            document.getElementById('tabs-container').style.display = 'block';
+            
+            if (!areTabsInitialized) initGameTabs();
+        }
+
+        function initGameTabs() {
+            const cardsWrapper = document.getElementById('cards-swiper-wrapper');
+            AppData.cards.forEach(card => {
+                cardsWrapper.innerHTML += `<div class="swiper-slide">${card.text}</div>`;
+            });
+            const badgesWrapper = document.getElementById('badges-swiper-wrapper');
+            AppData.badges.forEach(badge => {
+                badgesWrapper.innerHTML += `<div class="swiper-slide">${badge.text}</div>`;
+            });
+            const achievementsList = document.getElementById('achievements-list');
+            AppData.achievements.forEach(ach => {
+                achievementsList.innerHTML += `<li>${ach.text}</li>`;
+            });
+
+            cardsSwiperInstance = new Swiper('.cards-swiper', {
+                slidesPerView: 3, spaceBetween: 10, loop: true, grabCursor: true,
+            });
+            badgesSwiperInstance = new Swiper('.badges-swiper', {
+                slidesPerView: 4, spaceBetween: 10, loop: true, grabCursor: true,
+            });
+            areTabsInitialized = true;
+        }
+
+        function switchTab(tabId, clickedButton) {
+            document.documentElement.style.setProperty('--active-tab-color', clickedButton.dataset.color);
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            clickedButton.classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            
+            if (tabId === 'cards' && cardsSwiperInstance) cardsSwiperInstance.update();
+            if (tabId === 'badges' && badgesSwiperInstance) badgesSwiperInstance.update();
         }
     </script>
 </body>
