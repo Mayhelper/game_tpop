@@ -1,0 +1,36 @@
+name: Download Excel File
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Запуск каждый день в 00:00 UTC
+  workflow_dispatch:  # Ручной запуск через интерфейс GitHub
+
+jobs:
+  download-excel:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download report.xlsx
+        run: |
+          # Скачиваем файл по прямой ссылке
+          curl -L -o report.xlsx "https://disk.360.yandex.ru/i/r_OVUyfEHyHoDg"
+          
+          # Проверяем, что файл скачался (размер, дата)
+          ls -la report.xlsx
+
+      - name: Commit and push the Excel file
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          # Добавляем файл в индекс
+          git add report.xlsx
+          
+          # Коммитим, если есть изменения
+          git commit -m "Update report.xlsx from Yandex Disk" || echo "No changes to commit"
+          
+          # Отправляем в репозиторий
+          git push
