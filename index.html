@@ -35,6 +35,78 @@
         }
         .screen.active { opacity: 1; transform: scale(1); pointer-events: auto; }
         #screen-gender, #screen-character-select { justify-content: center; }
+        
+        /* --- ЭКРАН ЗАГРУЗКИ --- */
+        #screen-loader {
+            background-image: url('https://raw.githubusercontent.com/Mayhelper/game_tpop/main/images/loader-bg.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #667eea; /* Fallback цвет, если изображение не загрузится */
+            justify-content: flex-end; /* Выравнивание внизу */
+            align-items: center;
+            z-index: 9999;
+            padding-bottom: 0; /* Убираем отступ, чтобы кнопка была внизу */
+        }
+        #screen-loader.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+        .loader-content {
+            text-align: center;
+            color: white;
+            width: 90%;
+            max-width: 350px;
+            padding: 0 20px 20px 20px; /* Небольшой отступ только снизу для безопасности */
+        }
+        .loader-progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .loader-progress-bar {
+            height: 100%;
+            background: #E53935; /* Красный цвет */
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            width: 0%;
+            box-shadow: 0 0 10px rgba(229, 57, 53, 0.6);
+        }
+        .loader-start-button {
+            width: 100%;
+            padding: 16px;
+            background: #E53935; /* Красный цвет */
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: var(--font-main);
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(10px);
+            box-shadow: 0 4px 15px rgba(229, 57, 53, 0.4);
+        }
+        .loader-start-button.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        .loader-start-button:hover {
+            background: #C62828;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(229, 57, 53, 0.6);
+        }
+        .loader-start-button:active {
+            transform: translateY(0);
+        }
 
         h1 { text-align: center; margin-bottom: 30px; margin-top: 10px; font-weight: 700; }
         .brand-title {
@@ -111,7 +183,7 @@
         }
         .game-character-display {
             position: absolute; 
-            top: 50%;
+            top: 60%; /* Опускаем персонажа ниже */
             left: 50%;
             transform: translate(-50%, -50%); /* Центрирование по вертикали и горизонтали */
             text-align: center; 
@@ -142,12 +214,13 @@
         .panel-left { left: 10px; }
         .panel-right { right: 10px; }
         .status-bar {
-            background: rgba(0, 0, 0, 0.25); 
+            background: rgba(0, 0, 0, 0.6); /* Увеличиваем непрозрачность для лучшей видимости */
             border-radius: 12px;
             padding: 8px; 
             color: white; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3); /* Усиливаем тень */
             font-size: 11px; /* Немного уменьшаем для мобильных */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Добавляем тонкую рамку */
         }
         .status-bar label {
             font-size: 13px; opacity: 0.8; display: flex;
@@ -170,18 +243,19 @@
         .clothing-slot {
             width: 100%; 
             padding-top: 100%;
-            background-color: rgba(0, 0, 0, 0.25); 
+            background-color: rgba(0, 0, 0, 0.5); /* Увеличиваем непрозрачность фона */
             border-radius: 12px;
-            border: 2px solid rgba(255, 255, 255, 0.2); 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border: 2px solid rgba(255, 255, 255, 0.4); /* Увеличиваем непрозрачность границы */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3); /* Усиливаем тень */
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
         .clothing-slot:hover {
-            border-color: rgba(255, 255, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.7); /* Более яркая граница при наведении */
             transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4); /* Усиливаем тень при наведении */
         }
         .clothing-slot img {
             position: absolute;
@@ -197,8 +271,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 24px;
-            opacity: 0.5;
+            font-size: 28px; /* Немного увеличиваем размер */
+            opacity: 0.9; /* Увеличиваем непрозрачность для лучшей видимости */
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); /* Добавляем тень для контраста */
         }
         
         /* Модальное окно выбора одежды */
@@ -481,7 +556,17 @@
 </head>
 <body>
 
-    <div id="screen-gender" class="screen active">
+    <!-- ЭКРАН ЗАГРУЗКИ -->
+    <div id="screen-loader" class="screen active">
+        <div class="loader-content">
+            <div class="loader-progress-container">
+                <div class="loader-progress-bar" id="loader-progress-bar"></div>
+            </div>
+            <button class="loader-start-button" id="loader-start-button" onclick="startGame()">Начать</button>
+        </div>
+    </div>
+
+    <div id="screen-gender" class="screen">
         <!-- ... (содержимое без изменений) ... -->
         <h2 class="brand-title">MAY GAMES</h2>
         <h1>СДЕЛАЙ ВЫБОР</h1>
@@ -602,6 +687,7 @@
 
         const AppData = {
             repoUrl: 'https://raw.githubusercontent.com/Mayhelper/game_tpop/main/images/',
+            loaderBackground: 'loader-bg.png', // Фоновая заставка для экрана загрузки (если есть)
             characters: { 
                 male: [
                     { id: 'male-1', bg: '#039BE5', title: 'ВСЕГДА С ИГОЛОЧКИ', description: 'ГОТОВ ПОКОРИТЬ ЛЮБЫЕ ТОЧКИ' },
@@ -664,6 +750,75 @@
         
         let currentClothingType = null;
         let currentSelectedClothingItem = null;
+        
+        // --- ФУНКЦИЯ ПРЕДЗАГРУЗКИ ИЗОБРАЖЕНИЙ ---
+        function preloadImages() {
+            // Предзагружаем фоновую заставку
+            if (AppData.loaderBackground) {
+                const bgImage = new Image();
+                bgImage.src = AppData.repoUrl + AppData.loaderBackground;
+                bgImage.onload = function() {
+                    const loaderScreen = document.getElementById('screen-loader');
+                    loaderScreen.style.background = `url('${AppData.repoUrl}${AppData.loaderBackground}') center/cover, linear-gradient(135deg, #667eea 0%, #764ba2 100%)`;
+                };
+            }
+            
+            const imagesToLoad = [];
+            
+            // Собираем все изображения персонажей
+            Object.values(AppData.characters.male).forEach(char => {
+                imagesToLoad.push(AppData.repoUrl + char.id + '.png');
+            });
+            Object.values(AppData.characters.female).forEach(char => {
+                imagesToLoad.push(AppData.repoUrl + char.id + '.png');
+            });
+            
+            // Добавляем фон
+            imagesToLoad.push(AppData.repoUrl + 'game-bg.png');
+            
+            // Собираем все изображения одежды
+            Object.values(AppData.clothing).forEach(category => {
+                category.forEach(item => {
+                    imagesToLoad.push(AppData.repoUrl + item.image);
+                });
+            });
+            
+            let loadedCount = 0;
+            const totalImages = imagesToLoad.length;
+            const progressBar = document.getElementById('loader-progress-bar');
+            
+            // Функция обновления прогресса
+            function updateProgress() {
+                const percentage = Math.round((loadedCount / totalImages) * 100);
+                progressBar.style.width = percentage + '%';
+            }
+            
+            // Загружаем все изображения
+            const loadPromises = imagesToLoad.map((url, index) => {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        loadedCount++;
+                        updateProgress();
+                        resolve(url);
+                    };
+                    img.onerror = () => {
+                        // Продолжаем даже если изображение не загрузилось
+                        loadedCount++;
+                        updateProgress();
+                        resolve(url); // Разрешаем промис, чтобы не блокировать загрузку
+                    };
+                    img.src = url;
+                });
+            });
+            
+            // После загрузки всех изображений
+            Promise.all(loadPromises).then(() => {
+                // Показываем кнопку "Начать"
+                const startButton = document.getElementById('loader-start-button');
+                startButton.classList.add('visible');
+            });
+        }
         
         // --- (JS-код без изменений в логике) ---
         const bodyEl = document.body;
@@ -933,6 +1088,34 @@
             if (e.target === this) {
                 closeClothingModal();
             }
+        });
+        
+        // Функция запуска игры после загрузки
+        function startGame() {
+            const loaderScreen = document.getElementById('screen-loader');
+            const genderScreen = document.getElementById('screen-gender');
+            
+            loaderScreen.classList.remove('active');
+            setTimeout(() => {
+                genderScreen.classList.add('active');
+            }, 300);
+        }
+        
+        // Устанавливаем фон загрузки сразу при загрузке страницы
+        window.addEventListener('DOMContentLoaded', function() {
+            // Устанавливаем фоновую заставку сразу
+            if (AppData.loaderBackground) {
+                const loaderScreen = document.getElementById('screen-loader');
+                const bgUrl = AppData.repoUrl + AppData.loaderBackground;
+                loaderScreen.style.background = `url('${bgUrl}') center/cover no-repeat, linear-gradient(135deg, #667eea 0%, #764ba2 100%)`;
+                
+                // Предзагружаем изображение для надежности
+                const bgImage = new Image();
+                bgImage.src = bgUrl;
+            }
+            
+            // Запускаем предзагрузку всех изображений
+            preloadImages();
         });
     </script>
 </body>
