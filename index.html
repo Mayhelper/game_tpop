@@ -48,6 +48,10 @@
             z-index: 9999;
             padding-bottom: 0; /* Убираем отступ, чтобы кнопка была внизу */
         }
+        /* Когда экран загрузки скрыт, он не должен перекрывать другие элементы */
+        #screen-loader:not(.active) {
+            z-index: -1;
+        }
         #screen-loader.active {
             opacity: 1;
             transform: scale(1);
@@ -142,9 +146,20 @@
             width: 90%; max-width: 350px; padding: 16px; border: none; border-radius: 12px;
             font-family: var(--font-main); font-size: 18px; font-weight: 700;
             color: white; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase;
+            z-index: 1000; /* Убеждаемся, что кнопка поверх экранов */
         }
-        #btn-confirm-gender { opacity: 0; pointer-events: none; transform: translate(-50%, 20px); }
-        #btn-confirm-gender.visible { opacity: 1; pointer-events: auto; transform: translateX(-50%); }
+        #btn-confirm-gender { 
+            opacity: 0 !important; 
+            pointer-events: none !important; 
+            transform: translate(-50%, 20px) !important;
+            z-index: 1000 !important; /* Убеждаемся, что кнопка поверх других элементов */
+            display: block !important; /* Убеждаемся, что кнопка отображается */
+        }
+        #btn-confirm-gender.visible { 
+            opacity: 1 !important; 
+            pointer-events: auto !important; 
+            transform: translateX(-50%) !important;
+        }
         body.theme-male-selection #btn-confirm-gender { background-color: var(--btn-male); }
         body.theme-female-selection #btn-confirm-gender { background-color: var(--btn-female); }
         /* --- ЭКРАН 2: Выбор персонажа --- */
@@ -838,24 +853,35 @@
         };
 
         function selectGender(gender) {
+            console.log('selectGender called with:', gender);
             selectedGender = gender;
             bodyEl.className = '';
-            buttons.male.classList.remove('active-male');
-            buttons.female.classList.remove('active-female');
+            if (buttons.male) buttons.male.classList.remove('active-male');
+            if (buttons.female) buttons.female.classList.remove('active-female');
             if (gender === 'male') {
                 bodyEl.classList.add('theme-male-selection');
-                buttons.male.classList.add('active-male');
+                if (buttons.male) buttons.male.classList.add('active-male');
             } else {
                 bodyEl.classList.add('theme-female-selection');
-                buttons.female.classList.add('active-female');
+                if (buttons.female) buttons.female.classList.add('active-female');
             }
-            buttons.confirmGender.classList.add('visible');
+            if (buttons.confirmGender) {
+                console.log('Adding visible class to confirm button');
+                buttons.confirmGender.classList.add('visible');
+                console.log('Button classes:', buttons.confirmGender.className);
+            } else {
+                console.error('Confirm gender button not found');
+            }
         }
 
         function goToCharacterSelection() {
             if (!selectedGender) return;
             const characterList = AppData.characters[selectedGender];
             const swiperWrapper = document.getElementById('character-swiper-wrapper');
+            if (!swiperWrapper) {
+                console.error('Swiper wrapper not found');
+                return;
+            }
             swiperWrapper.innerHTML = '';
             characterList.forEach(char => {
                 const slide = document.createElement('div');
@@ -867,24 +893,50 @@
             buttons.confirmGender.style.display = 'none';
             screens.character.classList.add('active');
             buttons.confirmCharacter.style.display = 'block';
-            initSwiper();
+            // Небольшая задержка для корректной инициализации Swiper после показа экрана
+            setTimeout(() => {
+                initSwiper();
+            }, 100);
         }
 
         function initSwiper() {
-            if (swiperInstance) swiperInstance.destroy(true, true);
-            swiperInstance = new Swiper('.swiper', {
-                effect: 'fade', fadeEffect: { crossFade: true },
-                grabCursor: true, loop: true,
-                pagination: { el: '.swiper-pagination', dynamicBullets: true },
-                on: {
-                    slideChangeTransitionStart: () => {
-                        characterInfo.title.classList.remove('animate-in');
-                        characterInfo.description.classList.remove('animate-in');
+            if (swiperInstance) {
+                try {
+                    swiperInstance.destroy(true, true);
+                } catch(e) {
+                    console.warn('Error destroying swiper:', e);
+                }
+            }
+            // Используем более специфичный селектор для экрана выбора персонажа
+            const swiperElement = screens.character ? screens.character.querySelector('.swiper') : null;
+            if (!swiperElement) {
+                console.error('Swiper element not found in character screen');
+                return;
+            }
+            const paginationElement = swiperElement.querySelector('.swiper-pagination');
+            if (!paginationElement) {
+                console.error('Pagination element not found');
+                return;
+            }
+            try {
+                swiperInstance = new Swiper(swiperElement, {
+                    effect: 'fade', 
+                    fadeEffect: { crossFade: true },
+                    grabCursor: true, 
+                    loop: true,
+                    pagination: { el: paginationElement, dynamicBullets: true },
+                    on: {
+                        slideChangeTransitionStart: () => {
+                            if (characterInfo.title) characterInfo.title.classList.remove('animate-in');
+                            if (characterInfo.description) characterInfo.description.classList.remove('animate-in');
+                        },
+                        slideChangeTransitionEnd: () => updateCharacterInfo(),
+                        init: () => setTimeout(updateCharacterInfo, 100),
                     },
-                    slideChangeTransitionEnd: () => updateCharacterInfo(),
-                    init: () => setTimeout(updateCharacterInfo, 100),
-                },
-            });
+                });
+            } catch(e) {
+                console.error('Error initializing Swiper:', e);
+            }
         }
         
         function updateCharacterInfo() {
@@ -1095,9 +1147,20 @@
             const loaderScreen = document.getElementById('screen-loader');
             const genderScreen = document.getElementById('screen-gender');
             
+            if (!loaderScreen || !genderScreen) {
+                console.error('Экраны не найдены!');
+                return;
+            }
+            
             loaderScreen.classList.remove('active');
+            // Убеждаемся, что экран загрузки не перекрывает другие элементы
+            setTimeout(() => {
+                loaderScreen.style.display = 'none';
+            }, 500);
+            
             setTimeout(() => {
                 genderScreen.classList.add('active');
+                console.log('Экран выбора пола активирован');
             }, 300);
         }
         
@@ -1112,6 +1175,14 @@
                 // Предзагружаем изображение для надежности
                 const bgImage = new Image();
                 bgImage.src = bgUrl;
+            }
+            
+            // Проверяем, что все кнопки найдены
+            if (!buttons.confirmGender) {
+                console.error('Кнопка "Далее" не найдена!');
+            }
+            if (!buttons.male || !buttons.female) {
+                console.error('Кнопки выбора пола не найдены!');
             }
             
             // Запускаем предзагрузку всех изображений
