@@ -91,34 +91,63 @@
         #btn-confirm-character { background-color: #43A047; }
 
         /* --- СТИЛИ: ЭКРАН 3 - Геймификация --- */
-        #screen-gamification { padding: 0; }
+        #screen-gamification { 
+            padding: 0; 
+            /* Фон устанавливается через JavaScript из GitHub */
+            background-size: cover;
+            background-position: center;
+            background-color: #1a2639; /* Резервный цвет, если картинка не загрузится */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
         .game-top-area {
             position: relative;
             width: 100%;
-            height: 280px; /* Фиксированная высота для верхней части */
+            height: 33vh; /* Занимает 1/3 экрана */
+            min-height: 200px;
+            max-height: 300px;
+            flex-shrink: 0; /* Не сжимается */
         }
         .game-character-display {
-            position: absolute; top: 20px; left: 50%;
-            transform: translateX(-50%); text-align: center; width: 150px;
+            position: absolute; 
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Центрирование по вертикали и горизонтали */
+            text-align: center; 
+            width: 140px; /* Фиксированный размер для мобильной игры */
+            height: 200px; /* Фиксированная высота */
+            z-index: 2; /* Персонаж поверх других элементов */
         }
         .game-character-display img {
-            max-width: 100%; height: auto;
+            width: 140px; /* Фиксированная ширина - не масштабируется */
+            height: 200px; /* Фиксированная высота - не масштабируется */
+            object-fit: contain; /* Сохраняет пропорции */
             filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
         }
         .game-character-display h2 {
-            font-size: 14px; font-weight: 700; color: white;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5); margin-top: 10px;
+            display: none; /* Скрываем подпись под персонажем */
         }
         .game-side-panel {
-            position: absolute; top: 30px; width: 30%;
-            max-width: 110px; display: flex;
-            flex-direction: column; gap: 15px;
+            position: absolute; 
+            top: 50%;
+            transform: translateY(-50%); /* Вертикальное центрирование */
+            width: 30%;
+            max-width: 110px; 
+            display: flex;
+            flex-direction: column; 
+            gap: 15px;
+            z-index: 1;
         }
         .panel-left { left: 10px; }
         .panel-right { right: 10px; }
         .status-bar {
-            background: rgba(0, 0, 0, 0.25); border-radius: 12px;
-            padding: 10px; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background: rgba(0, 0, 0, 0.25); 
+            border-radius: 12px;
+            padding: 8px; 
+            color: white; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 11px; /* Немного уменьшаем для мобильных */
         }
         .status-bar label {
             font-size: 13px; opacity: 0.8; display: flex;
@@ -139,26 +168,215 @@
         #status-gold .bar-content { font-size: 16px; font-weight: 700; color: #FFEB3B; }
         .clothing-slots { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
         .clothing-slot {
-            width: 100%; padding-top: 100%;
-            background-color: rgba(0, 0, 0, 0.25); border-radius: 12px;
-            border: 2px solid rgba(255, 255, 255, 0.2); box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: 100%; 
+            padding-top: 100%;
+            background-color: rgba(0, 0, 0, 0.25); 
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .clothing-slot:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
+        }
+        .clothing-slot img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 5px;
+        }
+        .clothing-slot-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            opacity: 0.5;
+        }
+        
+        /* Модальное окно выбора одежды */
+        .clothing-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        .clothing-modal.active {
+            display: flex;
+            flex-direction: column;
+        }
+        .clothing-modal-content {
+            width: 100%;
+            height: 100%;
+            background: rgba(20, 30, 48, 0.95);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .clothing-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: white;
+        }
+        .clothing-modal-header h2 {
+            margin: 0;
+            font-size: 20px;
+            text-transform: uppercase;
+        }
+        .clothing-modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .clothing-modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .clothing-modal-body {
+            display: flex;
+            flex: 1;
+            gap: 15px;
+            min-height: 0;
+        }
+        .clothing-items-grid {
+            width: 65%; /* 2/3 экрана */
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            overflow-y: auto;
+            padding-right: 5px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .clothing-item {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+        .clothing-item:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
+        }
+        .clothing-item.active {
+            border-color: #4FC3F7;
+            box-shadow: 0 0 15px rgba(79, 195, 247, 0.5);
+        }
+        .clothing-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 8px;
+        }
+        .clothing-preview {
+            width: 35%; /* 1/3 экрана */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            color: white;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .clothing-preview-image {
+            width: 100%;
+            max-width: 200px;
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .clothing-preview-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .clothing-preview-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .clothing-preview-description {
+            font-size: 14px;
+            text-align: center;
+            opacity: 0.8;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            text-transform: none;
+        }
+        .clothing-select-button {
+            width: 100%;
+            padding: 14px;
+            background: #4FC3F7;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: var(--font-main);
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .clothing-select-button:hover {
+            background: #29B6F6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 195, 247, 0.4);
+        }
+        .clothing-select-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         
         /* --- ИСПРАВЛЕННЫЙ БЛОК ВКЛАДОК --- */
         #tabs-container {
-            position: absolute;
-            bottom: 0;
-            left: 0;
+            position: relative; /* Изменено с absolute на relative */
             width: 100%;
-            height: 240px; /* Высота всего блока вкладок */
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(5px);
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-            padding: 10px 15px 15px 15px;
+            flex: 1; /* Занимает оставшееся пространство */
+            min-height: 0; /* Позволяет flex-элементу сжиматься */
+            background: rgba(20, 30, 48, 0.85);
+            backdrop-filter: blur(10px);
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+            padding: 20px 15px 15px 15px;
+            padding-top: 30px; /* Опускаем вкладки ниже, чтобы персонаж полностью влезал */
             box-sizing: border-box;
             color: white;
             display: none; /* Скрыт по умолчанию */
+            box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
+            overflow: hidden; /* Предотвращает переполнение */
+            margin-top: 10px; /* Дополнительный отступ сверху */
         }
         .tab-buttons {
             display: flex; gap: 5px; background: rgba(0, 0, 0, 0.25);
@@ -175,25 +393,90 @@
             color: white; font-weight: 700;
             background-color: var(--active-tab-color);
         }
-        .tabs-content { height: calc(100% - 65px); }
+        .tabs-content { 
+            height: calc(100% - 70px); /* Увеличено для большего пространства */
+            min-height: 0; /* Позволяет контенту правильно сжиматься */
+            overflow: hidden;
+            padding-top: 5px; /* Небольшой отступ сверху */
+        }
         .tab-pane {
             display: none; height: 100%;
             align-items: center; justify-content: center;
         }
         .tab-pane.active { display: flex; }
-        .cards-swiper, .badges-swiper { width: 100%; height: 100%; }
+        .cards-swiper, .badges-swiper { 
+            width: 100%; 
+            height: 100%; 
+            padding: 5px 0; /* Небольшой отступ сверху и снизу */
+        }
         .cards-swiper .swiper-slide, .badges-swiper .swiper-slide {
-            background: rgba(255, 255, 255, 0.1); border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 20px; font-weight: bold;
+            background: rgba(255, 255, 255, 0.1); 
+            border-radius: 12px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 14px; 
+            font-weight: bold;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .cards-swiper .swiper-slide {
+            height: 100px; /* Фиксированная высота - маленькие прямоугольники */
+            aspect-ratio: 3/4; /* Соотношение сторон как у карточек */
+        }
+        .badges-swiper .swiper-slide {
+            height: 80px; /* Фиксированная высота для значков */
+            aspect-ratio: 1; /* Квадратные значки */
+            font-size: 32px; /* Увеличенный размер эмодзи */
         }
         #achievements-list {
-            list-style: none; padding: 0 5px; margin: 0; width: 100%;
-            font-size: 14px; text-transform: none; text-align: left;
-            height: 100%; overflow-y: auto;
+            list-style: none; 
+            padding: 0 5px; 
+            margin: 0; 
+            width: 100%;
+            font-size: 14px; 
+            text-transform: none; 
+            text-align: left;
+            height: 100%; 
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* Плавная прокрутка на iOS */
         }
         #achievements-list li { padding: 8px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
         #achievements-list li:last-child { border-bottom: none; }
+        
+        /* Медиа-запросы для маленьких экранов */
+        @media (max-height: 600px) {
+            .game-top-area {
+                height: 35vh; /* Немного больше для маленьких экранов */
+                min-height: 180px;
+            }
+            /* Персонаж остается фиксированного размера */
+            .status-bar {
+                padding: 6px;
+                font-size: 10px;
+            }
+            .cards-swiper .swiper-slide {
+                height: 90px; /* Немного меньше на маленьких экранах */
+            }
+            .badges-swiper .swiper-slide {
+                height: 70px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .game-side-panel {
+                max-width: 90px; /* Уменьшаем панели на очень маленьких экранах */
+            }
+            /* Персонаж остается фиксированного размера */
+            .cards-swiper .swiper-slide {
+                height: 85px;
+                font-size: 12px;
+            }
+            .badges-swiper .swiper-slide {
+                height: 65px;
+                font-size: 28px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -226,7 +509,6 @@
         <div class="game-top-area">
             <div class="game-character-display">
                 <img id="game-character-image" src="" alt="Character">
-                <h2 id="game-character-title"></h2>
             </div>
             <div class="game-side-panel panel-left">
                 <!-- ... (статус-бары) ... -->
@@ -245,8 +527,18 @@
             </div>
             <div class="game-side-panel panel-right">
                 <div class="clothing-slots">
-                    <div class="clothing-slot"></div><div class="clothing-slot"></div>
-                    <div class="clothing-slot"></div><div class="clothing-slot"></div>
+                    <div class="clothing-slot" data-slot-type="head" onclick="openClothingModal('head')">
+                        <div class="clothing-slot-icon">👤</div>
+                    </div>
+                    <div class="clothing-slot" data-slot-type="body" onclick="openClothingModal('body')">
+                        <div class="clothing-slot-icon">👕</div>
+                    </div>
+                    <div class="clothing-slot" data-slot-type="legs" onclick="openClothingModal('legs')">
+                        <div class="clothing-slot-icon">👖</div>
+                    </div>
+                    <div class="clothing-slot" data-slot-type="shoes" onclick="openClothingModal('shoes')">
+                        <div class="clothing-slot-icon">👟</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -266,6 +558,29 @@
                 </div>
                 <div id="tab-achievements" class="tab-pane">
                     <ul id="achievements-list"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно выбора одежды -->
+    <div id="clothing-modal" class="clothing-modal">
+        <div class="clothing-modal-content">
+            <div class="clothing-modal-header">
+                <h2 id="clothing-modal-title">Выбор одежды</h2>
+                <button class="clothing-modal-close" onclick="closeClothingModal()">×</button>
+            </div>
+            <div class="clothing-modal-body">
+                <div class="clothing-items-grid" id="clothing-items-grid">
+                    <!-- Вещи будут добавлены через JavaScript -->
+                </div>
+                <div class="clothing-preview">
+                    <div class="clothing-preview-image" id="clothing-preview-image">
+                        <span style="opacity: 0.5;">Выберите вещь</span>
+                    </div>
+                    <div class="clothing-preview-name" id="clothing-preview-name">-</div>
+                    <div class="clothing-preview-description" id="clothing-preview-description">-</div>
+                    <button class="clothing-select-button" id="clothing-select-button" onclick="selectClothingItem()" disabled>Выбрать</button>
                 </div>
             </div>
         </div>
@@ -312,8 +627,43 @@
             achievements: [
                 { text: '✅ Первые шаги: Завершить обучение' }, { text: '✅ Новатор: Предложить 5 идей' },
                 { text: '🔒 Командный игрок: Завершить проект' }, { text: '🔒 Лидер мнений: Выступить на встрече' },
-            ]
+            ],
+            clothing: {
+                // Путь к изображениям одежды на GitHub: clothing/{тип}/{id}.png
+                // Полный путь: https://raw.githubusercontent.com/Mayhelper/game_tpop/main/images/clothing/{тип}/{id}.png
+                head: [
+                    { id: 'hat-1', name: 'Деловая шляпа', description: 'Элегантная шляпа для важных встреч', image: 'clothing/head/hat-1.png' },
+                    { id: 'cap-1', name: 'Бейсболка', description: 'Спортивный стиль для неформальных встреч', image: 'clothing/head/cap-1.png' },
+                    { id: 'helmet-1', name: 'Каска', description: 'Для работы на стройке', image: 'clothing/head/helmet-1.png' },
+                ],
+                body: [
+                    { id: 'suit-1', name: 'Деловой костюм', description: 'Классический костюм для переговоров', image: 'clothing/body/suit-1.png' },
+                    { id: 'shirt-1', name: 'Рубашка', description: 'Официальная рубашка', image: 'clothing/body/shirt-1.png' },
+                    { id: 'hoodie-1', name: 'Толстовка', description: 'Неформальный стиль', image: 'clothing/body/hoodie-1.png' },
+                ],
+                legs: [
+                    { id: 'pants-1', name: 'Брюки', description: 'Классические брюки', image: 'clothing/legs/pants-1.png' },
+                    { id: 'jeans-1', name: 'Джинсы', description: 'Удобные джинсы', image: 'clothing/legs/jeans-1.png' },
+                    { id: 'shorts-1', name: 'Шорты', description: 'Для жаркой погоды', image: 'clothing/legs/shorts-1.png' },
+                ],
+                shoes: [
+                    { id: 'shoes-1', name: 'Туфли', description: 'Классические туфли', image: 'clothing/shoes/shoes-1.png' },
+                    { id: 'sneakers-1', name: 'Кроссовки', description: 'Удобные кроссовки', image: 'clothing/shoes/sneakers-1.png' },
+                    { id: 'boots-1', name: 'Ботинки', description: 'Надежные ботинки', image: 'clothing/shoes/boots-1.png' },
+                ]
+            }
         };
+        
+        // Хранилище выбранной одежды
+        let selectedClothing = {
+            head: null,
+            body: null,
+            legs: null,
+            shoes: null
+        };
+        
+        let currentClothingType = null;
+        let currentSelectedClothingItem = null;
         
         // --- (JS-код без изменений в логике) ---
         const bodyEl = document.body;
@@ -398,8 +748,12 @@
             if (!selectedCharacter) return;
             document.getElementById('game-character-image').src = AppData.repoUrl + selectedCharacter.id + '.png';
             document.getElementById('game-character-image').alt = selectedCharacter.title;
-            document.getElementById('game-character-title').textContent = selectedCharacter.title;
-            bodyEl.style.backgroundColor = '#303f5a'; 
+            // Подпись под персонажем убрана
+            
+            // Устанавливаем фон из GitHub
+            const screenGamification = document.getElementById('screen-gamification');
+            screenGamification.style.backgroundImage = `url('${AppData.repoUrl}game-bg.png')`;
+            
             screens.character.classList.remove('active');
             screens.gamification.classList.add('active');
             buttons.confirmCharacter.style.display = 'none';
@@ -424,10 +778,18 @@
             });
 
             cardsSwiperInstance = new Swiper('.cards-swiper', {
-                slidesPerView: 3, spaceBetween: 10, loop: true, grabCursor: true,
+                slidesPerView: 3.5, /* Показываем 3.5 карточки, чтобы видно было что можно прокрутить */
+                spaceBetween: 8, 
+                loop: true, 
+                grabCursor: true,
+                freeMode: true, /* Плавная прокрутка */
             });
             badgesSwiperInstance = new Swiper('.badges-swiper', {
-                slidesPerView: 4, spaceBetween: 10, loop: true, grabCursor: true,
+                slidesPerView: 4.5, /* Показываем 4.5 значка */
+                spaceBetween: 8, 
+                loop: true, 
+                grabCursor: true,
+                freeMode: true, /* Плавная прокрутка */
             });
             areTabsInitialized = true;
         }
@@ -442,6 +804,136 @@
             if (tabId === 'cards' && cardsSwiperInstance) cardsSwiperInstance.update();
             if (tabId === 'badges' && badgesSwiperInstance) badgesSwiperInstance.update();
         }
+        
+        // Функции для работы с одеждой
+        function openClothingModal(type) {
+            currentClothingType = type;
+            const modal = document.getElementById('clothing-modal');
+            const title = document.getElementById('clothing-modal-title');
+            const grid = document.getElementById('clothing-items-grid');
+            
+            // Устанавливаем заголовок
+            const typeNames = {
+                head: 'Голова',
+                body: 'Туловище',
+                legs: 'Ноги',
+                shoes: 'Обувь'
+            };
+            title.textContent = `Выбор: ${typeNames[type]}`;
+            
+            // Очищаем сетку
+            grid.innerHTML = '';
+            
+            // Получаем вещи для выбранного типа
+            const items = AppData.clothing[type] || [];
+            
+            // Добавляем вещи в сетку
+            items.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'clothing-item';
+                itemDiv.onclick = (e) => selectClothingItemPreview(item, itemDiv);
+                
+                // Проверяем, выбрана ли эта вещь
+                if (selectedClothing[type] && selectedClothing[type].id === item.id) {
+                    itemDiv.classList.add('active');
+                }
+                
+                const img = document.createElement('img');
+                img.src = AppData.repoUrl + item.image; // Добавляем GitHub URL
+                img.alt = item.name;
+                img.onerror = function() {
+                    // Если изображение не загрузилось, показываем placeholder
+                    this.style.display = 'none';
+                    itemDiv.innerHTML = `<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 24px; opacity: 0.5;">👕</div>`;
+                };
+                
+                itemDiv.appendChild(img);
+                grid.appendChild(itemDiv);
+            });
+            
+            // Сбрасываем превью
+            resetClothingPreview();
+            
+            // Показываем модальное окно
+            modal.classList.add('active');
+        }
+        
+        function closeClothingModal() {
+            const modal = document.getElementById('clothing-modal');
+            modal.classList.remove('active');
+            currentSelectedClothingItem = null;
+        }
+        
+        function selectClothingItemPreview(item, element) {
+            currentSelectedClothingItem = item;
+            
+            // Обновляем активный элемент в сетке
+            document.querySelectorAll('.clothing-item').forEach(el => el.classList.remove('active'));
+            if (element) {
+                element.classList.add('active');
+            }
+            
+            // Обновляем превью
+            const previewImage = document.getElementById('clothing-preview-image');
+            const previewName = document.getElementById('clothing-preview-name');
+            const previewDescription = document.getElementById('clothing-preview-description');
+            const selectButton = document.getElementById('clothing-select-button');
+            
+            previewImage.innerHTML = `<img src="${AppData.repoUrl + item.image}" alt="${item.name}" onerror="this.parentElement.innerHTML='<span style=\'opacity: 0.5;\'>Изображение не найдено</span>'">`;
+            previewName.textContent = item.name;
+            previewDescription.textContent = item.description;
+            selectButton.disabled = false;
+        }
+        
+        function resetClothingPreview() {
+            const previewImage = document.getElementById('clothing-preview-image');
+            const previewName = document.getElementById('clothing-preview-name');
+            const previewDescription = document.getElementById('clothing-preview-description');
+            const selectButton = document.getElementById('clothing-select-button');
+            
+            previewImage.innerHTML = '<span style="opacity: 0.5;">Выберите вещь</span>';
+            previewName.textContent = '-';
+            previewDescription.textContent = '-';
+            selectButton.disabled = true;
+        }
+        
+        function selectClothingItem() {
+            if (!currentSelectedClothingItem || !currentClothingType) return;
+            
+            // Сохраняем выбранную вещь
+            selectedClothing[currentClothingType] = currentSelectedClothingItem;
+            
+            // Обновляем слот
+            const slot = document.querySelector(`[data-slot-type="${currentClothingType}"]`);
+            if (slot) {
+                slot.innerHTML = `<img src="${AppData.repoUrl + currentSelectedClothingItem.image}" alt="${currentSelectedClothingItem.name}" onerror="this.parentElement.innerHTML='<div class=\'clothing-slot-icon\'>${getSlotIcon(currentClothingType)}</div>'">`;
+            }
+            
+            // Закрываем модальное окно
+            closeClothingModal();
+            
+            // Вибрация (если поддерживается)
+            if (tg && tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('medium');
+            }
+        }
+        
+        function getSlotIcon(type) {
+            const icons = {
+                head: '👤',
+                body: '👕',
+                legs: '👖',
+                shoes: '👟'
+            };
+            return icons[type] || '👕';
+        }
+        
+        // Закрытие модального окна при клике вне его
+        document.getElementById('clothing-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeClothingModal();
+            }
+        });
     </script>
 </body>
 </html>
