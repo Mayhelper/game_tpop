@@ -162,6 +162,13 @@
         }
         body.theme-male-selection #btn-confirm-gender { background-color: var(--btn-male); }
         body.theme-female-selection #btn-confirm-gender { background-color: var(--btn-female); }
+        /* Скрываем кнопку "Далее" на экране выбора персонажа */
+        body.character-selection-active #btn-confirm-gender {
+            display: none !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            visibility: hidden !important;
+        }
         /* --- ЭКРАН 2: Выбор персонажа --- */
         @keyframes slideInUp {
             from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); }
@@ -890,9 +897,19 @@
                 swiperWrapper.appendChild(slide);
             });
             screens.gender.classList.remove('active');
-            buttons.confirmGender.style.display = 'none';
+            // Полностью скрываем кнопку "Далее"
+            if (buttons.confirmGender) {
+                buttons.confirmGender.style.display = 'none';
+                buttons.confirmGender.classList.remove('visible');
+                buttons.confirmGender.style.opacity = '0';
+            }
             screens.character.classList.add('active');
-            buttons.confirmCharacter.style.display = 'block';
+            // Добавляем класс на body для CSS правил
+            bodyEl.classList.add('character-selection-active');
+            // Показываем кнопку "Выбрать этого"
+            if (buttons.confirmCharacter) {
+                buttons.confirmCharacter.style.display = 'block';
+            }
             // Небольшая задержка для корректной инициализации Swiper после показа экрана
             setTimeout(() => {
                 initSwiper();
@@ -962,8 +979,13 @@
             screenGamification.style.backgroundImage = `url('${AppData.repoUrl}game-bg.png')`;
             
             screens.character.classList.remove('active');
+            // Убираем класс с body
+            bodyEl.classList.remove('character-selection-active');
             screens.gamification.classList.add('active');
-            buttons.confirmCharacter.style.display = 'none';
+            // Скрываем кнопку "Выбрать этого"
+            if (buttons.confirmCharacter) {
+                buttons.confirmCharacter.style.display = 'none';
+            }
             
             document.getElementById('tabs-container').style.display = 'block';
             
@@ -987,14 +1009,14 @@
             cardsSwiperInstance = new Swiper('.cards-swiper', {
                 slidesPerView: 3.5, /* Показываем 3.5 карточки, чтобы видно было что можно прокрутить */
                 spaceBetween: 8, 
-                loop: true, 
+                loop: false, /* Отключаем loop, так как карточек недостаточно для бесконечной прокрутки */
                 grabCursor: true,
                 freeMode: true, /* Плавная прокрутка */
             });
             badgesSwiperInstance = new Swiper('.badges-swiper', {
                 slidesPerView: 4.5, /* Показываем 4.5 значка */
                 spaceBetween: 8, 
-                loop: true, 
+                loop: false, /* Отключаем loop, так как значков недостаточно для бесконечной прокрутки */
                 grabCursor: true,
                 freeMode: true, /* Плавная прокрутка */
             });
