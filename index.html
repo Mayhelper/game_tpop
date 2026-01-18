@@ -209,13 +209,13 @@
             left: 50%;
             transform: translate(-50%, -50%); /* Центрирование по вертикали и горизонтали */
             text-align: center; 
-            width: 140px; /* Фиксированный размер для мобильной игры */
-            height: 200px; /* Фиксированная высота */
+            width: 160px; /* Увеличен размер персонажа */
+            height: 230px; /* Увеличен размер персонажа */
             z-index: 2; /* Персонаж поверх других элементов */
         }
         .game-character-display img {
-            width: 140px; /* Фиксированная ширина - не масштабируется */
-            height: 200px; /* Фиксированная высота - не масштабируется */
+            width: 160px; /* Увеличен размер персонажа */
+            height: 230px; /* Увеличен размер персонажа */
             object-fit: contain; /* Сохраняет пропорции */
             filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
         }
@@ -455,6 +455,192 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+        .clothing-remove-button {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: white;
+            font-family: var(--font-main);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        .clothing-remove-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .clothing-remove-button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        /* Модальное окно просмотра карточки */
+        .card-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+        .card-modal.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-modal-content {
+            width: 90%;
+            max-width: 400px;
+            background: rgba(20, 30, 48, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-sizing: border-box;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .card-modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .card-3d-container {
+            width: 100%;
+            max-width: 300px;
+            aspect-ratio: 3/4;
+            margin: 20px 0;
+            perspective: 1000px;
+        }
+        .card-3d {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+            cursor: grab;
+        }
+        .card-3d:active {
+            cursor: grabbing;
+        }
+        .card-3d-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        .card-3d-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 15px;
+        }
+        .card-rotation-controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .card-rotation-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-family: var(--font-main);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .card-rotation-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .card-modal-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .card-modal-description {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            line-height: 1.5;
+            text-transform: none;
+        }
+        
+        /* Уведомление о новых картах */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #4FC3F7, #29B6F6);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.4);
+            z-index: 3000;
+            font-family: var(--font-main);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+        .notification.active {
+            display: block;
+        }
+        .notification-close {
+            margin-left: 15px;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        .notification-close:hover {
+            opacity: 1;
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
         
         /* --- ИСПРАВЛЕННЫЙ БЛОК ВКЛАДОК --- */
         #tabs-container {
@@ -501,12 +687,56 @@
             align-items: center; justify-content: center;
         }
         .tab-pane.active { display: flex; }
-        .cards-swiper, .badges-swiper { 
+        /* Сетка карточек 3x2 */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .card-item {
+            aspect-ratio: 3/4;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .card-item:hover {
+            transform: scale(1.05);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .card-item img {
+            width: 100%;
+            height: 70%;
+            object-fit: contain;
+            margin-bottom: 5px;
+        }
+        .card-item-name {
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            color: white;
+        }
+        
+        .badges-swiper { 
             width: 100%; 
             height: 100%; 
-            padding: 5px 0; /* Небольшой отступ сверху и снизу */
+            padding: 5px 0;
         }
-        .cards-swiper .swiper-slide, .badges-swiper .swiper-slide {
+        .badges-swiper .swiper-slide {
             background: rgba(255, 255, 255, 0.1); 
             border-radius: 12px;
             display: flex; 
@@ -516,10 +746,6 @@
             font-weight: bold;
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-        .cards-swiper .swiper-slide {
-            height: 100px; /* Фиксированная высота - маленькие прямоугольники */
-            aspect-ratio: 3/4; /* Соотношение сторон как у карточек */
         }
         .badges-swiper .swiper-slide {
             height: 80px; /* Фиксированная высота для значков */
@@ -658,7 +884,7 @@
             </div>
             <div class="tabs-content">
                 <div id="tab-cards" class="tab-pane active">
-                    <div class="swiper-container cards-swiper"><div class="swiper-wrapper" id="cards-swiper-wrapper"></div></div>
+                    <div class="cards-grid" id="cards-grid"></div>
                 </div>
                 <div id="tab-badges" class="tab-pane">
                     <div class="swiper-container badges-swiper"><div class="swiper-wrapper" id="badges-swiper-wrapper"></div></div>
@@ -688,9 +914,36 @@
                     <div class="clothing-preview-name" id="clothing-preview-name">-</div>
                     <div class="clothing-preview-description" id="clothing-preview-description">-</div>
                     <button class="clothing-select-button" id="clothing-select-button" onclick="selectClothingItem()" disabled>Выбрать</button>
+                    <button class="clothing-remove-button" id="clothing-remove-button" onclick="removeClothingItem()" disabled>Снять</button>
                 </div>
             </div>
         </div>
+    </div>
+    
+    <!-- Модальное окно просмотра карточки -->
+    <div id="card-modal" class="card-modal">
+        <div class="card-modal-content">
+            <button class="card-modal-close" onclick="closeCardModal()">×</button>
+            <div class="card-modal-name" id="card-modal-name">Название карты</div>
+            <div class="card-3d-container">
+                <div class="card-3d" id="card-3d">
+                    <div class="card-3d-face">
+                        <img id="card-3d-image" src="" alt="Card">
+                    </div>
+                </div>
+            </div>
+            <div class="card-rotation-controls">
+                <button class="card-rotation-btn" onclick="rotateCard('left')">← Повернуть</button>
+                <button class="card-rotation-btn" onclick="rotateCard('right')">Повернуть →</button>
+            </div>
+            <div class="card-modal-description" id="card-modal-description">Описание карты</div>
+        </div>
+    </div>
+    
+    <!-- Уведомление о новых картах -->
+    <div id="notification" class="notification">
+        <span>У вас новые карты, посмотрите!</span>
+        <span class="notification-close" onclick="closeNotification()">×</span>
     </div>
     
     <button id="btn-confirm-gender" class="main-button" onclick="goToCharacterSelection()">Далее</button>
@@ -703,7 +956,6 @@
         let selectedGender = null;
         let swiperInstance = null;
         let selectedCharacter = {};
-        let cardsSwiperInstance = null;
         let badgesSwiperInstance = null;
         let areTabsInitialized = false;
 
@@ -727,7 +979,12 @@
                 ]
             },
             cards: [
-                { text: 'Карта 1' }, { text: 'Карта 2' }, { text: 'Карта 3' }, { text: 'Карта 4' }, { text: 'Карта 5' }
+                { id: 'card-1', name: 'Карта 1', description: 'Мощная карта для начала игры. Дает бонус к опыту.', image: 'clothing/head/hat-1.png' },
+                { id: 'card-2', name: 'Карта 2', description: 'Уникальная карта с особыми способностями. Увеличивает здоровье.', image: 'clothing/body/suit-1.png' },
+                { id: 'card-3', name: 'Карта 3', description: 'Редкая карта коллекционера. Повышает удачу.', image: 'clothing/legs/pants-1.png' },
+                { id: 'card-4', name: 'Карта 4', description: 'Легендарная карта. Дает огромные преимущества.', image: 'clothing/shoes/shoes-1.png' },
+                { id: 'card-5', name: 'Карта 5', description: 'Эпическая карта. Максимальные характеристики.', image: 'clothing/head/cap-1.png' },
+                { id: 'card-6', name: 'Карта 6', description: 'Новая карта! Специальные возможности.', image: 'clothing/body/shirt-1.png' }
             ],
             badges: [
                 { text: '⭐' }, { text: '🏆' }, { text: '💎' }, { text: '💡' }, { text: '🚀' }
@@ -740,22 +997,22 @@
                 // Путь к изображениям одежды на GitHub: clothing/{тип}/{id}.png
                 // Полный путь: https://raw.githubusercontent.com/Mayhelper/game_tpop/main/images/clothing/{тип}/{id}.png
                 head: [
-                    { id: 'hat-1', name: 'Деловая шляпа', description: 'Элегантная шляпа для важных встреч', image: 'clothing/head/hat-1.png' },
+                    { id: 'hat-1', name: 'Шлем самурая', description: 'Традиционный шлем самурая для защиты', image: 'clothing/head/hat-1.png', isSamurai: true },
                     { id: 'cap-1', name: 'Бейсболка', description: 'Спортивный стиль для неформальных встреч', image: 'clothing/head/cap-1.png' },
                     { id: 'helmet-1', name: 'Каска', description: 'Для работы на стройке', image: 'clothing/head/helmet-1.png' },
                 ],
                 body: [
-                    { id: 'suit-1', name: 'Деловой костюм', description: 'Классический костюм для переговоров', image: 'clothing/body/suit-1.png' },
+                    { id: 'suit-1', name: 'Кимоно самурая', description: 'Традиционное кимоно самурая', image: 'clothing/body/suit-1.png', isSamurai: true },
                     { id: 'shirt-1', name: 'Рубашка', description: 'Официальная рубашка', image: 'clothing/body/shirt-1.png' },
                     { id: 'hoodie-1', name: 'Толстовка', description: 'Неформальный стиль', image: 'clothing/body/hoodie-1.png' },
                 ],
                 legs: [
-                    { id: 'pants-1', name: 'Брюки', description: 'Классические брюки', image: 'clothing/legs/pants-1.png' },
+                    { id: 'pants-1', name: 'Хакама самурая', description: 'Традиционные широкие штаны самурая', image: 'clothing/legs/pants-1.png', isSamurai: true },
                     { id: 'jeans-1', name: 'Джинсы', description: 'Удобные джинсы', image: 'clothing/legs/jeans-1.png' },
                     { id: 'shorts-1', name: 'Шорты', description: 'Для жаркой погоды', image: 'clothing/legs/shorts-1.png' },
                 ],
                 shoes: [
-                    { id: 'shoes-1', name: 'Туфли', description: 'Классические туфли', image: 'clothing/shoes/shoes-1.png' },
+                    { id: 'shoes-1', name: 'Гэта самурая', description: 'Традиционная обувь самурая', image: 'clothing/shoes/shoes-1.png', isSamurai: true },
                     { id: 'sneakers-1', name: 'Кроссовки', description: 'Удобные кроссовки', image: 'clothing/shoes/sneakers-1.png' },
                     { id: 'boots-1', name: 'Ботинки', description: 'Надежные ботинки', image: 'clothing/shoes/boots-1.png' },
                 ]
@@ -993,10 +1250,22 @@
         }
 
         function initGameTabs() {
-            const cardsWrapper = document.getElementById('cards-swiper-wrapper');
-            AppData.cards.forEach(card => {
-                cardsWrapper.innerHTML += `<div class="swiper-slide">${card.text}</div>`;
-            });
+            // Создаем карточки в grid
+            const cardsGrid = document.getElementById('cards-grid');
+            if (cardsGrid) {
+                cardsGrid.innerHTML = '';
+                AppData.cards.forEach(card => {
+                    const cardItem = document.createElement('div');
+                    cardItem.className = 'card-item';
+                    cardItem.onclick = () => openCardModal(card);
+                    cardItem.innerHTML = `
+                        <img src="${AppData.repoUrl + card.image}" alt="${card.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'display: flex; align-items: center; justify-content: center; height: 100%; font-size: 24px; opacity: 0.5;\'>🃏</div>'">
+                        <div class="card-item-name">${card.name}</div>
+                    `;
+                    cardsGrid.appendChild(cardItem);
+                });
+            }
+            
             const badgesWrapper = document.getElementById('badges-swiper-wrapper');
             AppData.badges.forEach(badge => {
                 badgesWrapper.innerHTML += `<div class="swiper-slide">${badge.text}</div>`;
@@ -1006,13 +1275,6 @@
                 achievementsList.innerHTML += `<li>${ach.text}</li>`;
             });
 
-            cardsSwiperInstance = new Swiper('.cards-swiper', {
-                slidesPerView: 3.5, /* Показываем 3.5 карточки, чтобы видно было что можно прокрутить */
-                spaceBetween: 8, 
-                loop: false, /* Отключаем loop, так как карточек недостаточно для бесконечной прокрутки */
-                grabCursor: true,
-                freeMode: true, /* Плавная прокрутка */
-            });
             badgesSwiperInstance = new Swiper('.badges-swiper', {
                 slidesPerView: 4.5, /* Показываем 4.5 значка */
                 spaceBetween: 8, 
@@ -1021,7 +1283,130 @@
                 freeMode: true, /* Плавная прокрутка */
             });
             areTabsInitialized = true;
+            
+            // Показываем уведомление о новых картах
+            setTimeout(() => {
+                showNotification();
+            }, 1000);
         }
+        
+        // Функции для модального окна карточки
+        let currentCardRotation = { x: 0, y: 0 };
+        let currentCard = null;
+        
+        function openCardModal(card) {
+            currentCard = card;
+            currentCardRotation = { x: 0, y: 0 };
+            const modal = document.getElementById('card-modal');
+            const cardName = document.getElementById('card-modal-name');
+            const cardImage = document.getElementById('card-3d-image');
+            const cardDescription = document.getElementById('card-modal-description');
+            const card3d = document.getElementById('card-3d');
+            
+            cardName.textContent = card.name;
+            cardDescription.textContent = card.description;
+            cardImage.src = AppData.repoUrl + card.image;
+            card3d.style.transform = 'rotateX(0deg) rotateY(0deg)';
+            
+            modal.classList.add('active');
+            
+            // Добавляем обработчики для вращения перетаскиванием
+            let isDragging = false;
+            let startX = 0;
+            let startY = 0;
+            
+            card3d.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+            });
+            
+            card3d.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            });
+            
+            const handleMove = (clientX, clientY) => {
+                if (!isDragging) return;
+                const deltaX = clientX - startX;
+                const deltaY = clientY - startY;
+                
+                currentCardRotation.y += deltaX * 0.5;
+                currentCardRotation.x -= deltaY * 0.5;
+                
+                // Ограничиваем вращение по X
+                currentCardRotation.x = Math.max(-30, Math.min(30, currentCardRotation.x));
+                
+                card3d.style.transform = `rotateX(${currentCardRotation.x}deg) rotateY(${currentCardRotation.y}deg)`;
+                
+                startX = clientX;
+                startY = clientY;
+            };
+            
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) handleMove(e.clientX, e.clientY);
+            });
+            
+            document.addEventListener('touchmove', (e) => {
+                if (isDragging && e.touches[0]) {
+                    handleMove(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            });
+            
+            document.addEventListener('mouseup', () => { isDragging = false; });
+            document.addEventListener('touchend', () => { isDragging = false; });
+            
+            // Вибрация
+            if (tg && tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            }
+        }
+        
+        function closeCardModal() {
+            const modal = document.getElementById('card-modal');
+            modal.classList.remove('active');
+            currentCard = null;
+        }
+        
+        function rotateCard(direction) {
+            const card3d = document.getElementById('card-3d');
+            if (!card3d) return;
+            
+            if (direction === 'left') {
+                currentCardRotation.y -= 15;
+            } else {
+                currentCardRotation.y += 15;
+            }
+            
+            card3d.style.transform = `rotateX(${currentCardRotation.x}deg) rotateY(${currentCardRotation.y}deg)`;
+        }
+        
+        // Функции для уведомления
+        function showNotification() {
+            const notification = document.getElementById('notification');
+            if (notification) {
+                notification.classList.add('active');
+                // Автоматически скрываем через 5 секунд
+                setTimeout(() => {
+                    closeNotification();
+                }, 5000);
+            }
+        }
+        
+        function closeNotification() {
+            const notification = document.getElementById('notification');
+            if (notification) {
+                notification.classList.remove('active');
+            }
+        }
+        
+        // Закрытие модального окна карточки при клике вне его
+        document.getElementById('card-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCardModal();
+            }
+        });
 
         function switchTab(tabId, clickedButton) {
             document.documentElement.style.setProperty('--active-tab-color', clickedButton.dataset.color);
@@ -1030,7 +1415,7 @@
             clickedButton.classList.add('active');
             document.getElementById(`tab-${tabId}`).classList.add('active');
             
-            if (tabId === 'cards' && cardsSwiperInstance) cardsSwiperInstance.update();
+            // Обновляем только badges swiper, так как карточки теперь в grid
             if (tabId === 'badges' && badgesSwiperInstance) badgesSwiperInstance.update();
         }
         
@@ -1080,8 +1465,36 @@
                 grid.appendChild(itemDiv);
             });
             
-            // Сбрасываем превью
-            resetClothingPreview();
+            // Если вещь уже выбрана, показываем её в превью после создания сетки
+            setTimeout(() => {
+                if (selectedClothing[type]) {
+                    const selectedItem = selectedClothing[type];
+                    const previewImage = document.getElementById('clothing-preview-image');
+                    const previewName = document.getElementById('clothing-preview-name');
+                    const previewDescription = document.getElementById('clothing-preview-description');
+                    const selectButton = document.getElementById('clothing-select-button');
+                    const removeButton = document.getElementById('clothing-remove-button');
+                    
+                    previewImage.innerHTML = `<img src="${AppData.repoUrl + selectedItem.image}" alt="${selectedItem.name}">`;
+                    previewName.textContent = selectedItem.name;
+                    previewDescription.textContent = selectedItem.description;
+                    selectButton.disabled = false;
+                    if (removeButton) {
+                        removeButton.disabled = false;
+                    }
+                    
+                    // Находим элемент в сетке и делаем его активным
+                    const activeItem = Array.from(grid.children).find(child => {
+                        const img = child.querySelector('img');
+                        return img && img.alt === selectedItem.name;
+                    });
+                    if (activeItem) {
+                        activeItem.classList.add('active');
+                    }
+                } else {
+                    resetClothingPreview();
+                }
+            }, 50);
             
             // Показываем модальное окно
             modal.classList.add('active');
@@ -1107,11 +1520,18 @@
             const previewName = document.getElementById('clothing-preview-name');
             const previewDescription = document.getElementById('clothing-preview-description');
             const selectButton = document.getElementById('clothing-select-button');
+            const removeButton = document.getElementById('clothing-remove-button');
             
             previewImage.innerHTML = `<img src="${AppData.repoUrl + item.image}" alt="${item.name}" onerror="this.parentElement.innerHTML='<span style=\'opacity: 0.5;\'>Изображение не найдено</span>'">`;
             previewName.textContent = item.name;
             previewDescription.textContent = item.description;
             selectButton.disabled = false;
+            
+            // Показываем кнопку "Снять" если эта вещь уже выбрана
+            const isCurrentlySelected = selectedClothing[currentClothingType] && selectedClothing[currentClothingType].id === item.id;
+            if (removeButton) {
+                removeButton.disabled = !isCurrentlySelected;
+            }
         }
         
         function resetClothingPreview() {
@@ -1119,11 +1539,46 @@
             const previewName = document.getElementById('clothing-preview-name');
             const previewDescription = document.getElementById('clothing-preview-description');
             const selectButton = document.getElementById('clothing-select-button');
+            const removeButton = document.getElementById('clothing-remove-button');
             
             previewImage.innerHTML = '<span style="opacity: 0.5;">Выберите вещь</span>';
             previewName.textContent = '-';
             previewDescription.textContent = '-';
             selectButton.disabled = true;
+            if (removeButton) {
+                removeButton.disabled = true;
+            }
+        }
+        
+        // Функция снятия вещи
+        function removeClothingItem() {
+            if (!currentClothingType) return;
+            
+            // Удаляем вещь из выбранных
+            selectedClothing[currentClothingType] = null;
+            
+            // Обновляем слот - возвращаем иконку
+            const slot = document.querySelector(`[data-slot-type="${currentClothingType}"]`);
+            if (slot) {
+                slot.innerHTML = `<div class="clothing-slot-icon">${getSlotIcon(currentClothingType)}</div>`;
+            }
+            
+            // Обновляем изображение персонажа
+            updateCharacterImage();
+            
+            // Обновляем кнопку "Снять" в превью
+            const removeButton = document.getElementById('clothing-remove-button');
+            if (removeButton) {
+                removeButton.disabled = true;
+            }
+            
+            // Обновляем активные элементы в сетке
+            document.querySelectorAll('.clothing-item').forEach(el => el.classList.remove('active'));
+            
+            // Вибрация
+            if (tg && tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            }
         }
         
         function selectClothingItem() {
@@ -1138,12 +1593,47 @@
                 slot.innerHTML = `<img src="${AppData.repoUrl + currentSelectedClothingItem.image}" alt="${currentSelectedClothingItem.name}" onerror="this.parentElement.innerHTML='<div class=\'clothing-slot-icon\'>${getSlotIcon(currentClothingType)}</div>'">`;
             }
             
+            // Проверяем комбинацию самурая и обновляем персонажа
+            updateCharacterImage();
+            
+            // Активируем кнопку "Снять"
+            const removeButton = document.getElementById('clothing-remove-button');
+            if (removeButton) {
+                removeButton.disabled = false;
+            }
+            
             // Закрываем модальное окно
             closeClothingModal();
             
             // Вибрация (если поддерживается)
             if (tg && tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('medium');
+            }
+        }
+        
+        // Функция проверки комбинации самурая
+        function isSamuraiSetComplete() {
+            // Проверяем, что выбраны все 4 вещи самурая
+            return selectedClothing.head && selectedClothing.head.isSamurai &&
+                   selectedClothing.body && selectedClothing.body.isSamurai &&
+                   selectedClothing.legs && selectedClothing.legs.isSamurai &&
+                   selectedClothing.shoes && selectedClothing.shoes.isSamurai;
+        }
+        
+        // Функция обновления изображения персонажа
+        function updateCharacterImage() {
+            const characterImage = document.getElementById('game-character-image');
+            if (!characterImage || !selectedCharacter) return;
+            
+            // Проверяем, выбран ли женский персонаж female-1 и полный набор самурая
+            if (selectedCharacter.id === 'female-1' && isSamuraiSetComplete()) {
+                // Меняем на версию самурая
+                characterImage.src = AppData.repoUrl + 'female-1.1.png';
+                characterImage.alt = selectedCharacter.title + ' (Самурай)';
+            } else {
+                // Возвращаем обычную версию
+                characterImage.src = AppData.repoUrl + selectedCharacter.id + '.png';
+                characterImage.alt = selectedCharacter.title;
             }
         }
         
