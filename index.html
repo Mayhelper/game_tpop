@@ -261,6 +261,37 @@
         }
         .progress-bar-fill { background-color: #7CB342; height: 100%; border-radius: 5px; }
         #status-gold .bar-content { font-size: 16px; font-weight: 700; color: #FFEB3B; }
+        .shop-button {
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 10px;
+            font-family: var(--font-main);
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .shop-button:hover {
+            border-color: rgba(255, 255, 255, 0.7);
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+        .shop-button:active {
+            transform: scale(0.98);
+        }
         .clothing-slots { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
         .clothing-slot {
             width: 100%; 
@@ -490,6 +521,8 @@
             background: rgba(0, 0, 0, 0.8);
             z-index: 2000;
             backdrop-filter: blur(5px);
+            touch-action: none;
+            overflow: hidden;
         }
         .card-modal.active {
             display: flex;
@@ -543,6 +576,9 @@
             transform-style: preserve-3d;
             transition: transform 0.3s ease;
             cursor: grab;
+            touch-action: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
         .card-3d:active {
             cursor: grabbing;
@@ -559,6 +595,62 @@
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        /* Эффекты свечения для карточек в модальном окне */
+        .card-3d-face.glow-silver {
+            border-color: rgba(192, 192, 192, 0.8);
+            box-shadow: 0 0 20px rgba(192, 192, 192, 0.6), 0 0 40px rgba(192, 192, 192, 0.4), 0 8px 20px rgba(0,0,0,0.3);
+            animation: glowPulseSilver 2s ease-in-out infinite;
+        }
+        .card-3d-face.glow-gold {
+            border-color: rgba(255, 215, 0, 0.8);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.4), 0 8px 20px rgba(0,0,0,0.3);
+            animation: glowPulseGold 2s ease-in-out infinite;
+        }
+        .card-3d-face.glow-blue {
+            border-color: rgba(79, 195, 247, 0.8);
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.6), 0 0 40px rgba(79, 195, 247, 0.4), 0 8px 20px rgba(0,0,0,0.3);
+            animation: glowPulseBlue 2s ease-in-out infinite;
+        }
+        .card-3d-face.glow-purple {
+            border-color: rgba(156, 39, 176, 0.8);
+            box-shadow: 0 0 20px rgba(156, 39, 176, 0.6), 0 0 40px rgba(156, 39, 176, 0.4), 0 8px 20px rgba(0,0,0,0.3);
+            animation: glowPulsePurple 2s ease-in-out infinite;
+        }
+        
+        @keyframes glowPulseSilver {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(192, 192, 192, 0.6), 0 0 40px rgba(192, 192, 192, 0.4), 0 8px 20px rgba(0,0,0,0.3);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(192, 192, 192, 0.8), 0 0 50px rgba(192, 192, 192, 0.6), 0 8px 20px rgba(0,0,0,0.3);
+            }
+        }
+        @keyframes glowPulseGold {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.4), 0 8px 20px rgba(0,0,0,0.3);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.6), 0 8px 20px rgba(0,0,0,0.3);
+            }
+        }
+        @keyframes glowPulseBlue {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(79, 195, 247, 0.6), 0 0 40px rgba(79, 195, 247, 0.4), 0 8px 20px rgba(0,0,0,0.3);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(79, 195, 247, 0.8), 0 0 50px rgba(79, 195, 247, 0.6), 0 8px 20px rgba(0,0,0,0.3);
+            }
+        }
+        @keyframes glowPulsePurple {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(156, 39, 176, 0.6), 0 0 40px rgba(156, 39, 176, 0.4), 0 8px 20px rgba(0,0,0,0.3);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(156, 39, 176, 0.8), 0 0 50px rgba(156, 39, 176, 0.6), 0 8px 20px rgba(0,0,0,0.3);
+            }
         }
         .card-3d-face img {
             width: 100%;
@@ -687,10 +779,10 @@
             align-items: center; justify-content: center;
         }
         .tab-pane.active { display: flex; }
-        /* Сетка карточек 3x2 */
+        /* Адаптивная сетка карточек - показывает только реальные карты */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             gap: 10px;
             width: 100%;
             height: 100%;
@@ -700,35 +792,108 @@
         }
         .card-item {
             aspect-ratio: 3/4;
-            background: rgba(255, 255, 255, 0.1);
+            background: 
+                linear-gradient(135deg, rgba(245, 245, 220, 0.15) 0%, rgba(250, 240, 230, 0.1) 100%),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.03) 2px,
+                    rgba(0, 0, 0, 0.03) 4px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.03) 2px,
+                    rgba(0, 0, 0, 0.03) 4px
+                ),
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            background-color: rgba(245, 245, 220, 0.2);
             border-radius: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            justify-content: flex-end;
+            border: 2px solid rgba(139, 120, 100, 0.3);
+            box-shadow: 
+                0 2px 8px rgba(0,0,0,0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
             cursor: pointer;
             transition: all 0.3s ease;
-            padding: 10px;
+            padding: 0;
             box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
+        .card-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
+            pointer-events: none;
+            opacity: 0.6;
         }
         .card-item:hover {
             transform: scale(1.05);
-            border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border-color: rgba(139, 120, 100, 0.5);
+            box-shadow: 
+                0 4px 12px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.15);
         }
         .card-item img {
             width: 100%;
-            height: 70%;
-            object-fit: contain;
-            margin-bottom: 5px;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            border-radius: 10px;
         }
         .card-item-name {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             text-align: center;
             color: white;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 2;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 70%, transparent 100%);
+            padding: 8px 6px 6px 6px;
+            width: 100%;
+            box-sizing: border-box;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
+        /* Единый плейсхолдер при ошибке загрузки изображения */
+        .no-image-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            font-size: 12px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            padding: 10px;
+            box-sizing: border-box;
+            text-transform: none;
+        }
+        .no-image-placeholder.small {
+            font-size: 10px;
+            padding: 4px;
         }
         
         .badges-swiper { 
@@ -859,6 +1024,7 @@
                 </div>
             </div>
             <div class="game-side-panel panel-right">
+                <button class="shop-button" onclick="openShop()">🛒 Магазин</button>
                 <div class="clothing-slots">
                     <div class="clothing-slot" data-slot-type="head" onclick="openClothingModal('head')">
                         <div class="clothing-slot-icon">👤</div>
@@ -979,11 +1145,11 @@
                 ]
             },
             cards: [
-                { id: 'card-1', name: 'Карта 1', description: 'Мощная карта для начала игры. Дает бонус к опыту.', image: 'cards/card-1.png' },
+                { id: 'card-1', name: 'Карта 1', description: 'Мощная карта для начала игры. Дает бонус к опыту.', image: 'cards/card-1.png', glowColor: 'silver' },
                 { id: 'card-2', name: 'Карта 2', description: 'Уникальная карта с особыми способностями. Увеличивает здоровье.', image: 'cards/card-2.png' },
                 { id: 'card-3', name: 'Карта 3', description: 'Редкая карта коллекционера. Повышает удачу.', image: 'cards/card-3.png' },
-                { id: 'card-4', name: 'Карта 4', description: 'Легендарная карта. Дает огромные преимущества.', image: 'cards/card-4.png' },
-                { id: 'card-5', name: 'Карта 5', description: 'Эпическая карта. Максимальные характеристики.', image: 'cards/card-5.png' },
+                { id: 'card-4', name: 'Карта 4', description: 'Легендарная карта. Дает огромные преимущества.', image: 'cards/card-4.png', glowColor: 'gold' },
+                { id: 'card-5', name: 'Карта 5', description: 'Эпическая карта. Максимальные характеристики.', image: 'cards/card-5.png', glowColor: 'purple' },
                 { id: 'card-6', name: 'Карта 6', description: 'Новая карта! Специальные возможности.', image: 'cards/card-6.png' }
             ],
             badges: [
@@ -1250,7 +1416,7 @@
         }
 
         function initGameTabs() {
-            // Создаем карточки в grid
+            // Создаем карточки в grid - только реальные карты, без пустых слотов
             const cardsGrid = document.getElementById('cards-grid');
             if (cardsGrid) {
                 cardsGrid.innerHTML = '';
@@ -1259,9 +1425,11 @@
                     cardItem.className = 'card-item';
                     cardItem.onclick = () => openCardModal(card);
                     cardItem.innerHTML = `
-                        <img src="${AppData.repoUrl + card.image}" alt="${card.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'display: flex; align-items: center; justify-content: center; height: 100%; font-size: 24px; opacity: 0.5;\'>🃏</div>'">
+                        <img src="${AppData.repoUrl + card.image}" alt="${card.name}" onerror="var n=this.alt; this.style.display='none'; this.parentElement.innerHTML='<div class=\'no-image-placeholder\' style=\'position:absolute;top:0;left:0;right:0;bottom:0;z-index:1\'>Нет изображения</div><div class=\'card-item-name\'>'+n+'</div>'">
                         <div class="card-item-name">${card.name}</div>
                     `;
+                    // Убеждаемся, что карточка имеет position: relative для правильного позиционирования
+                    cardItem.style.position = 'relative';
                     cardsGrid.appendChild(cardItem);
                 });
             }
@@ -1299,33 +1467,65 @@
             currentCardRotation = { x: 0, y: 0 };
             const modal = document.getElementById('card-modal');
             const cardName = document.getElementById('card-modal-name');
-            const cardImage = document.getElementById('card-3d-image');
             const cardDescription = document.getElementById('card-modal-description');
             const card3d = document.getElementById('card-3d');
+            const card3dFace = card3d.querySelector('.card-3d-face');
             
             cardName.textContent = card.name;
             cardDescription.textContent = card.description;
-            cardImage.src = AppData.repoUrl + card.image;
+            
+            // Восстанавливаем содержимое карточки (на случай предыдущей ошибки загрузки)
+            if (card3dFace) {
+                card3dFace.innerHTML = '<img id="card-3d-image" src="" alt="Card">';
+            }
+            const cardImg = document.getElementById('card-3d-image');
+            if (cardImg) {
+                cardImg.src = AppData.repoUrl + card.image;
+                cardImg.alt = card.name;
+                cardImg.onerror = function() {
+                    if (card3dFace) {
+                        card3dFace.innerHTML = '<div class="no-image-placeholder">Нет изображения</div>';
+                    }
+                };
+            }
+            
             card3d.style.transform = 'rotateX(0deg) rotateY(0deg)';
             
+            // Убираем все классы свечения и добавляем нужный
+            if (card3dFace) {
+                card3dFace.classList.remove('glow-silver', 'glow-gold', 'glow-blue', 'glow-purple');
+                if (card.glowColor) {
+                    card3dFace.classList.add(`glow-${card.glowColor}`);
+                }
+            }
+            
             modal.classList.add('active');
+            
+            // Блокируем прокрутку body когда модальное окно открыто
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
             
             // Добавляем обработчики для вращения перетаскиванием
             let isDragging = false;
             let startX = 0;
             let startY = 0;
             
-            card3d.addEventListener('mousedown', (e) => {
+            const handleMouseDown = (e) => {
                 isDragging = true;
                 startX = e.clientX;
                 startY = e.clientY;
-            });
+                e.preventDefault();
+            };
             
-            card3d.addEventListener('touchstart', (e) => {
-                isDragging = true;
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-            });
+            const handleTouchStart = (e) => {
+                if (e.touches.length === 1) {
+                    isDragging = true;
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                    e.preventDefault();
+                }
+            };
             
             const handleMove = (clientX, clientY) => {
                 if (!isDragging) return;
@@ -1344,18 +1544,33 @@
                 startY = clientY;
             };
             
-            document.addEventListener('mousemove', (e) => {
-                if (isDragging) handleMove(e.clientX, e.clientY);
-            });
+            const handleMouseMove = (e) => {
+                if (isDragging) {
+                    handleMove(e.clientX, e.clientY);
+                    e.preventDefault();
+                }
+            };
             
-            document.addEventListener('touchmove', (e) => {
+            const handleTouchMove = (e) => {
                 if (isDragging && e.touches[0]) {
                     handleMove(e.touches[0].clientX, e.touches[0].clientY);
+                    e.preventDefault();
                 }
-            });
+            };
             
-            document.addEventListener('mouseup', () => { isDragging = false; });
-            document.addEventListener('touchend', () => { isDragging = false; });
+            const handleEnd = () => { 
+                isDragging = false; 
+            };
+            
+            card3d.addEventListener('mousedown', handleMouseDown);
+            card3d.addEventListener('touchstart', handleTouchStart, { passive: false });
+            
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('touchmove', handleTouchMove, { passive: false });
+            
+            document.addEventListener('mouseup', handleEnd);
+            document.addEventListener('touchend', handleEnd);
+            document.addEventListener('touchcancel', handleEnd);
             
             // Вибрация
             if (tg && tg.HapticFeedback) {
@@ -1367,6 +1582,11 @@
             const modal = document.getElementById('card-modal');
             modal.classList.remove('active');
             currentCard = null;
+            
+            // Восстанавливаем прокрутку body
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
         }
         
         function rotateCard(direction) {
@@ -1420,6 +1640,14 @@
         }
         
         // Функции для работы с одеждой
+        function openShop() {
+            // Заглушка для магазина - можно будет расширить позже
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+            }
+            alert('Магазин скоро откроется!');
+        }
+        
         function openClothingModal(type) {
             currentClothingType = type;
             const modal = document.getElementById('clothing-modal');
@@ -1456,9 +1684,8 @@
                 img.src = AppData.repoUrl + item.image; // Добавляем GitHub URL
                 img.alt = item.name;
                 img.onerror = function() {
-                    // Если изображение не загрузилось, показываем placeholder
                     this.style.display = 'none';
-                    itemDiv.innerHTML = `<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 24px; opacity: 0.5;">👕</div>`;
+                    itemDiv.innerHTML = `<div class="no-image-placeholder">Нет изображения</div>`;
                 };
                 
                 itemDiv.appendChild(img);
@@ -1522,7 +1749,7 @@
             const selectButton = document.getElementById('clothing-select-button');
             const removeButton = document.getElementById('clothing-remove-button');
             
-            previewImage.innerHTML = `<img src="${AppData.repoUrl + item.image}" alt="${item.name}" onerror="this.parentElement.innerHTML='<span style=\'opacity: 0.5;\'>Изображение не найдено</span>'">`;
+            previewImage.innerHTML = `<img src="${AppData.repoUrl + item.image}" alt="${item.name}" onerror="this.parentElement.innerHTML='<div class=\'no-image-placeholder\'>Нет изображения</div>'">`;
             previewName.textContent = item.name;
             previewDescription.textContent = item.description;
             selectButton.disabled = false;
@@ -1590,7 +1817,7 @@
             // Обновляем слот
             const slot = document.querySelector(`[data-slot-type="${currentClothingType}"]`);
             if (slot) {
-                slot.innerHTML = `<img src="${AppData.repoUrl + currentSelectedClothingItem.image}" alt="${currentSelectedClothingItem.name}" onerror="this.parentElement.innerHTML='<div class=\'clothing-slot-icon\'>${getSlotIcon(currentClothingType)}</div>'">`;
+                slot.innerHTML = `<img src="${AppData.repoUrl + currentSelectedClothingItem.image}" alt="${currentSelectedClothingItem.name}" onerror="this.parentElement.innerHTML='<div class=\'no-image-placeholder small\'>Нет изображения</div>'">`;
             }
             
             // Проверяем комбинацию самурая и обновляем персонажа
