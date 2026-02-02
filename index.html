@@ -724,6 +724,9 @@
             -webkit-user-select: none;
             user-select: none;
         }
+        .card-3d.card-3d-dragging {
+            transition: none;
+        }
         .card-3d:active {
             cursor: grabbing;
         }
@@ -740,67 +743,47 @@
             border: 2px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
             transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        /* Глянцевый блик — рассеянный источник света, смещается при повороте карты */
+        .card-3d-face::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            background: radial-gradient(
+                circle at var(--gloss-x, 50%) var(--gloss-y, 50%),
+                rgba(255, 255, 255, 0.4) 0%,
+                rgba(255, 255, 255, 0.15) 25%,
+                rgba(255, 255, 255, 0.05) 45%,
+                transparent 65%
+            );
         }
         
-        /* Эффекты свечения для карточек в модальном окне */
-        .card-3d-face.glow-silver {
-            border-color: rgba(192, 192, 192, 0.8);
-            box-shadow: 0 0 20px rgba(192, 192, 192, 0.6), 0 0 40px rgba(192, 192, 192, 0.4), 0 8px 20px rgba(0,0,0,0.3);
-            animation: glowPulseSilver 2s ease-in-out infinite;
-        }
-        .card-3d-face.glow-gold {
-            border-color: rgba(255, 215, 0, 0.8);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.4), 0 8px 20px rgba(0,0,0,0.3);
-            animation: glowPulseGold 2s ease-in-out infinite;
-        }
-        .card-3d-face.glow-blue {
-            border-color: rgba(79, 195, 247, 0.8);
-            box-shadow: 0 0 20px rgba(79, 195, 247, 0.6), 0 0 40px rgba(79, 195, 247, 0.4), 0 8px 20px rgba(0,0,0,0.3);
-            animation: glowPulseBlue 2s ease-in-out infinite;
-        }
-        .card-3d-face.glow-purple {
-            border-color: rgba(156, 39, 176, 0.8);
-            box-shadow: 0 0 20px rgba(156, 39, 176, 0.6), 0 0 40px rgba(156, 39, 176, 0.4), 0 8px 20px rgba(0,0,0,0.3);
-            animation: glowPulsePurple 2s ease-in-out infinite;
-        }
-        
-        @keyframes glowPulseSilver {
-            0%, 100% {
-                box-shadow: 0 0 20px rgba(192, 192, 192, 0.6), 0 0 40px rgba(192, 192, 192, 0.4), 0 8px 20px rgba(0,0,0,0.3);
-            }
-            50% {
-                box-shadow: 0 0 25px rgba(192, 192, 192, 0.8), 0 0 50px rgba(192, 192, 192, 0.6), 0 8px 20px rgba(0,0,0,0.3);
-            }
-        }
-        @keyframes glowPulseGold {
-            0%, 100% {
-                box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.4), 0 8px 20px rgba(0,0,0,0.3);
-            }
-            50% {
-                box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.6), 0 8px 20px rgba(0,0,0,0.3);
-            }
-        }
-        @keyframes glowPulseBlue {
-            0%, 100% {
-                box-shadow: 0 0 20px rgba(79, 195, 247, 0.6), 0 0 40px rgba(79, 195, 247, 0.4), 0 8px 20px rgba(0,0,0,0.3);
-            }
-            50% {
-                box-shadow: 0 0 25px rgba(79, 195, 247, 0.8), 0 0 50px rgba(79, 195, 247, 0.6), 0 8px 20px rgba(0,0,0,0.3);
-            }
-        }
-        @keyframes glowPulsePurple {
-            0%, 100% {
-                box-shadow: 0 0 20px rgba(156, 39, 176, 0.6), 0 0 40px rgba(156, 39, 176, 0.4), 0 8px 20px rgba(0,0,0,0.3);
-            }
-            50% {
-                box-shadow: 0 0 25px rgba(156, 39, 176, 0.8), 0 0 50px rgba(156, 39, 176, 0.6), 0 8px 20px rgba(0,0,0,0.3);
-            }
-        }
         .card-3d-face img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             padding: 15px;
+        }
+        .card-3d-face-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, #1a2639 0%, #2d3e50 50%, #1a2639 100%);
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.4), 0 8px 20px rgba(0,0,0,0.3);
+        }
+        .card-3d-face-back::before {
+            content: 'MAY GAMES';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
         }
         .card-rotation-controls {
             display: flex;
@@ -1297,9 +1280,10 @@
             <div class="card-modal-name" id="card-modal-name">Название карты</div>
             <div class="card-3d-container">
                 <div class="card-3d" id="card-3d">
-                    <div class="card-3d-face">
+                    <div class="card-3d-face card-3d-face-front">
                         <img id="card-3d-image" src="" alt="Card">
                     </div>
+                    <div class="card-3d-face card-3d-face-back"></div>
                 </div>
             </div>
             <div class="card-rotation-controls">
@@ -1686,6 +1670,7 @@
         // Функции для модального окна карточки
         let currentCardRotation = { x: 0, y: 0 };
         let currentCard = null;
+        let cardModalDragHandlers = null;
         
         function openCardModal(card) {
             currentCard = card;
@@ -1694,12 +1679,11 @@
             const cardName = document.getElementById('card-modal-name');
             const cardDescription = document.getElementById('card-modal-description');
             const card3d = document.getElementById('card-3d');
-            const card3dFace = card3d.querySelector('.card-3d-face');
+            const card3dFace = card3d.querySelector('.card-3d-face-front');
             
             cardName.textContent = card.name;
             cardDescription.textContent = card.description;
             
-            // Восстанавливаем содержимое карточки (на случай предыдущей ошибки загрузки)
             if (card3dFace) {
                 card3dFace.innerHTML = '<img id="card-3d-image" src="" alt="Card">';
             }
@@ -1715,23 +1699,18 @@
             }
             
             card3d.style.transform = 'rotateX(0deg) rotateY(0deg)';
+            updateCardGloss(card3d);
+            card3d.classList.remove('card-3d-dragging');
             
-            // Убираем все классы свечения и добавляем нужный
             if (card3dFace) {
                 card3dFace.classList.remove('glow-silver', 'glow-gold', 'glow-blue', 'glow-purple');
-                if (card.glowColor) {
-                    card3dFace.classList.add(`glow-${card.glowColor}`);
-                }
             }
             
             modal.classList.add('active');
-            
-            // Блокируем прокрутку body когда модальное окно открыто
             document.body.style.overflow = 'hidden';
             document.body.style.position = 'fixed';
             document.body.style.width = '100%';
             
-            // Добавляем обработчики для вращения перетаскиванием
             let isDragging = false;
             let startX = 0;
             let startY = 0;
@@ -1740,6 +1719,7 @@
                 isDragging = true;
                 startX = e.clientX;
                 startY = e.clientY;
+                card3d.classList.add('card-3d-dragging');
                 e.preventDefault();
             };
             
@@ -1748,6 +1728,7 @@
                     isDragging = true;
                     startX = e.touches[0].clientX;
                     startY = e.touches[0].clientY;
+                    card3d.classList.add('card-3d-dragging');
                     e.preventDefault();
                 }
             };
@@ -1756,15 +1737,11 @@
                 if (!isDragging) return;
                 const deltaX = clientX - startX;
                 const deltaY = clientY - startY;
-                
                 currentCardRotation.y += deltaX * 0.5;
                 currentCardRotation.x -= deltaY * 0.5;
-                
-                // Ограничиваем вращение по X
                 currentCardRotation.x = Math.max(-30, Math.min(30, currentCardRotation.x));
-                
                 card3d.style.transform = `rotateX(${currentCardRotation.x}deg) rotateY(${currentCardRotation.y}deg)`;
-                
+                updateCardGloss(card3d);
                 startX = clientX;
                 startY = clientY;
             };
@@ -1784,31 +1761,45 @@
             };
             
             const handleEnd = () => { 
-                isDragging = false; 
+                isDragging = false;
+                card3d.classList.remove('card-3d-dragging');
             };
             
             card3d.addEventListener('mousedown', handleMouseDown);
             card3d.addEventListener('touchstart', handleTouchStart, { passive: false });
-            
             document.addEventListener('mousemove', handleMouseMove);
             document.addEventListener('touchmove', handleTouchMove, { passive: false });
-            
             document.addEventListener('mouseup', handleEnd);
             document.addEventListener('touchend', handleEnd);
             document.addEventListener('touchcancel', handleEnd);
             
-            // Вибрация
-            if (tg && tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('light');
-            }
+            cardModalDragHandlers = {
+                mouseDown: handleMouseDown,
+                touchStart: handleTouchStart,
+                mouseMove: handleMouseMove,
+                touchMove: handleTouchMove,
+                end: handleEnd
+            };
+            
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
         
         function closeCardModal() {
             const modal = document.getElementById('card-modal');
+            const card3d = document.getElementById('card-3d');
+            if (card3d) card3d.classList.remove('card-3d-dragging');
+            if (cardModalDragHandlers && card3d) {
+                card3d.removeEventListener('mousedown', cardModalDragHandlers.mouseDown);
+                card3d.removeEventListener('touchstart', cardModalDragHandlers.touchStart);
+                document.removeEventListener('mousemove', cardModalDragHandlers.mouseMove);
+                document.removeEventListener('touchmove', cardModalDragHandlers.touchMove);
+                document.removeEventListener('mouseup', cardModalDragHandlers.end);
+                document.removeEventListener('touchend', cardModalDragHandlers.end);
+                document.removeEventListener('touchcancel', cardModalDragHandlers.end);
+                cardModalDragHandlers = null;
+            }
             modal.classList.remove('active');
             currentCard = null;
-            
-            // Восстанавливаем прокрутку body
             document.body.style.overflow = '';
             document.body.style.position = '';
             document.body.style.width = '';
@@ -1825,6 +1816,17 @@
             }
             
             card3d.style.transform = `rotateX(${currentCardRotation.x}deg) rotateY(${currentCardRotation.y}deg)`;
+            updateCardGloss(card3d);
+        }
+        
+        function updateCardGloss(card3dEl) {
+            if (!card3dEl) return;
+            var glossX = 50 + currentCardRotation.y * 0.25;
+            var glossY = 50 - currentCardRotation.x * 0.25;
+            glossX = Math.max(15, Math.min(85, glossX));
+            glossY = Math.max(15, Math.min(85, glossY));
+            card3dEl.style.setProperty('--gloss-x', glossX + '%');
+            card3dEl.style.setProperty('--gloss-y', glossY + '%');
         }
         
         // Функции для уведомления
