@@ -198,10 +198,11 @@
         .game-top-area {
             position: relative;
             width: 100%;
-            height: 33vh; /* Занимает 1/3 экрана */
+            height: 33vh;
             min-height: 200px;
-            max-height: 300px;
-            flex-shrink: 0; /* Не сжимается */
+            max-height: 280px;
+            flex-shrink: 0;
+            overflow: hidden;
         }
         .game-character-display {
             position: absolute; 
@@ -225,15 +226,17 @@
         .game-side-panel {
             position: absolute; 
             top: 20px;
+            bottom: 20px;
             width: 30%;
             max-width: 110px; 
-            min-width: 0; /* Чтобы не вылезало при узком экране */
+            min-width: 0;
             display: flex;
             flex-direction: column; 
-            gap: 10px;
+            gap: 8px;
             z-index: 1;
             box-sizing: border-box;
         }
+        .game-side-panel > *:last-child { margin-top: auto; }
         .panel-left { left: 10px; }
         .panel-right { right: 10px; }
         .status-bar {
@@ -255,8 +258,10 @@
             font-size: 10px; font-weight: 700; background: rgba(0,0,0,0.4);
             padding: 2px 4px; border-radius: 4px;
         }
+        #status-health { cursor: pointer; }
         #status-health .bar-content { font-size: 16px; letter-spacing: 1px; }
         #status-health .bar-content span { color: #E53935; text-shadow: 0 0 5px rgba(255, 82, 82, 0.7); }
+        #status-health .bar-content span.heart-empty { color: rgba(255,255,255,0.35); }
         .progress-bar-container {
             background-color: rgba(0, 0, 0, 0.3); border-radius: 5px;
             height: 10px; overflow: hidden; width: 100%;
@@ -319,9 +324,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
             object-position: center center;
-            padding: 5px;
+            padding: 0;
             box-sizing: border-box;
         }
         .clothing-set-bonus {
@@ -357,6 +362,58 @@
             font-size: 28px; /* Немного увеличиваем размер */
             opacity: 0.9; /* Увеличиваем непрозрачность для лучшей видимости */
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); /* Добавляем тень для контраста */
+        }
+        
+        /* Модальное окно правил жизней */
+        .health-rules-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .health-rules-modal.active { display: flex; }
+        .health-rules-modal-content {
+            background: rgba(20, 30, 48, 0.98);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 340px;
+            width: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.9);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .health-rules-modal h3 {
+            margin: 0 0 16px 0;
+            font-size: 18px;
+            color: white;
+            text-transform: uppercase;
+        }
+        .health-rules-modal p {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.9);
+            text-transform: none;
+        }
+        .health-rules-modal-close {
+            margin-top: 16px;
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 10px;
+            color: white;
+            font-family: var(--font-main);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
         }
         
         /* Модальное окно выбора одежды */
@@ -807,22 +864,22 @@
         
         /* --- ИСПРАВЛЕННЫЙ БЛОК ВКЛАДОК --- */
         #tabs-container {
-            position: relative; /* Изменено с absolute на relative */
+            position: relative;
             width: 100%;
-            flex: 1; /* Занимает оставшееся пространство */
-            min-height: 0; /* Позволяет flex-элементу сжиматься */
+            flex: 1;
+            min-height: 0;
             background: rgba(20, 30, 48, 0.85);
             backdrop-filter: blur(10px);
             border-top-left-radius: 30px;
             border-top-right-radius: 30px;
             padding: 20px 15px 15px 15px;
-            padding-top: 30px; /* Опускаем вкладки ниже, чтобы персонаж полностью влезал */
+            padding-top: 30px;
             box-sizing: border-box;
             color: white;
-            display: none; /* Скрыт по умолчанию */
+            display: none;
             box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
-            overflow: hidden; /* Предотвращает переполнение */
-            margin-top: 10px; /* Дополнительный отступ сверху */
+            overflow: hidden;
+            margin-top: 0;
         }
         .tab-buttons {
             display: flex; gap: 5px; background: rgba(0, 0, 0, 0.25);
@@ -1082,9 +1139,9 @@
             </div>
             <div class="game-side-panel panel-left">
                 <!-- ... (статус-бары) ... -->
-                 <div class="status-bar" id="status-health">
+                 <div class="status-bar" id="status-health" onclick="openHealthRulesModal()" title="Правила жизней">
                     <label>жизни</label>
-                    <div class="bar-content"><span>❤</span><span>❤</span><span>❤</span></div>
+                    <div class="bar-content"><span>❤</span><span>❤</span><span class="heart-empty">🤍</span></div>
                 </div>
                 <div class="status-bar" id="status-xp">
                     <label>опыт <span>Level 5</span></label>
@@ -1132,6 +1189,16 @@
                     <ul id="achievements-list"></ul>
                 </div>
             </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно правил жизней -->
+    <div id="health-rules-modal" class="health-rules-modal" onclick="if(event.target===this) closeHealthRulesModal()">
+        <div class="health-rules-modal-content">
+            <h3>Правила жизней</h3>
+            <p>Если сотрудник не заходит в игру в течение <strong>2 дней</strong>, жизни теряются (одно сердце в день).</p>
+            <p>При отсутствии жизней каждый день списываются <strong>May Coins</strong> в размере <strong>200 монет</strong>.</p>
+            <button type="button" class="health-rules-modal-close" onclick="closeHealthRulesModal()">Понятно</button>
         </div>
     </div>
     
@@ -1739,11 +1806,22 @@
         
         // Функции для работы с одеждой
         function openShop() {
-            // Заглушка для магазина - можно будет расширить позже
             if (window.Telegram && window.Telegram.WebApp) {
                 window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
             }
             alert('Магазин скоро откроется!');
+        }
+        
+        function openHealthRulesModal() {
+            const modal = document.getElementById('health-rules-modal');
+            if (modal) modal.classList.add('active');
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+            }
+        }
+        function closeHealthRulesModal() {
+            const modal = document.getElementById('health-rules-modal');
+            if (modal) modal.classList.remove('active');
         }
         
         function openClothingModal(type) {
