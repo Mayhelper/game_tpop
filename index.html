@@ -224,8 +224,7 @@
         }
         .game-side-panel {
             position: absolute; 
-            top: 50%;
-            transform: translateY(-50%); /* Вертикальное центрирование */
+            top: 20px; /* На одном уровне с первым статус-баром (health) */
             width: 30%;
             max-width: 110px; 
             display: flex;
@@ -317,13 +316,32 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
+            object-position: center center;
             padding: 5px;
+            box-sizing: border-box;
+        }
+        .clothing-set-bonus {
+            width: 100%;
+            margin-top: 8px;
+            padding: 6px 8px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            font-size: 10px;
+            line-height: 1.3;
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: none;
         }
         .clothing-slot-icon {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
             font-size: 28px; /* Немного увеличиваем размер */
             opacity: 0.9; /* Увеличиваем непрозрачность для лучшей видимости */
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); /* Добавляем тень для контраста */
@@ -388,15 +406,13 @@
             flex: 1;
             gap: 15px;
             min-height: 0;
+            align-items: flex-start;
         }
         .clothing-items-grid {
             width: 65%; /* 2/3 экрана */
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            overflow-y: auto;
-            padding-right: 5px;
-            -webkit-overflow-scrolling: touch;
+            gap: 8px;
         }
         .clothing-item {
             aspect-ratio: 1;
@@ -408,7 +424,7 @@
             overflow: hidden;
             position: relative;
         }
-        .clothing-item:hover {
+        .clothing-item:hover:not(.locked) {
             border-color: rgba(255, 255, 255, 0.5);
             transform: scale(1.05);
         }
@@ -416,11 +432,34 @@
             border-color: #4FC3F7;
             box-shadow: 0 0 15px rgba(79, 195, 247, 0.5);
         }
+        .clothing-item.locked {
+            cursor: not-allowed;
+            background: rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        .clothing-item.locked::after {
+            content: 'закрыто';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
         .clothing-item img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            padding: 8px;
+            object-fit: cover;
+            object-position: center center;
+            display: block;
+            border-radius: 10px;
         }
         .clothing-preview {
             width: 35%; /* 1/3 экрана */
@@ -429,39 +468,59 @@
             align-items: center;
             justify-content: flex-start;
             color: white;
-            padding: 20px;
+            padding: 12px;
             box-sizing: border-box;
         }
         .clothing-preview-image {
             width: 100%;
-            max-width: 200px;
+            max-width: 140px;
             aspect-ratio: 1;
+            flex-shrink: 0;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
+            border-radius: 12px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
         }
         .clothing-preview-image img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
+            object-position: center center;
         }
         .clothing-preview-name {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-align: center;
         }
         .clothing-preview-description {
-            font-size: 14px;
+            font-size: 12px;
             text-align: center;
             opacity: 0.8;
-            margin-bottom: 20px;
-            line-height: 1.5;
+            margin-bottom: 12px;
+            line-height: 1.4;
             text-transform: none;
+        }
+        .clothing-how-to-get {
+            width: 100%;
+            margin-top: auto;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            font-size: 12px;
+            line-height: 1.4;
+            text-transform: none;
+        }
+        .clothing-how-to-get-title {
+            font-weight: 700;
+            margin-bottom: 6px;
+            opacity: 0.95;
+        }
+        .clothing-how-to-get-text {
+            opacity: 0.85;
         }
         .clothing-select-button {
             width: 100%;
@@ -853,6 +912,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center center;
             position: absolute;
             top: 0;
             left: 0;
@@ -1011,20 +1071,20 @@
             <div class="game-side-panel panel-left">
                 <!-- ... (статус-бары) ... -->
                  <div class="status-bar" id="status-health">
-                    <label>Health</label>
+                    <label>жизни</label>
                     <div class="bar-content"><span>❤</span><span>❤</span><span>❤</span></div>
                 </div>
                 <div class="status-bar" id="status-xp">
-                    <label>XP <span>Level 5</span></label>
+                    <label>опыт <span>Level 5</span></label>
                     <div class="bar-content"><div class="progress-bar-container"><div class="progress-bar-fill" style="width: 60%;"></div></div></div>
                 </div>
                 <div class="status-bar" id="status-gold">
-                    <label>Gold</label>
-                    <div class="bar-content">💰 1250</div>
+                    <label>May Coins</label>
+                    <div class="bar-content">🪙 1250</div>
                 </div>
             </div>
             <div class="game-side-panel panel-right">
-                <button class="shop-button" onclick="openShop()">🛒 Магазин</button>
+                <button class="shop-button" onclick="openShop()">МАГАЗИН</button>
                 <div class="clothing-slots">
                     <div class="clothing-slot" data-slot-type="head" onclick="openClothingModal('head')">
                         <div class="clothing-slot-icon">👤</div>
@@ -1039,6 +1099,7 @@
                         <div class="clothing-slot-icon">👟</div>
                     </div>
                 </div>
+                <div class="clothing-set-bonus" id="clothing-set-bonus">—</div>
             </div>
         </div>
         
@@ -1079,6 +1140,10 @@
                     </div>
                     <div class="clothing-preview-name" id="clothing-preview-name">-</div>
                     <div class="clothing-preview-description" id="clothing-preview-description">-</div>
+                    <div class="clothing-how-to-get" id="clothing-how-to-get">
+                        <div class="clothing-how-to-get-title">Как получить</div>
+                        <div class="clothing-how-to-get-text" id="clothing-how-to-get-text">—</div>
+                    </div>
                     <button class="clothing-select-button" id="clothing-select-button" onclick="selectClothingItem()" disabled>Выбрать</button>
                     <button class="clothing-remove-button" id="clothing-remove-button" onclick="removeClothingItem()" disabled>Снять</button>
                 </div>
@@ -1113,7 +1178,7 @@
     </div>
     
     <button id="btn-confirm-gender" class="main-button" onclick="goToCharacterSelection()">Далее</button>
-    <button id="btn-confirm-character" class="main-button" style="display: none;" onclick="confirmCharacter()">Выбрать этого</button>
+    <button id="btn-confirm-character" class="main-button" style="display: none;" onclick="confirmCharacter()">Выбрать</button>
 
     <script>
         const tg = window.Telegram.WebApp;
@@ -1161,28 +1226,43 @@
             ],
             clothing: {
                 // Путь к изображениям одежды на GitHub: clothing/{тип}/{id}.png
-                // Полный путь: https://raw.githubusercontent.com/Mayhelper/game_tpop/main/images/clothing/{тип}/{id}.png
+                // howToGet — текст «Как получить» вещь
                 head: [
-                    { id: 'hat-1', name: 'Шлем самурая', description: 'Традиционный шлем самурая для защиты', image: 'clothing/head/hat-1.png', isSamurai: true },
-                    { id: 'cap-1', name: 'Бейсболка', description: 'Спортивный стиль для неформальных встреч', image: 'clothing/head/cap-1.png' },
-                    { id: 'helmet-1', name: 'Каска', description: 'Для работы на стройке', image: 'clothing/head/helmet-1.png' },
+                    { id: 'chain-gold', name: 'Золотая цепочка', description: 'Тонкий акцент делового образа', image: 'clothing/head/chain-gold.png', howToGet: 'Посетить 10 заправок партнёра' },
+                    { id: 'cap-90', name: 'Бейсболка с символикой', description: 'Легендарный стиль девяностых', image: 'clothing/head/cap-90.png', howToGet: 'Посетить 5 гипермаркетов' },
+                    { id: 'hat-1', name: 'Шлем самурая', description: 'Традиционный шлем самурая для защиты', image: 'clothing/head/hat-1.png', howToGet: 'Собрать 3 карты из одной серии' },
+                    { id: 'cap-1', name: 'Бейсболка', description: 'Спортивный стиль для неформальных встреч', image: 'clothing/head/cap-1.png', howToGet: 'Достичь 5 уровня' },
+                    { id: 'helmet-1', name: 'Каска', description: 'Для работы на стройке', image: 'clothing/head/helmet-1.png', howToGet: 'Выполнить 5 заказов' },
                 ],
                 body: [
-                    { id: 'suit-1', name: 'Кимоно самурая', description: 'Традиционное кимоно самурая', image: 'clothing/body/suit-1.png', isSamurai: true },
-                    { id: 'shirt-1', name: 'Рубашка', description: 'Официальная рубашка', image: 'clothing/body/shirt-1.png' },
-                    { id: 'hoodie-1', name: 'Толстовка', description: 'Неформальный стиль', image: 'clothing/body/hoodie-1.png' },
+                    { id: 'suit-office', name: 'Офисный костюм', description: 'Безупречный крой для переговоров и карьеры', image: 'clothing/body/suit-office.png', howToGet: 'Получить 500 May Coins' },
+                    { id: 'jacket-sport', name: 'Спортивная куртка', description: 'Ветер девяностых в каждом шве', image: 'clothing/body/jacket-sport.png', howToGet: 'Посетить 7 АЗС в одном месяце' },
+                    { id: 'suit-1', name: 'Кимоно самурая', description: 'Традиционное кимоно самурая', image: 'clothing/body/suit-1.png', howToGet: 'Достичь 10 уровня опыта' },
+                    { id: 'shirt-1', name: 'Рубашка', description: 'Официальная рубашка', image: 'clothing/body/shirt-1.png', howToGet: 'Посетить 3 магазина партнёра' },
+                    { id: 'hoodie-1', name: 'Толстовка', description: 'Неформальный стиль', image: 'clothing/body/hoodie-1.png', howToGet: 'Пригласить друга' },
                 ],
                 legs: [
-                    { id: 'pants-1', name: 'Хакама самурая', description: 'Традиционные широкие штаны самурая', image: 'clothing/legs/pants-1.png', isSamurai: true },
-                    { id: 'jeans-1', name: 'Джинсы', description: 'Удобные джинсы', image: 'clothing/legs/jeans-1.png' },
-                    { id: 'shorts-1', name: 'Шорты', description: 'Для жаркой погоды', image: 'clothing/legs/shorts-1.png' },
+                    { id: 'skirt-pencil', name: 'Юбка-карандаш', description: 'Классика офисного стиля и уверенности', image: 'clothing/legs/skirt-pencil.png', howToGet: 'Выполнить 5 заказов в приложении' },
+                    { id: 'pants-sport', name: 'Спортивные штаны', description: 'Расслабленный дух эпохи 90-х', image: 'clothing/legs/pants-sport.png', howToGet: 'Посетить 3 разных магазина партнёра' },
+                    { id: 'pants-1', name: 'Хакама самурая', description: 'Традиционные широкие штаны самурая', image: 'clothing/legs/pants-1.png', howToGet: 'Активировать 10 промокодов' },
+                    { id: 'jeans-1', name: 'Джинсы', description: 'Удобные джинсы', image: 'clothing/legs/jeans-1.png', howToGet: 'Заработать 500 May Coins' },
+                    { id: 'shorts-1', name: 'Шорты', description: 'Для жаркой погоды', image: 'clothing/legs/shorts-1.png', howToGet: 'Пригласить друга в программу' },
                 ],
                 shoes: [
-                    { id: 'shoes-1', name: 'Гэта самурая', description: 'Традиционная обувь самурая', image: 'clothing/shoes/shoes-1.png', isSamurai: true },
-                    { id: 'sneakers-1', name: 'Кроссовки', description: 'Удобные кроссовки', image: 'clothing/shoes/sneakers-1.png' },
-                    { id: 'boots-1', name: 'Ботинки', description: 'Надежные ботинки', image: 'clothing/shoes/boots-1.png' },
+                    { id: 'heels', name: 'Туфли на каблуке', description: 'Элегантный шаг к успеху', image: 'clothing/shoes/heels.png', howToGet: 'Активировать 20 промокодов' },
+                    { id: 'sneakers-white', name: 'Белые кроссовки', description: 'Чистый ретро-вид, как в лучшие годы', image: 'clothing/shoes/sneakers-white.png', howToGet: 'Заработать 1000 May Coins' },
+                    { id: 'shoes-1', name: 'Гэта самурая', description: 'Традиционная обувь самурая', image: 'clothing/shoes/shoes-1.png', howToGet: 'Посетить 15 заправок за месяц' },
+                    { id: 'sneakers-1', name: 'Кроссовки', description: 'Удобные кроссовки', image: 'clothing/shoes/sneakers-1.png', howToGet: 'Достичь 8 уровня' },
+                    { id: 'boots-1', name: 'Ботинки', description: 'Надежные ботинки', image: 'clothing/shoes/boots-1.png', howToGet: 'Выполнить 10 заказов' },
                 ]
-            }
+            },
+            // Комплекты одежды: первый — по умолчанию при выборе персонажа. При надетом комплекте female-1 отображается female-1.1, female-1.2 … female-1.9
+            outfitSets: [
+                { id: 'office', name: 'Офисный стиль', head: 'chain-gold', body: 'suit-office', legs: 'skirt-pencil', shoes: 'heels', bonus: 'Бонус: +15% к May Coins в будни. Образ переговорщика и лидера.' },
+                { id: 'style90', name: 'Стиль 90-х', head: 'cap-90', body: 'jacket-sport', legs: 'pants-sport', shoes: 'sneakers-white', bonus: 'Бонус: +10% к опыту. Ностальгия и уверенный уличный стиль.' },
+                { id: 'casual', name: 'Повседневный', head: 'cap-1', body: 'hoodie-1', legs: 'jeans-1', shoes: 'sneakers-1', bonus: 'Бонус: +5% к опыту. Удобный стиль для будней.' },
+                { id: 'business', name: 'Деловой', head: null, body: 'shirt-1', legs: 'jeans-1', shoes: 'boots-1', bonus: 'Бонус: дополнительная карта при достижении уровня.' }
+            ]
         };
         
         // Хранилище выбранной одежды
@@ -1220,6 +1300,11 @@
             
             // Добавляем фон
             imagesToLoad.push(AppData.repoUrl + 'game-bg.png');
+            
+            // Варианты персонажа female-1 по комплектам (female-1.1 … female-1.9)
+            for (let v = 1; v <= 9; v++) {
+                imagesToLoad.push(AppData.repoUrl + 'female-1.' + v + '.png');
+            }
             
             // Собираем все изображения одежды
             Object.values(AppData.clothing).forEach(category => {
@@ -1413,6 +1498,7 @@
             document.getElementById('tabs-container').style.display = 'block';
             
             if (!areTabsInitialized) initGameTabs();
+            applyOutfitSet(0);
         }
 
         function initGameTabs() {
@@ -1668,29 +1754,31 @@
             
             // Получаем вещи для выбранного типа
             const items = AppData.clothing[type] || [];
+            const totalSlots = 9;
             
-            // Добавляем вещи в сетку
-            items.forEach(item => {
+            // Добавляем вещи в сетку (до 9 слотов)
+            for (let i = 0; i < totalSlots; i++) {
                 const itemDiv = document.createElement('div');
-                itemDiv.className = 'clothing-item';
-                itemDiv.onclick = (e) => selectClothingItemPreview(item, itemDiv);
-                
-                // Проверяем, выбрана ли эта вещь
-                if (selectedClothing[type] && selectedClothing[type].id === item.id) {
-                    itemDiv.classList.add('active');
+                if (i < items.length) {
+                    const item = items[i];
+                    itemDiv.className = 'clothing-item';
+                    itemDiv.onclick = (e) => selectClothingItemPreview(item, itemDiv);
+                    if (selectedClothing[type] && selectedClothing[type].id === item.id) {
+                        itemDiv.classList.add('active');
+                    }
+                    const img = document.createElement('img');
+                    img.src = AppData.repoUrl + item.image;
+                    img.alt = item.name;
+                    img.onerror = function() {
+                        this.style.display = 'none';
+                        itemDiv.innerHTML = `<div class="no-image-placeholder">Нет изображения</div>`;
+                    };
+                    itemDiv.appendChild(img);
+                } else {
+                    itemDiv.className = 'clothing-item locked';
                 }
-                
-                const img = document.createElement('img');
-                img.src = AppData.repoUrl + item.image; // Добавляем GitHub URL
-                img.alt = item.name;
-                img.onerror = function() {
-                    this.style.display = 'none';
-                    itemDiv.innerHTML = `<div class="no-image-placeholder">Нет изображения</div>`;
-                };
-                
-                itemDiv.appendChild(img);
                 grid.appendChild(itemDiv);
-            });
+            }
             
             // Если вещь уже выбрана, показываем её в превью после создания сетки
             setTimeout(() => {
@@ -1705,6 +1793,8 @@
                     previewImage.innerHTML = `<img src="${AppData.repoUrl + selectedItem.image}" alt="${selectedItem.name}">`;
                     previewName.textContent = selectedItem.name;
                     previewDescription.textContent = selectedItem.description;
+                    const howToGetEl = document.getElementById('clothing-how-to-get-text');
+                    if (howToGetEl) howToGetEl.textContent = selectedItem.howToGet || '—';
                     selectButton.disabled = false;
                     if (removeButton) {
                         removeButton.disabled = false;
@@ -1752,6 +1842,8 @@
             previewImage.innerHTML = `<img src="${AppData.repoUrl + item.image}" alt="${item.name}" onerror="this.parentElement.innerHTML='<div class=\'no-image-placeholder\'>Нет изображения</div>'">`;
             previewName.textContent = item.name;
             previewDescription.textContent = item.description;
+            const howToGetEl = document.getElementById('clothing-how-to-get-text');
+            if (howToGetEl) howToGetEl.textContent = item.howToGet || '—';
             selectButton.disabled = false;
             
             // Показываем кнопку "Снять" если эта вещь уже выбрана
@@ -1771,6 +1863,8 @@
             previewImage.innerHTML = '<span style="opacity: 0.5;">Выберите вещь</span>';
             previewName.textContent = '-';
             previewDescription.textContent = '-';
+            const howToGetEl = document.getElementById('clothing-how-to-get-text');
+            if (howToGetEl) howToGetEl.textContent = '—';
             selectButton.disabled = true;
             if (removeButton) {
                 removeButton.disabled = true;
@@ -1792,6 +1886,7 @@
             
             // Обновляем изображение персонажа
             updateCharacterImage();
+            updateClothingSetDescription();
             
             // Обновляем кнопку "Снять" в превью
             const removeButton = document.getElementById('clothing-remove-button');
@@ -1822,6 +1917,7 @@
             
             // Проверяем комбинацию самурая и обновляем персонажа
             updateCharacterImage();
+            updateClothingSetDescription();
             
             // Активируем кнопку "Снять"
             const removeButton = document.getElementById('clothing-remove-button');
@@ -1838,30 +1934,26 @@
             }
         }
         
-        // Функция проверки комбинации самурая
-        function isSamuraiSetComplete() {
-            // Проверяем, что выбраны все 4 вещи самурая
-            return selectedClothing.head && selectedClothing.head.isSamurai &&
-                   selectedClothing.body && selectedClothing.body.isSamurai &&
-                   selectedClothing.legs && selectedClothing.legs.isSamurai &&
-                   selectedClothing.shoes && selectedClothing.shoes.isSamurai;
-        }
-        
         // Функция обновления изображения персонажа
         function updateCharacterImage() {
             const characterImage = document.getElementById('game-character-image');
             if (!characterImage || !selectedCharacter) return;
             
-            // Проверяем, выбран ли женский персонаж female-1 и полный набор самурая
-            if (selectedCharacter.id === 'female-1' && isSamuraiSetComplete()) {
-                // Меняем на версию самурая
-                characterImage.src = AppData.repoUrl + 'female-1.1.png';
-                characterImage.alt = selectedCharacter.title + ' (Самурай)';
-            } else {
-                // Возвращаем обычную версию
-                characterImage.src = AppData.repoUrl + selectedCharacter.id + '.png';
-                characterImage.alt = selectedCharacter.title;
+            // Для female-1: при полном комплекте показываем female-1.1, female-1.2 … female-1.9 по порядку комплекта
+            if (selectedCharacter.id === 'female-1') {
+                const set = getCurrentOutfitSet();
+                if (set && AppData.outfitSets) {
+                    const setIndex = AppData.outfitSets.indexOf(set);
+                    if (setIndex >= 0 && setIndex < 9) {
+                        const variant = setIndex + 1;
+                        characterImage.src = AppData.repoUrl + 'female-1.' + variant + '.png';
+                        characterImage.alt = selectedCharacter.title + ' (' + (set.name || 'Комплект ' + variant) + ')';
+                        return;
+                    }
+                }
             }
+            characterImage.src = AppData.repoUrl + selectedCharacter.id + '.png';
+            characterImage.alt = selectedCharacter.title;
         }
         
         function getSlotIcon(type) {
@@ -1872,6 +1964,57 @@
                 shoes: '👟'
             };
             return icons[type] || '👕';
+        }
+        
+        function getClothingItem(type, itemId) {
+            const list = AppData.clothing[type];
+            if (!list) return null;
+            return list.find(item => item.id === itemId) || null;
+        }
+        
+        function getCurrentOutfitSet() {
+            if (!AppData.outfitSets) return null;
+            for (const set of AppData.outfitSets) {
+                const headOk = (set.head == null && selectedClothing.head == null) || (set.head && selectedClothing.head && selectedClothing.head.id === set.head);
+                const bodyOk = (set.body == null && selectedClothing.body == null) || (set.body && selectedClothing.body && selectedClothing.body.id === set.body);
+                const legsOk = (set.legs == null && selectedClothing.legs == null) || (set.legs && selectedClothing.legs && selectedClothing.legs.id === set.legs);
+                const shoesOk = (set.shoes == null && selectedClothing.shoes == null) || (set.shoes && selectedClothing.shoes && selectedClothing.shoes.id === set.shoes);
+                if (headOk && bodyOk && legsOk && shoesOk) return set;
+            }
+            return null;
+        }
+        
+        function updateClothingSetDescription() {
+            const el = document.getElementById('clothing-set-bonus');
+            if (!el) return;
+            const set = getCurrentOutfitSet();
+            el.textContent = set ? set.bonus : 'Соберите комплект — бонус за полный набор.';
+        }
+        
+        function refreshClothingSlots() {
+            const types = ['head', 'body', 'legs', 'shoes'];
+            types.forEach(type => {
+                const slot = document.querySelector(`[data-slot-type="${type}"]`);
+                if (!slot) return;
+                const item = selectedClothing[type];
+                if (item) {
+                    slot.innerHTML = `<img src="${AppData.repoUrl + item.image}" alt="${item.name}" onerror="this.parentElement.innerHTML='<div class=\'no-image-placeholder small\'>Нет изображения</div>'">`;
+                } else {
+                    slot.innerHTML = `<div class="clothing-slot-icon">${getSlotIcon(type)}</div>`;
+                }
+            });
+        }
+        
+        function applyOutfitSet(setIndex) {
+            if (!AppData.outfitSets || setIndex < 0 || setIndex >= AppData.outfitSets.length) return;
+            const set = AppData.outfitSets[setIndex];
+            selectedClothing.head = set.head ? getClothingItem('head', set.head) : null;
+            selectedClothing.body = set.body ? getClothingItem('body', set.body) : null;
+            selectedClothing.legs = set.legs ? getClothingItem('legs', set.legs) : null;
+            selectedClothing.shoes = set.shoes ? getClothingItem('shoes', set.shoes) : null;
+            refreshClothingSlots();
+            updateCharacterImage();
+            updateClothingSetDescription();
         }
         
         // Закрытие модального окна при клике вне его
