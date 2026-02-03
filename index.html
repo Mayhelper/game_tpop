@@ -963,45 +963,80 @@
             text-transform: none;
         }
         
-        /* Уведомление о новых картах */
+        /* Уведомление о новых картах — стиль iOS (frosted glass) */
         .notification {
             position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #4FC3F7, #29B6F6);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.4);
+            top: 16px;
+            left: 12px;
+            right: 12px;
+            width: calc(100% - 24px);
+            max-width: none;
+            min-height: 56px;
+            background: rgba(255, 255, 255, 0.28);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            color: #1a1a1a;
+            padding: 14px 16px 14px 18px;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12), 0 0 1px rgba(255, 255, 255, 0.5) inset;
             z-index: 3000;
             font-family: var(--font-main);
-            font-size: 14px;
-            font-weight: 700;
+            font-size: 15px;
+            font-weight: 600;
             text-transform: uppercase;
+            letter-spacing: 0.3px;
             display: none;
-            animation: slideDown 0.3s ease;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            box-sizing: border-box;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            animation: notificationSlideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .notification.active {
-            display: block;
+            display: flex;
+        }
+        .notification.notification-dismissing {
+            transform: translateY(-120%);
+            opacity: 0;
+        }
+        .notification-body {
+            flex: 1;
+            cursor: pointer;
+        }
+        .notification-cards-word {
+            color: #1565C0;
+            font-weight: 700;
         }
         .notification-close {
-            margin-left: 15px;
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.08);
+            color: #333;
             cursor: pointer;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
+            font-size: 18px;
+            line-height: 1;
+            transition: background 0.2s ease;
         }
         .notification-close:hover {
-            opacity: 1;
+            background: rgba(0, 0, 0, 0.14);
         }
-        @keyframes slideDown {
+        .notification-close:active {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        @keyframes notificationSlideDown {
             from {
                 opacity: 0;
-                transform: translateX(-50%) translateY(-20px);
+                transform: translateY(-24px);
             }
             to {
                 opacity: 1;
-                transform: translateX(-50%) translateY(0);
+                transform: translateY(0);
             }
         }
         
@@ -1069,7 +1104,10 @@
         .quest-list {
             display: none; list-style: none; margin: 0; padding: 8px 0;
             overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1;
+            scrollbar-width: none; /* Firefox: скрыть полосу прокрутки */
+            -ms-overflow-style: none; /* IE/Edge */
         }
+        .quest-list::-webkit-scrollbar { display: none; } /* Chrome/Safari: скрыть полосу прокрутки */
         .quest-list.active { display: block; }
         .quest-item {
             padding: 12px 14px; margin-bottom: 8px;
@@ -1360,7 +1398,7 @@
         <div id="tabs-container">
             <div class="tab-buttons">
                 <button class="tab-button active" data-color="#7CB342" onclick="switchTab('quests', this)">Задания</button>
-                <button class="tab-button" data-color="#4FC3F7" onclick="switchTab('cards', this)">Карточки</button>
+                <button class="tab-button" id="tab-btn-cards" data-color="#4FC3F7" onclick="switchTab('cards', this)">Карточки</button>
                 <button class="tab-button" data-color="#F06292" onclick="switchTab('achievements', this)">Достижения</button>
             </div>
             <div class="tabs-content">
@@ -1515,8 +1553,8 @@
     
     <!-- Уведомление о новых картах -->
     <div id="notification" class="notification">
-        <span>У вас новые карты, посмотрите!</span>
-        <span class="notification-close" onclick="closeNotification()">×</span>
+        <span class="notification-body" id="notification-body">У вас новые <span class="notification-cards-word">карты</span>, посмотрите!</span>
+        <span class="notification-close" id="notification-close" aria-label="Закрыть">×</span>
     </div>
     
     <button id="btn-confirm-gender" class="main-button" onclick="goToCharacterSelection()">Далее</button>
@@ -1602,6 +1640,7 @@
                     { id: 'jacket-sport', name: 'Спортивная куртка', description: 'Ветер девяностых в каждом шве', image: 'clothing/body/jacket-sport.png', howToGet: 'Посетить 7 АЗС в одном месяце' },
                     { id: 'coat-spy', name: 'Пальто шпиона', description: 'Длинное пальто для незаметности', image: 'clothing/body/coat-spy.png', howToGet: 'Достичь 10 уровня опыта' },
                     { id: 'shirt-1', name: 'Рубашка', description: 'Официальная рубашка', image: 'clothing/body/shirt-1.png', howToGet: 'Посетить 3 магазина партнёра' },
+                    { id: 'shirt-safari', name: 'Рубашка сафари', description: 'Прочная рубашка для походов и исследований', image: 'clothing/body/shirt-safari.png', howToGet: 'Достичь 7 уровня' },
                     { id: 'hoodie-1', name: 'Толстовка', description: 'Неформальный стиль', image: 'clothing/body/hoodie-1.png', howToGet: 'Пригласить друга' },
                     { id: 'suit-sales-male', name: 'Костюм короля продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/body/suit-sales-male.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
                     { id: 'suit-sales-female', name: 'Костюм королевы продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/body/suit-sales-female.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
@@ -1611,6 +1650,7 @@
                     { id: 'pants-sport', name: 'Спортивные штаны', description: 'Расслабленный дух эпохи 90-х', image: 'clothing/legs/pants-sport.png', howToGet: 'Посетить 3 разных магазина партнёра' },
                     { id: 'pants-spy', name: 'Штаны шпиона', description: 'Классические штаны под пальто', image: 'clothing/legs/pants-spy.png', howToGet: 'Активировать 10 промокодов' },
                     { id: 'jeans-1', name: 'Джинсы', description: 'Удобные джинсы', image: 'clothing/legs/jeans-1.png', howToGet: 'Заработать 500 Май коинов' },
+                    { id: 'pants-safari', name: 'Штаны сафари', description: 'Удобные штаны для походов', image: 'clothing/legs/pants-safari.png', howToGet: 'Посетить 8 разных магазинов партнёра' },
                     { id: 'shorts-1', name: 'Шорты', description: 'Для жаркой погоды', image: 'clothing/legs/shorts-1.png', howToGet: 'Пригласить друга в программу' },
                     { id: 'pants-sales-male', name: 'Штаны короля продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/legs/pants-sales-male.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
                     { id: 'pants-sales-female', name: 'Юбка королевы продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/legs/pants-sales-female.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
@@ -1621,16 +1661,17 @@
                     { id: 'boots-black', name: 'Черные ботинки', description: 'Строгие черные ботинки для образа шпиона', image: 'clothing/shoes/boots-black.png', howToGet: 'Посетить 15 заправок за месяц' },
                     { id: 'sneakers-1', name: 'Кроссовки', description: 'Удобные кроссовки', image: 'clothing/shoes/sneakers-1.png', howToGet: 'Достичь 8 уровня' },
                     { id: 'boots-1', name: 'Ботинки', description: 'Надежные ботинки', image: 'clothing/shoes/boots-1.png', howToGet: 'Выполнить 10 заказов' },
+                    { id: 'boots-hiking', name: 'Походные ботинки', description: 'Надёжная обувь для походов', image: 'clothing/shoes/boots-hiking.png', howToGet: 'Выполнить 15 заказов' },
                     { id: 'shoes-sales-male', name: 'Туфли короля продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/shoes/shoes-sales-male.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
                     { id: 'shoes-sales-female', name: 'Туфли королевы продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/shoes/shoes-sales-female.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
                 ]
             },
-            // Комплекты: 0=офис, 1=90-х, 2=шпион, 3=деловой, 4=король продаж (м), 5=королева продаж (ж)
+            // Комплекты: 0=офис, 1=90-х, 2=шпион, 3=первооткрыватель, 4=король продаж (м), 5=королева продаж (ж)
             outfitSets: [
                 { id: 'office', name: 'Офисный стиль', head: 'chain-gold', body: 'suit-office', legs: 'skirt-pencil', shoes: 'heels', bonus: 'Бонус: +15% к Май коинам в будни. Образ переговорщика и лидера.' },
                 { id: 'style90', name: 'Стиль 90-х', head: 'cap-90', body: 'jacket-sport', legs: 'pants-sport', shoes: 'sneakers-white', bonus: 'Бонус: +10% к опыту. Ностальгия и уверенный уличный стиль.' },
                 { id: 'spy', name: 'Шпион', head: 'hat-spy', body: 'coat-spy', legs: 'pants-spy', shoes: 'boots-black', bonus: 'Бонус: +12% к опыту. Стиль детектива и скрытности.' },
-                { id: 'business', name: 'Деловой', head: null, body: 'shirt-1', legs: 'jeans-1', shoes: 'boots-1', bonus: 'Бонус: дополнительная карта при достижении уровня.' },
+                { id: 'explorer', name: 'Первооткрыватель', head: 'helmet-1', body: 'shirt-safari', legs: 'pants-safari', shoes: 'boots-hiking', bonus: 'Бонус: +8% к опыту за задания. Стиль исследователя и путешественника.' },
                 { id: 'sales-king', name: 'Король продаж', gender: 'male', head: 'crown-sales-male', body: 'suit-sales-male', legs: 'pants-sales-male', shoes: 'shoes-sales-male', bonus: 'Секретный комплект. Только один игрок в месяц — лидер по количеству продаж. Супер бонус: x2 Май коинов за все активности.' },
                 { id: 'sales-queen', name: 'Королева продаж', gender: 'female', head: 'crown-sales-female', body: 'suit-sales-female', legs: 'pants-sales-female', shoes: 'shoes-sales-female', bonus: 'Секретный комплект. Только один игрок в месяц — лидер по количеству продаж. Супер бонус: x2 Май коинов за все активности.' }
             ]
@@ -2085,24 +2126,44 @@
             card3dEl.style.setProperty('--shadow-strength', shadowStrength.toFixed(2));
         }
         
-        // Функции для уведомления
+        // Функции для уведомления (остаётся до закрытия или смахивания)
         function showNotification() {
             const notification = document.getElementById('notification');
             if (notification) {
+                notification.classList.remove('notification-dismissing');
                 notification.classList.add('active');
-                // Автоматически скрываем через 5 секунд
-                setTimeout(() => {
-                    closeNotification();
-                }, 5000);
             }
         }
         
         function closeNotification() {
             const notification = document.getElementById('notification');
-            if (notification) {
-                notification.classList.remove('active');
-            }
+            if (!notification || !notification.classList.contains('active')) return;
+            notification.classList.add('notification-dismissing');
+            setTimeout(() => {
+                notification.classList.remove('active', 'notification-dismissing');
+            }, 350);
         }
+        
+        function openCardsFromNotification() {
+            const btn = document.getElementById('tab-btn-cards');
+            if (btn) switchTab('cards', btn);
+            closeNotification();
+        }
+        
+        (function initNotificationHandlers() {
+            const notification = document.getElementById('notification');
+            const body = document.getElementById('notification-body');
+            const closeBtn = document.getElementById('notification-close');
+            if (!notification) return;
+            if (body) body.addEventListener('click', function(e) { e.stopPropagation(); openCardsFromNotification(); });
+            if (closeBtn) closeBtn.addEventListener('click', function(e) { e.stopPropagation(); closeNotification(); });
+            var touchStartY = 0;
+            notification.addEventListener('touchstart', function(e) { touchStartY = e.touches[0].clientY; }, { passive: true });
+            notification.addEventListener('touchend', function(e) {
+                var touchEndY = e.changedTouches[0].clientY;
+                if (touchStartY - touchEndY > 50) closeNotification();
+            }, { passive: true });
+        })();
         
         // Закрытие модального окна карточки при клике вне его
         document.getElementById('card-modal').addEventListener('click', function(e) {
