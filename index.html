@@ -17,7 +17,7 @@
             --btn-male: #0288D1;
             --btn-female: #D81B60;
             --color-neutral-icon: #b0b0b0;
-            --active-tab-color: #F06292; 
+            --active-tab-color: #7CB342; 
         }
         body {
             margin: 0; font-family: var(--font-main);
@@ -291,6 +291,7 @@
             justify-content: center;
             box-sizing: border-box;
         }
+        .shop-button-icon { margin-right: 6px; font-size: 1.1em; }
         .shop-button:hover {
             border-color: rgba(255, 255, 255, 0.5);
             transform: scale(1.02);
@@ -346,6 +347,8 @@
             box-sizing: border-box;
             transition: background 0.2s, border-color 0.2s;
         }
+        .bonus-set-button { display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .bonus-set-button-icon { font-size: 1.15em; }
         .bonus-set-button:hover {
             background: rgba(0, 0, 0, 0.85);
             border-color: rgba(255, 255, 255, 0.35);
@@ -947,7 +950,7 @@
         }
         .quest-sub-tab:hover { color: rgba(255, 255, 255, 0.9); }
         .quest-sub-tab.active {
-            background: rgba(240, 98, 146, 0.5); color: white; font-weight: 700;
+            background: rgba(124, 179, 66, 0.5); color: white; font-weight: 700;
         }
         .quest-list-container { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
         .quest-list {
@@ -967,6 +970,10 @@
         }
         .quest-item-title { font-weight: 700; margin-bottom: 4px; }
         .quest-item-reward { font-size: 12px; color: #FFEB3B; opacity: 0.9; }
+        .quest-item-status { font-size: 11px; text-transform: uppercase; margin-top: 4px; }
+        .quest-item.completed { border-color: rgba(76, 175, 80, 0.5); background: rgba(76, 175, 80, 0.15); }
+        .quest-item.completed .quest-item-status { color: #81C784; }
+        .quest-item.in-progress .quest-item-status { color: #FFB74D; }
         .quest-modal-reward { margin-top: 12px; font-size: 13px; color: #FFEB3B; font-weight: 600; }
         /* Адаптивная сетка карточек - показывает только реальные карты */
         .cards-grid {
@@ -1214,7 +1221,7 @@
                 </div>
             </div>
             <div class="game-side-panel panel-right">
-                <button class="shop-button" onclick="openShop()">МАГАЗИН</button>
+                <button class="shop-button" onclick="openShop()"><span class="shop-button-icon">🎁</span> МАГАЗИН</button>
                 <div class="clothing-slots">
                     <div class="clothing-slot" data-slot-type="head" onclick="openClothingModal('head')">
                         <div class="clothing-slot-icon">👤</div>
@@ -1229,15 +1236,15 @@
                         <div class="clothing-slot-icon">👟</div>
                     </div>
                 </div>
-                <button type="button" class="bonus-set-button" id="bonus-set-button" onclick="openSetBonusModal()" title="Подробнее о бонусе набора">Бонус набора</button>
+                <button type="button" class="bonus-set-button" id="bonus-set-button" onclick="openSetBonusModal()" title="Подробнее о бонусе набора"><span class="bonus-set-button-icon">👕</span> Бонус набора</button>
             </div>
         </div>
         
         <div id="tabs-container">
             <div class="tab-buttons">
-                <button class="tab-button active" data-color="#F06292" onclick="switchTab('quests', this)">Задания</button>
+                <button class="tab-button active" data-color="#7CB342" onclick="switchTab('quests', this)">Задания</button>
                 <button class="tab-button" data-color="#4FC3F7" onclick="switchTab('cards', this)">Карточки</button>
-                <button class="tab-button" data-color="#7CB342" onclick="switchTab('achievements', this)">Достижения</button>
+                <button class="tab-button" data-color="#F06292" onclick="switchTab('achievements', this)">Достижения</button>
             </div>
             <div class="tabs-content">
                 <div id="tab-quests" class="tab-pane active">
@@ -1401,6 +1408,7 @@
         let swiperInstance = null;
         let selectedCharacter = {};
         let areTabsInitialized = false;
+        var completedQuestIds = new Set(['daily-1', 'daily-2']);
 
         const AppData = {
             repoUrl: 'https://raw.githubusercontent.com/Mayhelper/game_tpop/main/images/',
@@ -1436,6 +1444,7 @@
                 daily: [
                     { id: 'daily-1', title: 'Зайти в приложение', instruction: 'Откройте мини-приложение May Games в течение дня. Достаточно одного входа — награда займёт в игру автоматически.', reward: '+3 XP, +50 May Coins' },
                     { id: 'daily-2', title: 'Отметить присутствие', instruction: 'На главном экране нажмите кнопку «Отметить присутствие» (или аналогичную). Отметка сохраняется до конца дня.', reward: '+5 May Coins' },
+                    { id: 'monthly-view', title: 'Посмотреть планы на месяц', instruction: 'Откройте вкладку «На месяц» в разделе «Задания», чтобы увидеть месячные цели и награды.', reward: '+10 May Coins' },
                     { id: 'daily-3', title: 'Просмотреть одну карточку', instruction: 'Откройте раздел «Карточки», выберите любую карточку и откройте её (нажмите на карточку). Просмотр описание карты засчитывается как выполнение.', reward: '+2 XP' },
                     { id: 'daily-4', title: 'Сменить элемент одежды', instruction: 'Зайдите в слоты одежды (голова, тело, ноги или обувь), выберите любой предмет и нажмите «Выбрать». Смена хотя бы одного элемента засчитывается.', reward: '+5 May Coins' },
                 ],
@@ -1760,19 +1769,7 @@
                 });
             }
             
-            const quests = AppData.quests || { daily: [], monthly: [], additional: [] };
-            ['daily', 'monthly', 'additional'].forEach(cat => {
-                const listEl = document.getElementById('quest-list-' + cat);
-                if (!listEl) return;
-                listEl.innerHTML = '';
-                (quests[cat] || []).forEach(q => {
-                    const li = document.createElement('li');
-                    li.className = 'quest-item';
-                    li.innerHTML = `<span class="quest-item-title">${q.title}</span><br><span class="quest-item-reward">${q.reward || ''}</span>`;
-                    li.onclick = () => openQuestModal(q);
-                    listEl.appendChild(li);
-                });
-            });
+            renderQuestLists();
             const achievementsList = document.getElementById('achievements-list');
             AppData.achievements.forEach(ach => {
                 achievementsList.innerHTML += `<li>${ach.text}</li>`;
@@ -1986,10 +1983,32 @@
             document.getElementById(`tab-${tabId}`).classList.add('active');
         }
         
+        function renderQuestLists() {
+            const quests = AppData.quests || { daily: [], monthly: [], additional: [] };
+            ['daily', 'monthly', 'additional'].forEach(cat => {
+                const listEl = document.getElementById('quest-list-' + cat);
+                if (!listEl) return;
+                listEl.innerHTML = '';
+                (quests[cat] || []).forEach(q => {
+                    const completed = completedQuestIds.has(q.id);
+                    const li = document.createElement('li');
+                    li.className = 'quest-item' + (completed ? ' completed' : ' in-progress');
+                    const statusText = completed ? 'Выполнено' : 'В работе';
+                    li.innerHTML = `<span class="quest-item-title">${completed ? '✅ ' : ''}${q.title}</span><br><span class="quest-item-reward">${q.reward || ''}</span><br><span class="quest-item-status">${statusText}</span>`;
+                    li.onclick = () => openQuestModal(q);
+                    listEl.appendChild(li);
+                });
+            });
+        }
+        
         function switchQuestSubTab(category, clickedButton) {
             document.querySelectorAll('.quest-sub-tab').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.quest-list').forEach(list => list.classList.remove('active'));
             if (clickedButton) clickedButton.classList.add('active');
+            if (category === 'monthly') {
+                completedQuestIds.add('monthly-view');
+                renderQuestLists();
+            }
             const listEl = document.getElementById('quest-list-' + category);
             if (listEl) listEl.classList.add('active');
         }
