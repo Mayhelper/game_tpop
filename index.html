@@ -435,7 +435,7 @@
         .xp-sources-list .xp-source-achievements { color: #F06292; }
         .xp-sources-list .xp-source-daily { color: #FFB74D; }
         .xp-sources-list .xp-source-outfit { color: #BA68C8; }
-        .xp-sources-list .xp-amount { color: #81D4FA; font-weight: 700; }
+        .xp-sources-list .xp-amount { color: #B39DDB; font-weight: 700; }
         .info-modal p, .info-modal li { margin: 0 0 10px 0; font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.9); text-transform: none; }
         .info-modal ul { margin: 0 0 12px 0; padding-left: 20px; }
         .info-modal-close { margin-top: 16px; width: 100%; padding: 12px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); border-radius: 10px; color: white; font-family: var(--font-main); font-size: 14px; font-weight: 700; text-transform: uppercase; cursor: pointer; }
@@ -527,11 +527,9 @@
         .clothing-preview-icon {
             flex: 0 0 auto;
             align-self: center;
-            width: auto;
-            height: 60%;
-            max-height: 120px;
-            aspect-ratio: 1;
-            min-height: 80px;
+            width: clamp(100px, 26vmin, 140px);
+            height: clamp(100px, 26vmin, 140px);
+            min-width: 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1076,15 +1074,15 @@
         }
         .quest-item-title { font-weight: 700; margin-bottom: 4px; }
         .quest-item-reward { font-size: 12px; opacity: 0.95; }
-        .quest-item-reward .reward-exp { color: #81D4FA; }
-        .quest-item-reward .reward-coins { color: #FFD54F; }
+        .quest-item-reward .reward-exp { color: #B39DDB; }
+        .quest-item-reward .reward-coins { color: #D4C46A; }
         .quest-item-status { font-size: 11px; text-transform: uppercase; margin-top: 4px; }
         .quest-item.completed { border-color: rgba(76, 175, 80, 0.5); background: rgba(76, 175, 80, 0.15); }
         .quest-item.completed .quest-item-status { color: #81C784; }
-        .quest-item.in-progress .quest-item-status { color: #FFB74D; }
+        .quest-item.in-progress .quest-item-status { color: #E57373; }
         .quest-modal-reward { margin-top: 12px; font-size: 13px; font-weight: 600; }
-        .quest-modal-reward .reward-exp { color: #81D4FA; }
-        .quest-modal-reward .reward-coins { color: #FFD54F; }
+        .quest-modal-reward .reward-exp { color: #B39DDB; }
+        .quest-modal-reward .reward-coins { color: #D4C46A; }
         /* Адаптивная сетка карточек - показывает только реальные карты */
         .cards-grid {
             display: grid;
@@ -2107,7 +2105,7 @@
                     const completed = completedQuestIds.has(q.id);
                     const li = document.createElement('li');
                     li.className = 'quest-item' + (completed ? ' completed' : ' in-progress');
-                    const statusText = completed ? 'Выполнено' : 'В работе';
+                    const statusText = completed ? 'Выполнено' : 'Невыполнено';
                     li.innerHTML = `<span class="quest-item-title">${completed ? '✅ ' : ''}${q.title}</span><br><span class="quest-item-reward">${formatRewardHtml(q.reward)}</span><br><span class="quest-item-status">${statusText}</span>`;
                     li.onclick = () => openQuestModal(q);
                     listEl.appendChild(li);
