@@ -237,6 +237,7 @@
             box-sizing: border-box;
         }
         .game-side-panel > *:last-child { margin-top: auto; }
+        #status-xp { margin-top: auto; margin-bottom: auto; }
         .panel-left { left: 10px; }
         .panel-right { right: 10px; }
         .status-bar {
@@ -259,10 +260,6 @@
             padding: 2px 4px; border-radius: 4px;
         }
         #status-health, #status-xp, #status-gold { cursor: pointer; }
-        .status-bar-icon { margin-right: 4px; opacity: 0.95; font-size: 12px; }
-        #status-health .status-bar-icon { color: #E53935; }
-        #status-xp .status-bar-icon { color: #7CB342; }
-        #status-gold .status-bar-icon { color: #FFEB3B; }
         #status-health .bar-content { font-size: 16px; letter-spacing: 1px; }
         #status-health .bar-content span { color: #E53935; text-shadow: 0 0 5px rgba(255, 82, 82, 0.7); }
         #status-health .bar-content span.heart-empty { color: rgba(255,255,255,0.35); }
@@ -340,8 +337,8 @@
             background: rgba(0, 0, 0, 0.75);
             border-radius: 8px;
             border: 1px solid rgba(0, 0, 0, 0.9);
-            font-size: 9px;
-            line-height: 1.25;
+            font-size: 11px;
+            line-height: 1.3;
             color: rgba(255, 255, 255, 0.95);
             text-transform: none;
             box-sizing: border-box;
@@ -397,7 +394,11 @@
             font-size: 18px;
             color: white;
             text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
+        .health-rules-modal h3 .info-modal-title-icon { color: #E53935; }
         .health-rules-modal p {
             margin: 0 0 12px 0;
             font-size: 14px;
@@ -423,12 +424,19 @@
         .info-modal.active { display: flex; }
         .info-modal-content { background: rgba(20, 30, 48, 0.98); border-radius: 16px; padding: 24px; max-width: 340px; width: 100%; max-height: 80vh; overflow-y: auto; border: 1px solid rgba(0,0,0,0.9); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .info-modal h3 { margin: 0 0 16px 0; font-size: 18px; color: white; text-transform: uppercase; }
+        .info-modal-title-with-icon { display: flex; align-items: center; gap: 8px; }
+        .info-modal-title-icon { font-size: 1em; line-height: 1; vertical-align: middle; }
+        .xp-sources-list .xp-source-cards { color: #4FC3F7; }
+        .xp-sources-list .xp-source-badges { color: #F06292; }
+        .xp-sources-list .xp-source-achievements { color: #7CB342; }
+        .xp-sources-list .xp-source-daily { color: #FFB74D; }
+        .xp-sources-list .xp-source-outfit { color: #BA68C8; }
         .info-modal p, .info-modal li { margin: 0 0 10px 0; font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.9); text-transform: none; }
         .info-modal ul { margin: 0 0 12px 0; padding-left: 20px; }
         .info-modal-close { margin-top: 16px; width: 100%; padding: 12px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); border-radius: 10px; color: white; font-family: var(--font-main); font-size: 14px; font-weight: 700; text-transform: uppercase; cursor: pointer; }
         .gold-history-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
         .gold-history-item:last-child { border-bottom: none; }
-        .gold-history-reason { color: rgba(255,255,255,0.9); }
+        .gold-history-reason { color: #98D4BB; }
         .gold-history-amount { color: #FFEB3B; font-weight: 700; }
         .gold-history-date { font-size: 11px; opacity: 0.7; margin-top: 2px; }
         
@@ -752,12 +760,13 @@
             inset: 0;
             border-radius: inherit;
             pointer-events: none;
+            mix-blend-mode: overlay;
             background: radial-gradient(
                 circle at var(--gloss-x, 50%) var(--gloss-y, 50%),
-                rgba(255, 255, 255, 0.4) 0%,
-                rgba(255, 255, 255, 0.15) 25%,
-                rgba(255, 255, 255, 0.05) 45%,
-                transparent 65%
+                rgba(255, 255, 255, 0.35) 0%,
+                rgba(255, 255, 255, 0.12) 18%,
+                rgba(255, 255, 255, 0.04) 38%,
+                transparent 55%
             );
         }
         
@@ -1139,15 +1148,15 @@
             <div class="game-side-panel panel-left">
                 <!-- ... (статус-бары) ... -->
                  <div class="status-bar" id="status-health" onclick="openHealthRulesModal()" title="Правила жизней">
-                    <label><span class="status-bar-icon">❤</span> жизни</label>
+                    <label>жизни</label>
                     <div class="bar-content"><span>❤</span><span>❤</span><span class="heart-empty">🤍</span></div>
                 </div>
                 <div class="status-bar" id="status-xp" onclick="openXpModal()" title="За что даётся опыт">
-                    <label><span class="status-bar-icon">⭐</span> опыт <span>Level 5</span></label>
+                    <label>опыт <span>Level 5</span></label>
                     <div class="bar-content"><div class="progress-bar-container"><div class="progress-bar-fill" style="width: 60%;"></div></div></div>
                 </div>
                 <div class="status-bar" id="status-gold" onclick="openGoldModal()" title="История May Coins">
-                    <label><span class="status-bar-icon">🪙</span> May Coins</label>
+                    <label>May Coins</label>
                     <div class="bar-content">🪙 1250</div>
                 </div>
             </div>
@@ -1194,7 +1203,7 @@
     <!-- Модальное окно правил жизней -->
     <div id="health-rules-modal" class="health-rules-modal" onclick="if(event.target===this) closeHealthRulesModal()">
         <div class="health-rules-modal-content">
-            <h3>Правила жизней</h3>
+            <h3><span class="info-modal-title-icon">❤</span> Правила жизней</h3>
             <p>Если сотрудник не заходит в игру в течение <strong>2 дней</strong>, жизни теряются (одно сердце в день).</p>
             <p>При отсутствии жизней каждый день списываются <strong>May Coins</strong> в размере <strong>200 монет</strong>.</p>
             <button type="button" class="health-rules-modal-close" onclick="closeHealthRulesModal()">Понятно</button>
@@ -1204,14 +1213,14 @@
     <!-- Модальное окно опыта -->
     <div id="xp-modal" class="info-modal" onclick="if(event.target===this) closeXpModal()">
         <div class="info-modal-content">
-            <h3>⭐ За что даётся опыт</h3>
+            <h3 class="info-modal-title-with-icon"><span class="info-modal-title-icon">⭐</span> За что даётся опыт</h3>
             <p>Опыт повышает ваш уровень и открывает новые возможности. Очки опыта начисляются за:</p>
-            <ul>
-                <li><strong>Карточки</strong> — за каждую новую открытую карточку (+10 XP)</li>
-                <li><strong>Значки</strong> — за каждый полученный значок (+5 XP)</li>
-                <li><strong>Достижения</strong> — за выполнение достижений (+15–50 XP в зависимости от сложности)</li>
-                <li><strong>Ежедневный вход</strong> — за вход в игру каждый день (+3 XP)</li>
-                <li><strong>Комплект одежды</strong> — за полный собранный комплект (+20 XP)</li>
+            <ul class="xp-sources-list">
+                <li><strong class="xp-source-cards">Карточки</strong> — за каждую новую открытую карточку (+10 XP)</li>
+                <li><strong class="xp-source-badges">Значки</strong> — за каждый полученный значок (+5 XP)</li>
+                <li><strong class="xp-source-achievements">Достижения</strong> — за выполнение достижений (+15–50 XP в зависимости от сложности)</li>
+                <li><strong class="xp-source-daily">Ежедневный вход</strong> — за вход в игру каждый день (+3 XP)</li>
+                <li><strong class="xp-source-outfit">Комплект одежды</strong> — за полный собранный комплект (+20 XP)</li>
             </ul>
             <p>Чем выше уровень, тем больше бонусов и наград.</p>
             <button type="button" class="info-modal-close" onclick="closeXpModal()">Понятно</button>
@@ -1356,6 +1365,7 @@
                     { id: 'hat-spy', name: 'Шляпа шпиона', description: 'Классическая шляпа для стиля детектива', image: 'clothing/head/hat-spy.png', howToGet: 'Собрать 3 карты из одной серии' },
                     { id: 'cap-1', name: 'Бейсболка', description: 'Спортивный стиль для неформальных встреч', image: 'clothing/head/cap-1.png', howToGet: 'Достичь 5 уровня' },
                     { id: 'helmet-1', name: 'Каска', description: 'Для работы на стройке', image: 'clothing/head/helmet-1.png', howToGet: 'Выполнить 5 заказов' },
+                    { id: 'crown-sales', name: 'Корона продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/head/crown-sales.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
                 ],
                 body: [
                     { id: 'suit-office', name: 'Офисный костюм', description: 'Безупречный крой для переговоров и карьеры', image: 'clothing/body/suit-office.png', howToGet: 'Получить 500 May Coins' },
@@ -1363,6 +1373,7 @@
                     { id: 'coat-spy', name: 'Пальто шпиона', description: 'Длинное пальто для незаметности', image: 'clothing/body/coat-spy.png', howToGet: 'Достичь 10 уровня опыта' },
                     { id: 'shirt-1', name: 'Рубашка', description: 'Официальная рубашка', image: 'clothing/body/shirt-1.png', howToGet: 'Посетить 3 магазина партнёра' },
                     { id: 'hoodie-1', name: 'Толстовка', description: 'Неформальный стиль', image: 'clothing/body/hoodie-1.png', howToGet: 'Пригласить друга' },
+                    { id: 'suit-sales-king', name: 'Костюм короля продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/body/suit-sales-king.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
                 ],
                 legs: [
                     { id: 'skirt-pencil', name: 'Юбка-карандаш', description: 'Классика офисного стиля и уверенности', image: 'clothing/legs/skirt-pencil.png', howToGet: 'Выполнить 5 заказов в приложении' },
@@ -1370,6 +1381,7 @@
                     { id: 'pants-spy', name: 'Штаны шпиона', description: 'Классические штаны под пальто', image: 'clothing/legs/pants-spy.png', howToGet: 'Активировать 10 промокодов' },
                     { id: 'jeans-1', name: 'Джинсы', description: 'Удобные джинсы', image: 'clothing/legs/jeans-1.png', howToGet: 'Заработать 500 May Coins' },
                     { id: 'shorts-1', name: 'Шорты', description: 'Для жаркой погоды', image: 'clothing/legs/shorts-1.png', howToGet: 'Пригласить друга в программу' },
+                    { id: 'pants-sales-king', name: 'Штаны короля продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/legs/pants-sales-king.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
                 ],
                 shoes: [
                     { id: 'heels', name: 'Туфли на каблуке', description: 'Элегантный шаг к успеху', image: 'clothing/shoes/heels.png', howToGet: 'Активировать 20 промокодов' },
@@ -1377,14 +1389,16 @@
                     { id: 'boots-black', name: 'Черные ботинки', description: 'Строгие черные ботинки для образа шпиона', image: 'clothing/shoes/boots-black.png', howToGet: 'Посетить 15 заправок за месяц' },
                     { id: 'sneakers-1', name: 'Кроссовки', description: 'Удобные кроссовки', image: 'clothing/shoes/sneakers-1.png', howToGet: 'Достичь 8 уровня' },
                     { id: 'boots-1', name: 'Ботинки', description: 'Надежные ботинки', image: 'clothing/shoes/boots-1.png', howToGet: 'Выполнить 10 заказов' },
+                    { id: 'shoes-sales-king', name: 'Туфли короля продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/shoes/shoes-sales-king.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
                 ]
             },
-            // Комплекты: 0=офис, 1=90-х, 2=шпион. Без костюма — character id (female-1, male-1…), в костюме — character.1, character.2, character.3
+            // Комплекты: 0=офис, 1=90-х, 2=шпион, 3=деловой, 4=король/королева продаж (секретный)
             outfitSets: [
                 { id: 'office', name: 'Офисный стиль', head: 'chain-gold', body: 'suit-office', legs: 'skirt-pencil', shoes: 'heels', bonus: 'Бонус: +15% к May Coins в будни. Образ переговорщика и лидера.' },
                 { id: 'style90', name: 'Стиль 90-х', head: 'cap-90', body: 'jacket-sport', legs: 'pants-sport', shoes: 'sneakers-white', bonus: 'Бонус: +10% к опыту. Ностальгия и уверенный уличный стиль.' },
                 { id: 'spy', name: 'Шпион', head: 'hat-spy', body: 'coat-spy', legs: 'pants-spy', shoes: 'boots-black', bonus: 'Бонус: +12% к опыту. Стиль детектива и скрытности.' },
-                { id: 'business', name: 'Деловой', head: null, body: 'shirt-1', legs: 'jeans-1', shoes: 'boots-1', bonus: 'Бонус: дополнительная карта при достижении уровня.' }
+                { id: 'business', name: 'Деловой', head: null, body: 'shirt-1', legs: 'jeans-1', shoes: 'boots-1', bonus: 'Бонус: дополнительная карта при достижении уровня.' },
+                { id: 'sales-king', name: 'Королева и король продаж', head: 'crown-sales', body: 'suit-sales-king', legs: 'pants-sales-king', shoes: 'shoes-sales-king', bonus: 'Секретный комплект. Только один игрок в месяц — лидер по количеству продаж. Супер бонус: x2 May Coins за все активности.' }
             ]
         };
         
