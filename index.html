@@ -1353,37 +1353,37 @@
                 head: [
                     { id: 'chain-gold', name: 'Золотая цепочка', description: 'Тонкий акцент делового образа', image: 'clothing/head/chain-gold.png', howToGet: 'Посетить 10 заправок партнёра' },
                     { id: 'cap-90', name: 'Бейсболка с символикой', description: 'Легендарный стиль девяностых', image: 'clothing/head/cap-90.png', howToGet: 'Посетить 5 гипермаркетов' },
-                    { id: 'hat-1', name: 'Шлем самурая', description: 'Традиционный шлем самурая для защиты', image: 'clothing/head/hat-1.png', howToGet: 'Собрать 3 карты из одной серии' },
+                    { id: 'hat-spy', name: 'Шляпа шпиона', description: 'Классическая шляпа для стиля детектива', image: 'clothing/head/hat-spy.png', howToGet: 'Собрать 3 карты из одной серии' },
                     { id: 'cap-1', name: 'Бейсболка', description: 'Спортивный стиль для неформальных встреч', image: 'clothing/head/cap-1.png', howToGet: 'Достичь 5 уровня' },
                     { id: 'helmet-1', name: 'Каска', description: 'Для работы на стройке', image: 'clothing/head/helmet-1.png', howToGet: 'Выполнить 5 заказов' },
                 ],
                 body: [
                     { id: 'suit-office', name: 'Офисный костюм', description: 'Безупречный крой для переговоров и карьеры', image: 'clothing/body/suit-office.png', howToGet: 'Получить 500 May Coins' },
                     { id: 'jacket-sport', name: 'Спортивная куртка', description: 'Ветер девяностых в каждом шве', image: 'clothing/body/jacket-sport.png', howToGet: 'Посетить 7 АЗС в одном месяце' },
-                    { id: 'suit-1', name: 'Кимоно самурая', description: 'Традиционное кимоно самурая', image: 'clothing/body/suit-1.png', howToGet: 'Достичь 10 уровня опыта' },
+                    { id: 'coat-spy', name: 'Пальто шпиона', description: 'Длинное пальто для незаметности', image: 'clothing/body/coat-spy.png', howToGet: 'Достичь 10 уровня опыта' },
                     { id: 'shirt-1', name: 'Рубашка', description: 'Официальная рубашка', image: 'clothing/body/shirt-1.png', howToGet: 'Посетить 3 магазина партнёра' },
                     { id: 'hoodie-1', name: 'Толстовка', description: 'Неформальный стиль', image: 'clothing/body/hoodie-1.png', howToGet: 'Пригласить друга' },
                 ],
                 legs: [
                     { id: 'skirt-pencil', name: 'Юбка-карандаш', description: 'Классика офисного стиля и уверенности', image: 'clothing/legs/skirt-pencil.png', howToGet: 'Выполнить 5 заказов в приложении' },
                     { id: 'pants-sport', name: 'Спортивные штаны', description: 'Расслабленный дух эпохи 90-х', image: 'clothing/legs/pants-sport.png', howToGet: 'Посетить 3 разных магазина партнёра' },
-                    { id: 'pants-1', name: 'Хакама самурая', description: 'Традиционные широкие штаны самурая', image: 'clothing/legs/pants-1.png', howToGet: 'Активировать 10 промокодов' },
+                    { id: 'pants-spy', name: 'Штаны шпиона', description: 'Классические штаны под пальто', image: 'clothing/legs/pants-spy.png', howToGet: 'Активировать 10 промокодов' },
                     { id: 'jeans-1', name: 'Джинсы', description: 'Удобные джинсы', image: 'clothing/legs/jeans-1.png', howToGet: 'Заработать 500 May Coins' },
                     { id: 'shorts-1', name: 'Шорты', description: 'Для жаркой погоды', image: 'clothing/legs/shorts-1.png', howToGet: 'Пригласить друга в программу' },
                 ],
                 shoes: [
                     { id: 'heels', name: 'Туфли на каблуке', description: 'Элегантный шаг к успеху', image: 'clothing/shoes/heels.png', howToGet: 'Активировать 20 промокодов' },
                     { id: 'sneakers-white', name: 'Белые кроссовки', description: 'Чистый ретро-вид, как в лучшие годы', image: 'clothing/shoes/sneakers-white.png', howToGet: 'Заработать 1000 May Coins' },
-                    { id: 'shoes-1', name: 'Гэта самурая', description: 'Традиционная обувь самурая', image: 'clothing/shoes/shoes-1.png', howToGet: 'Посетить 15 заправок за месяц' },
+                    { id: 'boots-black', name: 'Черные ботинки', description: 'Строгие черные ботинки для образа шпиона', image: 'clothing/shoes/boots-black.png', howToGet: 'Посетить 15 заправок за месяц' },
                     { id: 'sneakers-1', name: 'Кроссовки', description: 'Удобные кроссовки', image: 'clothing/shoes/sneakers-1.png', howToGet: 'Достичь 8 уровня' },
                     { id: 'boots-1', name: 'Ботинки', description: 'Надежные ботинки', image: 'clothing/shoes/boots-1.png', howToGet: 'Выполнить 10 заказов' },
                 ]
             },
-            // Комплекты одежды: первый — по умолчанию при выборе персонажа. При надетом комплекте female-1 отображается female-1.1, female-1.2 … female-1.9
+            // Комплекты: 0=офис, 1=90-х, 2=шпион. Без костюма — character id (female-1, male-1…), в костюме — character.1, character.2, character.3
             outfitSets: [
                 { id: 'office', name: 'Офисный стиль', head: 'chain-gold', body: 'suit-office', legs: 'skirt-pencil', shoes: 'heels', bonus: 'Бонус: +15% к May Coins в будни. Образ переговорщика и лидера.' },
                 { id: 'style90', name: 'Стиль 90-х', head: 'cap-90', body: 'jacket-sport', legs: 'pants-sport', shoes: 'sneakers-white', bonus: 'Бонус: +10% к опыту. Ностальгия и уверенный уличный стиль.' },
-                { id: 'casual', name: 'Повседневный', head: 'cap-1', body: 'hoodie-1', legs: 'jeans-1', shoes: 'sneakers-1', bonus: 'Бонус: +5% к опыту. Удобный стиль для будней.' },
+                { id: 'spy', name: 'Шпион', head: 'hat-spy', body: 'coat-spy', legs: 'pants-spy', shoes: 'boots-black', bonus: 'Бонус: +12% к опыту. Стиль детектива и скрытности.' },
                 { id: 'business', name: 'Деловой', head: null, body: 'shirt-1', legs: 'jeans-1', shoes: 'boots-1', bonus: 'Бонус: дополнительная карта при достижении уровня.' }
             ]
         };
@@ -1424,10 +1424,15 @@
             // Добавляем фон
             imagesToLoad.push(AppData.repoUrl + 'game-bg.png');
             
-            // Варианты персонажа female-1 по комплектам (female-1.1 … female-1.9)
-            for (let v = 1; v <= 9; v++) {
-                imagesToLoad.push(AppData.repoUrl + 'female-1.' + v + '.png');
-            }
+            // Варианты в костюмах: для каждого персонажа .1, .2, .3, .4 по числу комплектов
+            const outfitCount = (AppData.outfitSets && AppData.outfitSets.length) || 4;
+            ['male', 'female'].forEach(g => {
+                (AppData.characters[g] || []).forEach(char => {
+                    for (let v = 1; v <= outfitCount; v++) {
+                        imagesToLoad.push(AppData.repoUrl + char.id + '.' + v + '.png');
+                    }
+                });
+            });
             
             // Собираем все изображения одежды
             Object.values(AppData.clothing).forEach(category => {
@@ -2107,21 +2112,19 @@
         }
         
         // Функция обновления изображения персонажа
+        // Без костюма: female-1, male-1 и т.д. В костюме: female-1.1, male-2.2 и т.д. (все персонажи)
         function updateCharacterImage() {
             const characterImage = document.getElementById('game-character-image');
             if (!characterImage || !selectedCharacter) return;
             
-            // Для female-1: при полном комплекте показываем female-1.1, female-1.2 … female-1.9 по порядку комплекта
-            if (selectedCharacter.id === 'female-1') {
-                const set = getCurrentOutfitSet();
-                if (set && AppData.outfitSets) {
-                    const setIndex = AppData.outfitSets.indexOf(set);
-                    if (setIndex >= 0 && setIndex < 9) {
-                        const variant = setIndex + 1;
-                        characterImage.src = AppData.repoUrl + 'female-1.' + variant + '.png';
-                        characterImage.alt = selectedCharacter.title + ' (' + (set.name || 'Комплект ' + variant) + ')';
-                        return;
-                    }
+            const set = getCurrentOutfitSet();
+            if (set && AppData.outfitSets) {
+                const setIndex = AppData.outfitSets.indexOf(set);
+                if (setIndex >= 0) {
+                    const variant = setIndex + 1;
+                    characterImage.src = AppData.repoUrl + selectedCharacter.id + '.' + variant + '.png';
+                    characterImage.alt = selectedCharacter.title + ' (' + (set.name || 'Комплект ' + variant) + ')';
+                    return;
                 }
             }
             characterImage.src = AppData.repoUrl + selectedCharacter.id + '.png';
