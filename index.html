@@ -17,7 +17,7 @@
             --btn-male: #0288D1;
             --btn-female: #D81B60;
             --color-neutral-icon: #b0b0b0;
-            --active-tab-color: #4FC3F7; 
+            --active-tab-color: #F06292; 
         }
         body {
             margin: 0; font-family: var(--font-main);
@@ -330,24 +330,25 @@
             padding: 0;
             box-sizing: border-box;
         }
-        .clothing-set-bonus {
+        .bonus-set-button {
             width: 100%;
-            margin-top: 6px;
-            padding: 6px 8px;
+            margin-top: 8px;
+            padding: 10px 12px;
             background: rgba(0, 0, 0, 0.75);
             border-radius: 8px;
-            border: 1px solid rgba(0, 0, 0, 0.9);
-            font-size: 11px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 12px;
+            font-weight: 700;
             line-height: 1.3;
             color: rgba(255, 255, 255, 0.95);
-            text-transform: none;
+            text-transform: uppercase;
+            cursor: pointer;
             box-sizing: border-box;
-            overflow: hidden;
-            max-height: 48px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            line-clamp: 3;
-            -webkit-box-orient: vertical;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .bonus-set-button:hover {
+            background: rgba(0, 0, 0, 0.85);
+            border-color: rgba(255, 255, 255, 0.35);
         }
         .clothing-slot-icon {
             position: absolute;
@@ -753,7 +754,24 @@
             transition: all 0.3s ease;
             overflow: hidden;
         }
-        /* Глянцевый блик — рассеянный источник света, смещается при повороте карты */
+        /* Лёгкая тень с противоположной от света стороны — усиливает ощущение направленного света при повороте */
+        .card-3d-face-front::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            mix-blend-mode: multiply;
+            opacity: var(--shadow-strength, 0);
+            background: linear-gradient(
+                135deg,
+                transparent 0%,
+                transparent 45%,
+                rgba(0, 0, 0, 0.4) 100%
+            );
+            transition: opacity 0.25s ease;
+        }
+        /* Глянцевый блик — свет «падает» на карту, смещается при повороте */
         .card-3d-face::after {
             content: '';
             position: absolute;
@@ -763,11 +781,12 @@
             mix-blend-mode: overlay;
             background: radial-gradient(
                 circle at var(--gloss-x, 50%) var(--gloss-y, 50%),
-                rgba(255, 255, 255, 0.35) 0%,
-                rgba(255, 255, 255, 0.12) 18%,
-                rgba(255, 255, 255, 0.04) 38%,
+                rgba(255, 255, 255, 0.4) 0%,
+                rgba(255, 255, 255, 0.16) 18%,
+                rgba(255, 255, 255, 0.05) 38%,
                 transparent 55%
             );
+            transition: background 0.2s ease;
         }
         
         .card-3d-face img {
@@ -915,6 +934,40 @@
             align-items: center; justify-content: center;
         }
         .tab-pane.active { display: flex; }
+        .tab-pane#tab-quests { flex-direction: column; align-items: stretch; }
+        .quest-sub-tabs {
+            display: flex; gap: 6px; margin-bottom: 12px;
+            background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 5px;
+        }
+        .quest-sub-tab {
+            flex: 1; padding: 8px 6px; border: none; border-radius: 8px;
+            background: transparent; color: rgba(255, 255, 255, 0.7);
+            font-family: var(--font-main); font-size: 12px; text-transform: uppercase;
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .quest-sub-tab:hover { color: rgba(255, 255, 255, 0.9); }
+        .quest-sub-tab.active {
+            background: rgba(240, 98, 146, 0.5); color: white; font-weight: 700;
+        }
+        .quest-list-container { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
+        .quest-list {
+            display: none; list-style: none; margin: 0; padding: 8px 0;
+            overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1;
+        }
+        .quest-list.active { display: block; }
+        .quest-item {
+            padding: 12px 14px; margin-bottom: 8px;
+            background: rgba(0, 0, 0, 0.35); border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.95); font-size: 14px;
+            cursor: pointer; transition: background 0.2s, border-color 0.2s;
+        }
+        .quest-item:hover {
+            background: rgba(0, 0, 0, 0.5); border-color: rgba(255, 255, 255, 0.25);
+        }
+        .quest-item-title { font-weight: 700; margin-bottom: 4px; }
+        .quest-item-reward { font-size: 12px; color: #FFEB3B; opacity: 0.9; }
+        .quest-modal-reward { margin-top: 12px; font-size: 13px; color: #FFEB3B; font-weight: 600; }
         /* Адаптивная сетка карточек - показывает только реальные карты */
         .cards-grid {
             display: grid;
@@ -1176,22 +1229,31 @@
                         <div class="clothing-slot-icon">👟</div>
                     </div>
                 </div>
-                <div class="clothing-set-bonus" id="clothing-set-bonus">—</div>
+                <button type="button" class="bonus-set-button" id="bonus-set-button" onclick="openSetBonusModal()" title="Подробнее о бонусе набора">Бонус набора</button>
             </div>
         </div>
         
         <div id="tabs-container">
             <div class="tab-buttons">
-                <button class="tab-button active" data-color="#4FC3F7" onclick="switchTab('cards', this)">Карточки</button>
-                <button class="tab-button" data-color="#F06292" onclick="switchTab('badges', this)">Значки</button>
+                <button class="tab-button active" data-color="#F06292" onclick="switchTab('quests', this)">Задания</button>
+                <button class="tab-button" data-color="#4FC3F7" onclick="switchTab('cards', this)">Карточки</button>
                 <button class="tab-button" data-color="#7CB342" onclick="switchTab('achievements', this)">Достижения</button>
             </div>
             <div class="tabs-content">
-                <div id="tab-cards" class="tab-pane active">
-                    <div class="cards-grid" id="cards-grid"></div>
+                <div id="tab-quests" class="tab-pane active">
+                    <div class="quest-sub-tabs">
+                        <button type="button" class="quest-sub-tab active" data-quest-category="daily" onclick="switchQuestSubTab('daily', this)">Ежедневные</button>
+                        <button type="button" class="quest-sub-tab" data-quest-category="monthly" onclick="switchQuestSubTab('monthly', this)">На месяц</button>
+                        <button type="button" class="quest-sub-tab" data-quest-category="additional" onclick="switchQuestSubTab('additional', this)">Дополнительные</button>
+                    </div>
+                    <div class="quest-list-container">
+                        <ul id="quest-list-daily" class="quest-list active"></ul>
+                        <ul id="quest-list-monthly" class="quest-list"></ul>
+                        <ul id="quest-list-additional" class="quest-list"></ul>
+                    </div>
                 </div>
-                <div id="tab-badges" class="tab-pane">
-                    <div class="swiper-container badges-swiper"><div class="swiper-wrapper" id="badges-swiper-wrapper"></div></div>
+                <div id="tab-cards" class="tab-pane">
+                    <div class="cards-grid" id="cards-grid"></div>
                 </div>
                 <div id="tab-achievements" class="tab-pane">
                     <ul id="achievements-list"></ul>
@@ -1251,6 +1313,25 @@
                 </div>
             </div>
             <button type="button" class="info-modal-close" onclick="closeGoldModal()">Понятно</button>
+        </div>
+    </div>
+    
+    <!-- Модальное окно бонуса набора -->
+    <div id="set-bonus-modal" class="info-modal" onclick="if(event.target===this) closeSetBonusModal()">
+        <div class="info-modal-content">
+            <h3 class="info-modal-title-with-icon"><span class="info-modal-title-icon">👕</span> Бонус набора</h3>
+            <p id="set-bonus-modal-text">Соберите полный комплект одежды из одного набора — получите бонус к опыту или May Coins.</p>
+            <button type="button" class="info-modal-close" onclick="closeSetBonusModal()">Понятно</button>
+        </div>
+    </div>
+    
+    <!-- Модальное окно задания (подробная инструкция) -->
+    <div id="quest-modal" class="info-modal" onclick="if(event.target===this) closeQuestModal()">
+        <div class="info-modal-content">
+            <h3 class="info-modal-title-with-icon"><span class="info-modal-title-icon">📋</span> <span id="quest-modal-title">Задание</span></h3>
+            <p id="quest-modal-instruction">Подробная инструкция по выполнению задания.</p>
+            <p class="quest-modal-reward" id="quest-modal-reward">Награда: —</p>
+            <button type="button" class="info-modal-close" onclick="closeQuestModal()">Понятно</button>
         </div>
     </div>
     
@@ -1319,7 +1400,6 @@
         let selectedGender = null;
         let swiperInstance = null;
         let selectedCharacter = {};
-        let badgesSwiperInstance = null;
         let areTabsInitialized = false;
 
         const AppData = {
@@ -1352,6 +1432,24 @@
             badges: [
                 { text: '⭐' }, { text: '🏆' }, { text: '💎' }, { text: '💡' }, { text: '🚀' }
             ],
+            quests: {
+                daily: [
+                    { id: 'daily-1', title: 'Зайти в приложение', instruction: 'Откройте мини-приложение May Games в течение дня. Достаточно одного входа — награда займёт в игру автоматически.', reward: '+3 XP, +50 May Coins' },
+                    { id: 'daily-2', title: 'Отметить присутствие', instruction: 'На главном экране нажмите кнопку «Отметить присутствие» (или аналогичную). Отметка сохраняется до конца дня.', reward: '+5 May Coins' },
+                    { id: 'daily-3', title: 'Просмотреть одну карточку', instruction: 'Откройте раздел «Карточки», выберите любую карточку и откройте её (нажмите на карточку). Просмотр описание карты засчитывается как выполнение.', reward: '+2 XP' },
+                    { id: 'daily-4', title: 'Сменить элемент одежды', instruction: 'Зайдите в слоты одежды (голова, тело, ноги или обувь), выберите любой предмет и нажмите «Выбрать». Смена хотя бы одного элемента засчитывается.', reward: '+5 May Coins' },
+                ],
+                monthly: [
+                    { id: 'monthly-1', title: 'Посетить приложение 20 дней', instruction: 'В течение календарного месяца зайдите в приложение не менее 20 разных дней. Дни не обязательно подряд — учитывается общее количество дней с входом.', reward: '+50 XP, +200 May Coins' },
+                    { id: 'monthly-2', title: 'Собрать полный комплект одежды', instruction: 'Подберите и наденьте полный комплект из одного набора (голова, тело, ноги, обувь из одного набора в разделе «Наборы»). Комплект должен быть сохранён хотя бы один раз за месяц.', reward: '+30 XP, бонус набора' },
+                    { id: 'monthly-3', title: 'Открыть 5 новых карточек', instruction: 'В разделе «Карточки» откройте не менее 5 карточек, которых ещё не было в вашей коллекции. Учитываются только новые карты за текущий месяц.', reward: '+40 XP, +100 May Coins' },
+                ],
+                additional: [
+                    { id: 'add-1', title: 'Предложить идею для игры', instruction: 'Напишите идею или предложение по улучшению в специальную форму (или в чат обратной связи). Идея должна быть развёрнутой: что добавить или изменить и зачем.', reward: '+15 XP' },
+                    { id: 'add-2', title: 'Поделиться достижением', instruction: 'Выполните любое достижение из раздела «Достижения», затем нажмите «Поделиться» (если доступно) или сделайте скриншот и поделитесь в рабочем чате или со знакомыми.', reward: '+20 May Coins' },
+                    { id: 'add-3', title: 'Пройдите обучение', instruction: 'Если вы новый пользователь — пройдите краткое обучение в приложении (подсказки при первом запуске). Если уже проходили — задание не засчитывается повторно.', reward: '+25 XP, достижение «Первые шаги»' },
+                ],
+            },
             achievements: [
                 { text: '✅ Первые шаги: Завершить обучение' }, { text: '✅ Новатор: Предложить 5 идей' },
                 { text: '🔒 Командный игрок: Завершить проект' }, { text: '🔒 Лидер мнений: Выступить на встрече' },
@@ -1662,22 +1760,24 @@
                 });
             }
             
-            const badgesWrapper = document.getElementById('badges-swiper-wrapper');
-            AppData.badges.forEach(badge => {
-                badgesWrapper.innerHTML += `<div class="swiper-slide">${badge.text}</div>`;
+            const quests = AppData.quests || { daily: [], monthly: [], additional: [] };
+            ['daily', 'monthly', 'additional'].forEach(cat => {
+                const listEl = document.getElementById('quest-list-' + cat);
+                if (!listEl) return;
+                listEl.innerHTML = '';
+                (quests[cat] || []).forEach(q => {
+                    const li = document.createElement('li');
+                    li.className = 'quest-item';
+                    li.innerHTML = `<span class="quest-item-title">${q.title}</span><br><span class="quest-item-reward">${q.reward || ''}</span>`;
+                    li.onclick = () => openQuestModal(q);
+                    listEl.appendChild(li);
+                });
             });
             const achievementsList = document.getElementById('achievements-list');
             AppData.achievements.forEach(ach => {
                 achievementsList.innerHTML += `<li>${ach.text}</li>`;
             });
 
-            badgesSwiperInstance = new Swiper('.badges-swiper', {
-                slidesPerView: 4.5, /* Показываем 4.5 значка */
-                spaceBetween: 8, 
-                loop: false, /* Отключаем loop, так как значков недостаточно для бесконечной прокрутки */
-                grabCursor: true,
-                freeMode: true, /* Плавная прокрутка */
-            });
             areTabsInitialized = true;
             
             // Показываем уведомление о новых картах
@@ -1840,12 +1940,16 @@
         
         function updateCardGloss(card3dEl) {
             if (!card3dEl) return;
-            var glossX = 50 + currentCardRotation.y * 0.25;
-            var glossY = 50 - currentCardRotation.x * 0.25;
-            glossX = Math.max(15, Math.min(85, glossX));
-            glossY = Math.max(15, Math.min(85, glossY));
+            var rx = currentCardRotation.x, ry = currentCardRotation.y;
+            var glossX = 50 + ry * 0.55;
+            var glossY = 50 - rx * 0.55;
+            glossX = Math.max(10, Math.min(90, glossX));
+            glossY = Math.max(10, Math.min(90, glossY));
             card3dEl.style.setProperty('--gloss-x', glossX + '%');
             card3dEl.style.setProperty('--gloss-y', glossY + '%');
+            var tilt = (Math.abs(rx) + Math.abs(ry)) / 90;
+            var shadowStrength = Math.min(1, tilt * 1.4);
+            card3dEl.style.setProperty('--shadow-strength', shadowStrength.toFixed(2));
         }
         
         // Функции для уведомления
@@ -1880,9 +1984,26 @@
             document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
             clickedButton.classList.add('active');
             document.getElementById(`tab-${tabId}`).classList.add('active');
-            
-            // Обновляем только badges swiper, так как карточки теперь в grid
-            if (tabId === 'badges' && badgesSwiperInstance) badgesSwiperInstance.update();
+        }
+        
+        function switchQuestSubTab(category, clickedButton) {
+            document.querySelectorAll('.quest-sub-tab').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.quest-list').forEach(list => list.classList.remove('active'));
+            if (clickedButton) clickedButton.classList.add('active');
+            const listEl = document.getElementById('quest-list-' + category);
+            if (listEl) listEl.classList.add('active');
+        }
+        
+        function openQuestModal(quest) {
+            if (!quest) return;
+            document.getElementById('quest-modal-title').textContent = quest.title;
+            document.getElementById('quest-modal-instruction').textContent = quest.instruction;
+            document.getElementById('quest-modal-reward').textContent = 'Награда: ' + (quest.reward || '—');
+            document.getElementById('quest-modal').classList.add('active');
+            if (window.Telegram && window.Telegram.WebApp) window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        }
+        function closeQuestModal() {
+            document.getElementById('quest-modal').classList.remove('active');
         }
         
         // Функции для работы с одеждой
@@ -1922,6 +2043,19 @@
         }
         function closeGoldModal() {
             const modal = document.getElementById('gold-modal');
+            if (modal) modal.classList.remove('active');
+        }
+        
+        function openSetBonusModal() {
+            const set = getCurrentOutfitSet();
+            const textEl = document.getElementById('set-bonus-modal-text');
+            if (textEl) textEl.textContent = set ? set.bonus : 'Соберите полный комплект одежды из одного набора — получите бонус к опыту или May Coins.';
+            const modal = document.getElementById('set-bonus-modal');
+            if (modal) modal.classList.add('active');
+            if (window.Telegram && window.Telegram.WebApp) window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        }
+        function closeSetBonusModal() {
+            const modal = document.getElementById('set-bonus-modal');
             if (modal) modal.classList.remove('active');
         }
         
@@ -2174,10 +2308,8 @@
         }
         
         function updateClothingSetDescription() {
-            const el = document.getElementById('clothing-set-bonus');
-            if (!el) return;
-            const set = getCurrentOutfitSet();
-            el.textContent = set ? set.bonus : 'Соберите комплект — бонус за полный набор.';
+            const btn = document.getElementById('bonus-set-button');
+            if (btn) btn.title = getCurrentOutfitSet() ? 'Подробнее о бонусе набора' : 'Соберите комплект — бонус за полный набор';
         }
         
         function refreshClothingSlots() {
