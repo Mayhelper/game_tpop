@@ -1704,10 +1704,12 @@
             margin: 0;
             padding: 8px 0;
             overflow-y: auto;
+            overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
             flex: 1;
             scrollbar-width: none;
             -ms-overflow-style: none;
+            touch-action: pan-y;
         }
         .team-results-list.active {
             display: block;
@@ -1726,10 +1728,16 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            width: 100%;
+            box-sizing: border-box;
+            touch-action: manipulation;
         }
         .team-result-item:hover {
             background: rgba(255, 255, 255, 0.1);
             transform: translateX(4px);
+        }
+        .team-result-item:active {
+            transform: scale(0.98);
         }
         .team-result-rank {
             font-size: 18px;
@@ -1923,15 +1931,28 @@
                     <div id="team-member-modal" class="achievement-info-modal" onclick="if(event.target===this) closeTeamMemberModal()">
                         <div class="info-modal-content">
                             <h3 class="info-modal-title-with-icon"><span class="info-modal-title-icon">👤</span> <span id="team-member-modal-name">Сотрудник</span></h3>
-                            <p id="team-member-modal-rank">Место: —</p>
-                            <p id="team-member-modal-total">Всего продаж: —</p>
-                            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
-                                <p style="font-weight: 700; margin-bottom: 8px;">Продажи по сегментам:</p>
-                                <p id="team-member-modal-gas-stations">Заправки: —</p>
-                                <p id="team-member-modal-markets">Рынки: —</p>
-                                <p id="team-member-modal-local-stores">Локальные торговые точки: —</p>
+                            <div style="margin-bottom: 16px; padding: 12px; background: rgba(0, 0, 0, 0.3); border-radius: 10px;">
+                                <p style="margin: 0 0 8px 0; font-size: 16px; font-weight: 700; color: rgba(255, 255, 255, 0.95);" id="team-member-modal-rank">Место: —</p>
+                                <p style="margin: 0; font-size: 18px; font-weight: 700; color: #81C784;" id="team-member-modal-total">Всего продаж: —</p>
                             </div>
-                            <button type="button" class="info-modal-close" onclick="closeTeamMemberModal()">Понятно</button>
+                            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
+                                <p style="font-weight: 700; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; color: rgba(255, 255, 255, 0.9);">Продажи по сегментам:</p>
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <div style="padding: 10px; background: rgba(79, 195, 247, 0.15); border-radius: 8px; border-left: 3px solid #4FC3F7;">
+                                        <p style="margin: 0; font-weight: 700; font-size: 12px; color: #4FC3F7; text-transform: uppercase; margin-bottom: 4px;">Заправки</p>
+                                        <p style="margin: 0; font-size: 16px; font-weight: 700; color: white;" id="team-member-modal-gas-stations">—</p>
+                                    </div>
+                                    <div style="padding: 10px; background: rgba(124, 179, 66, 0.15); border-radius: 8px; border-left: 3px solid #7CB342;">
+                                        <p style="margin: 0; font-weight: 700; font-size: 12px; color: #7CB342; text-transform: uppercase; margin-bottom: 4px;">Рынки</p>
+                                        <p style="margin: 0; font-size: 16px; font-weight: 700; color: white;" id="team-member-modal-markets">—</p>
+                                    </div>
+                                    <div style="padding: 10px; background: rgba(240, 98, 146, 0.15); border-radius: 8px; border-left: 3px solid #F06292;">
+                                        <p style="margin: 0; font-weight: 700; font-size: 12px; color: #F06292; text-transform: uppercase; margin-bottom: 4px;">Локальные торговые точки</p>
+                                        <p style="margin: 0; font-size: 16px; font-weight: 700; color: white;" id="team-member-modal-local-stores">—</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="info-modal-close" onclick="closeTeamMemberModal()" style="margin-top: 20px;">Понятно</button>
                         </div>
                     </div>
                 </div>
@@ -2194,12 +2215,21 @@
                     { id: 'sales-master', title: 'Мастер продаж', description: 'Выполнить 50 успешных продаж', status: 'locked', reward: '+30 опыта, +150 Май коинов' },
                     { id: 'level-up', title: 'Повышение уровня', description: 'Достичь 10 уровня', status: 'locked', reward: '+40 опыта, +200 Май коинов' },
                     { id: 'card-collector', title: 'Коллекционер карт', description: 'Собрать 10 карточек', status: 'locked', reward: '+20 опыта, +80 Май коинов' },
+                    { id: 'daily-visitor', title: 'Ежедневный посетитель', description: 'Входить в приложение 7 дней подряд', status: 'locked', reward: '+25 опыта, +100 Май коинов' },
+                    { id: 'quest-master', title: 'Мастер заданий', description: 'Выполнить 20 заданий', status: 'locked', reward: '+35 опыта, +150 Май коинов' },
+                    { id: 'outfit-collector', title: 'Коллекционер нарядов', description: 'Собрать 3 полных комплекта одежды', status: 'locked', reward: '+30 опыта, +120 Май коинов' },
+                    { id: 'gold-earner', title: 'Золотоискатель', description: 'Накопить 5000 Май коинов', status: 'locked', reward: '+40 опыта, +200 Май коинов' },
+                    { id: 'level-15', title: 'Опытный игрок', description: 'Достичь 15 уровня', status: 'locked', reward: '+50 опыта, +250 Май коинов' },
                 ],
                 team: [
                     { id: 'team-player', title: 'Командный игрок', description: 'Завершить командный проект', status: 'completed', reward: '+35 опыта, +150 Май коинов' },
                     { id: 'opinion-leader', title: 'Лидер мнений', description: 'Выступить на командной встрече', status: 'locked', reward: '+30 опыта, +120 Май коинов' },
                     { id: 'team-sales', title: 'Командные продажи', description: 'Команда достигла 1000 продаж', status: 'locked', reward: '+50 опыта, +250 Май коинов' },
                     { id: 'team-goal', title: 'Командная цель', description: 'Выполнить месячную цель команды', status: 'locked', reward: '+45 опыта, +200 Май коинов' },
+                    { id: 'team-top3', title: 'Топ-3 команды', description: 'Занять место в топ-3 рейтинга команды', status: 'locked', reward: '+40 опыта, +180 Май коинов' },
+                    { id: 'team-cooperation', title: 'Командное сотрудничество', description: 'Участвовать в 5 командных проектах', status: 'locked', reward: '+35 опыта, +150 Май коинов' },
+                    { id: 'team-leader', title: 'Лидер команды', description: 'Возглавить команду в рейтинге продаж', status: 'locked', reward: '+60 опыта, +300 Май коинов' },
+                    { id: 'team-milestone', title: 'Командный рубеж', description: 'Команда достигла 5000 продаж', status: 'locked', reward: '+55 опыта, +280 Май коинов' },
                 ]
             },
             teamResults: [
@@ -2919,11 +2949,18 @@
             const localStoresEl = document.getElementById('team-member-modal-local-stores');
             
             if (nameEl) nameEl.textContent = member.name;
-            if (rankEl) rankEl.textContent = 'Место: ' + member.rank;
+            
+            // Форматируем место с эмодзи для топ-3
+            let rankText = 'Место: ' + member.rank;
+            if (member.rank === 1) rankText = '🥇 1 место';
+            else if (member.rank === 2) rankText = '🥈 2 место';
+            else if (member.rank === 3) rankText = '🥉 3 место';
+            
+            if (rankEl) rankEl.textContent = rankText;
             if (totalEl) totalEl.textContent = 'Всего продаж: ' + member.sales;
-            if (gasStationsEl) gasStationsEl.textContent = 'Заправки: ' + member.segments.gasStations;
-            if (marketsEl) marketsEl.textContent = 'Рынки: ' + member.segments.markets;
-            if (localStoresEl) localStoresEl.textContent = 'Локальные торговые точки: ' + member.segments.localStores;
+            if (gasStationsEl) gasStationsEl.textContent = member.segments.gasStations;
+            if (marketsEl) marketsEl.textContent = member.segments.markets;
+            if (localStoresEl) localStoresEl.textContent = member.segments.localStores;
             
             modal.classList.add('active');
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
