@@ -490,13 +490,13 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            background: rgba(240, 98, 146, 0.8);
+            background: rgba(240, 98, 146, 0.6);
             border: none;
             color: white;
             width: 36px;
             height: 36px;
             border-radius: 10px;
-            font-size: 22px;
+            font-size: 28px;
             font-weight: 300;
             cursor: pointer;
             display: flex;
@@ -507,14 +507,18 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
         .clothing-modal-close-top:hover {
-            background: rgba(240, 98, 146, 1);
+            background: rgba(240, 98, 146, 0.8);
             transform: scale(1.05);
         }
         .clothing-modal-close-top:active {
             transform: scale(0.95);
         }
         .clothing-modal-type-tabs {
-            display: none;
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            margin-right: 50px;
+            flex-wrap: wrap;
         }
         .clothing-type-tab {
             flex: 1;
@@ -545,7 +549,7 @@
             flex: 1;
             min-height: 0;
             gap: 0;
-            padding-top: 60px;
+            padding-top: 0;
         }
         .clothing-preview-label {
             display: none;
@@ -564,6 +568,11 @@
             margin-bottom: 10px;
             padding: 0 4px;
         }
+        .clothing-set-row .clothing-section-title,
+        .clothing-grid-wrap .clothing-section-title {
+            margin-bottom: 12px;
+            padding: 0;
+        }
         .clothing-section-title-green {
             color: #81C784;
         }
@@ -576,15 +585,22 @@
         .clothing-preview-top {
             flex: 0 0 auto;
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             align-items: stretch;
-            gap: 14px;
+            gap: 12px;
             padding: 12px;
             color: white;
             box-sizing: border-box;
             background: rgba(0, 0, 0, 0.28);
             border-radius: 14px;
             margin: 0;
+            border: 2px solid #81C784;
+        }
+        .clothing-preview-top-inner {
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            gap: 14px;
         }
         .clothing-preview-icon {
             flex: 0 0 auto;
@@ -665,16 +681,24 @@
         }
         .clothing-set-row {
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            align-items: stretch;
             gap: 12px;
             margin-top: 0;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             padding: 12px;
             background: rgba(0, 0, 0, 0.28);
             border-radius: 14px;
+            border: 2px solid #BA68C8;
+        }
+        .clothing-set-row-inner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: nowrap;
         }
         .clothing-set-info {
-            flex: 1;
+            flex: 0 0 auto;
             min-width: 0;
         }
         .clothing-set-name {
@@ -684,6 +708,14 @@
             letter-spacing: 0.3px;
             color: rgba(255, 255, 255, 0.85);
             margin-bottom: 6px;
+        }
+        .clothing-set-name-top {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 8px;
         }
         .clothing-set-icons {
             display: flex;
@@ -722,7 +754,15 @@
         .clothing-set-row .clothing-wear-set-button {
             flex: 0 0 auto;
             margin-top: 0;
-            min-width: 90px;
+            width: auto;
+            min-width: 140px;
+            padding: 10px 16px;
+            white-space: nowrap;
+        }
+        .clothing-set-row-top {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
         .clothing-preview-actions {
             display: flex;
@@ -748,18 +788,19 @@
             border-radius: 14px;
             padding: 12px;
             box-sizing: border-box;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,0.25) transparent;
+            border: 2px solid #64B5F6;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
         .clothing-grid-wrap::-webkit-scrollbar {
-            width: 6px;
+            display: none;
+            width: 0;
         }
         .clothing-grid-wrap::-webkit-scrollbar-track {
-            background: transparent;
+            display: none;
         }
         .clothing-grid-wrap::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.25);
-            border-radius: 3px;
+            display: none;
         }
         .clothing-items-grid {
             width: 100%;
@@ -1087,14 +1128,14 @@
             width: calc(100% - 24px);
             max-width: none;
             min-height: 56px;
-            background: rgba(33, 150, 243, 0.85);
+            background: rgba(255, 255, 255, 0.28);
             backdrop-filter: saturate(180%) blur(20px);
             -webkit-backdrop-filter: saturate(180%) blur(20px);
-            border: 2px solid rgba(33, 150, 243, 1);
-            color: white;
+            border: 2px solid rgba(186, 104, 200, 0.6);
+            color: #1a1a1a;
             padding: 14px 16px 14px 18px;
             border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(33, 150, 243, 0.4), 0 0 1px rgba(255, 255, 255, 0.3) inset;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12), 0 0 1px rgba(255, 255, 255, 0.5) inset;
             z-index: 3000;
             font-family: var(--font-main);
             font-size: 15px;
@@ -1126,24 +1167,27 @@
         }
         .notification-close {
             flex-shrink: 0;
-            width: 28px;
-            height: 28px;
+            width: 36px;
+            height: 36px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.08);
-            color: #333;
+            border-radius: 10px;
+            background: rgba(240, 98, 146, 0.6);
+            color: white;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 28px;
+            font-weight: 300;
             line-height: 1;
-            transition: background 0.2s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
         .notification-close:hover {
-            background: rgba(0, 0, 0, 0.14);
+            background: rgba(240, 98, 146, 0.8);
+            transform: scale(1.05);
         }
         .notification-close:active {
-            background: rgba(0, 0, 0, 0.2);
+            transform: scale(0.95);
         }
         @keyframes notificationSlideDown {
             from {
@@ -1613,24 +1657,32 @@
     <div id="clothing-modal" class="clothing-modal">
         <div class="clothing-modal-content">
             <button class="clothing-modal-close-top" onclick="closeClothingModal()">×</button>
+            <div class="clothing-modal-type-tabs">
+                <button type="button" class="clothing-type-tab active" data-type="head" onclick="switchClothingType('head', this)">Голова</button>
+                <button type="button" class="clothing-type-tab" data-type="body" onclick="switchClothingType('body', this)">Туловище</button>
+                <button type="button" class="clothing-type-tab" data-type="legs" onclick="switchClothingType('legs', this)">Ноги</button>
+                <button type="button" class="clothing-type-tab" data-type="shoes" onclick="switchClothingType('shoes', this)">Обувь</button>
+            </div>
             <div class="clothing-modal-body">
                 <!-- Блок 1: ПРОСМОТР ВЫБРАННОГО ПРЕДМЕТА -->
                 <div class="clothing-section">
-                    <div class="clothing-section-title clothing-section-title-green">ПРОСМОТР ВЫБРАННОГО ПРЕДМЕТА</div>
                     <div class="clothing-preview-top">
-                        <div class="clothing-preview-icon" id="clothing-preview-image">
-                            <span class="clothing-preview-placeholder">Выберите вещь</span>
-                        </div>
-                        <div class="clothing-preview-info">
-                            <div class="clothing-preview-name" id="clothing-preview-name">—</div>
-                            <div class="clothing-preview-description" id="clothing-preview-description">—</div>
-                            <div class="clothing-preview-actions">
-                                <button class="clothing-select-button" id="clothing-select-button" onclick="selectClothingItem()" disabled>Надеть</button>
-                                <button class="clothing-remove-button" id="clothing-remove-button" onclick="removeClothingItem()" disabled>Снять</button>
+                        <div class="clothing-section-title clothing-section-title-green">ПРОСМОТР ВЫБРАННОГО ПРЕДМЕТА</div>
+                        <div class="clothing-preview-top-inner">
+                            <div class="clothing-preview-icon" id="clothing-preview-image">
+                                <span class="clothing-preview-placeholder">Выберите вещь</span>
                             </div>
-                            <div class="clothing-how-to-get" id="clothing-how-to-get">
-                                <div class="clothing-how-to-get-title">Как получить</div>
-                                <div class="clothing-how-to-get-text" id="clothing-how-to-get-text">—</div>
+                            <div class="clothing-preview-info">
+                                <div class="clothing-preview-name" id="clothing-preview-name">—</div>
+                                <div class="clothing-preview-description" id="clothing-preview-description">—</div>
+                                <div class="clothing-preview-actions">
+                                    <button class="clothing-select-button" id="clothing-select-button" onclick="selectClothingItem()" disabled>Надеть</button>
+                                    <button class="clothing-remove-button" id="clothing-remove-button" onclick="removeClothingItem()" disabled>Снять</button>
+                                </div>
+                                <div class="clothing-how-to-get" id="clothing-how-to-get">
+                                    <div class="clothing-how-to-get-title">Как получить</div>
+                                    <div class="clothing-how-to-get-text" id="clothing-how-to-get-text">—</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1638,25 +1690,29 @@
                 
                 <!-- Блок 2: НАБОР ВЫБРАННОГО ПРЕДМЕТА -->
                 <div class="clothing-section">
-                    <div class="clothing-section-title clothing-section-title-purple">НАБОР ВЫБРАННОГО ПРЕДМЕТА</div>
                     <div class="clothing-set-row" id="clothing-set-row">
-                        <div class="clothing-set-info">
-                            <div class="clothing-set-name" id="clothing-set-name">Соберите комплект</div>
-                            <div class="clothing-set-icons" id="clothing-set-icons">
-                                <div class="clothing-set-slot" data-slot="head" title="Голова"><div class="clothing-set-slot-img"></div></div>
-                                <div class="clothing-set-slot" data-slot="body" title="Туловище"><div class="clothing-set-slot-img"></div></div>
-                                <div class="clothing-set-slot" data-slot="legs" title="Ноги"><div class="clothing-set-slot-img"></div></div>
-                                <div class="clothing-set-slot" data-slot="shoes" title="Обувь"><div class="clothing-set-slot-img"></div></div>
+                        <div class="clothing-section-title clothing-section-title-purple">НАБОР ВЫБРАННОГО ПРЕДМЕТА</div>
+                        <div class="clothing-set-row-top">
+                            <div class="clothing-set-name clothing-set-name-top" id="clothing-set-name">Соберите комплект</div>
+                            <div class="clothing-set-row-inner">
+                                <div class="clothing-set-info">
+                                    <div class="clothing-set-icons" id="clothing-set-icons">
+                                        <div class="clothing-set-slot" data-slot="head" title="Голова"><div class="clothing-set-slot-img"></div></div>
+                                        <div class="clothing-set-slot" data-slot="body" title="Туловище"><div class="clothing-set-slot-img"></div></div>
+                                        <div class="clothing-set-slot" data-slot="legs" title="Ноги"><div class="clothing-set-slot-img"></div></div>
+                                        <div class="clothing-set-slot" data-slot="shoes" title="Обувь"><div class="clothing-set-slot-img"></div></div>
+                                    </div>
+                                </div>
+                                <button class="clothing-wear-set-button" id="clothing-wear-set-button" type="button" onclick="wearFullOutfitSet()" disabled>НАДЕТЬ ВЕСЬ НАБОР</button>
                             </div>
                         </div>
-                        <button class="clothing-wear-set-button" id="clothing-wear-set-button" type="button" onclick="wearFullOutfitSet()" disabled>НАДЕТЬ ВЕСЬ НАБОР</button>
                     </div>
                 </div>
                 
                 <!-- Блок 3: КОЛЛЕКЦИЯ ПРЕДМЕТОВ -->
                 <div class="clothing-section">
-                    <div class="clothing-section-title clothing-section-title-blue">КОЛЛЕКЦИЯ ПРЕДМЕТОВ</div>
                     <div class="clothing-grid-wrap">
+                        <div class="clothing-section-title clothing-section-title-blue">КОЛЛЕКЦИЯ ПРЕДМЕТОВ</div>
                         <div class="clothing-items-grid" id="clothing-items-grid"></div>
                     </div>
                 </div>
