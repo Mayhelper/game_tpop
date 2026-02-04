@@ -1609,7 +1609,14 @@
             flex-direction: column;
             flex: 1;
             min-height: 0;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .achievements-content-wrapper::-webkit-scrollbar {
+            display: none;
         }
         .achievements-category-section {
             margin-bottom: 20px;
@@ -1628,9 +1635,6 @@
             list-style: none; 
             margin: 0; 
             padding: 8px 0;
-            overflow-y: auto; 
-            -webkit-overflow-scrolling: touch; 
-            flex: 1;
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
@@ -1758,10 +1762,11 @@
             margin-bottom: 4px;
         }
         .team-result-sales {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
         }
         .team-result-sales-value {
+            font-size: 18px;
             font-weight: 700;
             color: #81C784;
         }
@@ -1917,44 +1922,6 @@
                         </div>
                         <ul id="team-results-list" class="team-results-list"></ul>
                     </div>
-                    <!-- Модальное окно достижения -->
-                    <div id="achievement-modal" class="achievement-info-modal" onclick="if(event.target===this) closeAchievementModal()">
-                        <div class="info-modal-content">
-                            <h3 class="info-modal-title-with-icon"><span class="info-modal-title-icon">🏆</span> <span id="achievement-modal-title">Достижение</span></h3>
-                            <p id="achievement-modal-description">Описание достижения.</p>
-                            <p class="quest-modal-reward" id="achievement-modal-reward">Награда: —</p>
-                            <p><span class="achievement-status" id="achievement-modal-status">Статус</span></p>
-                            <button type="button" class="info-modal-close" onclick="closeAchievementModal()">Понятно</button>
-                        </div>
-                    </div>
-                    <!-- Модальное окно сотрудника команды -->
-                    <div id="team-member-modal" class="achievement-info-modal" onclick="if(event.target===this) closeTeamMemberModal()">
-                        <div class="info-modal-content">
-                            <h3 class="info-modal-title-with-icon"><span class="info-modal-title-icon">👤</span> <span id="team-member-modal-name">Сотрудник</span></h3>
-                            <div style="margin-bottom: 16px; padding: 12px; background: rgba(0, 0, 0, 0.3); border-radius: 10px;">
-                                <p style="margin: 0 0 8px 0; font-size: 16px; font-weight: 700; color: rgba(255, 255, 255, 0.95);" id="team-member-modal-rank">Место: —</p>
-                                <p style="margin: 0; font-size: 18px; font-weight: 700; color: #81C784;" id="team-member-modal-total">Всего продаж: —</p>
-                            </div>
-                            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
-                                <p style="font-weight: 700; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; color: rgba(255, 255, 255, 0.9);">Продажи по сегментам:</p>
-                                <div style="display: flex; flex-direction: column; gap: 10px;">
-                                    <div style="padding: 10px; background: rgba(79, 195, 247, 0.15); border-radius: 8px; border-left: 3px solid #4FC3F7;">
-                                        <p style="margin: 0; font-weight: 700; font-size: 12px; color: #4FC3F7; text-transform: uppercase; margin-bottom: 4px;">Заправки</p>
-                                        <p style="margin: 0; font-size: 16px; font-weight: 700; color: white;" id="team-member-modal-gas-stations">—</p>
-                                    </div>
-                                    <div style="padding: 10px; background: rgba(124, 179, 66, 0.15); border-radius: 8px; border-left: 3px solid #7CB342;">
-                                        <p style="margin: 0; font-weight: 700; font-size: 12px; color: #7CB342; text-transform: uppercase; margin-bottom: 4px;">Рынки</p>
-                                        <p style="margin: 0; font-size: 16px; font-weight: 700; color: white;" id="team-member-modal-markets">—</p>
-                                    </div>
-                                    <div style="padding: 10px; background: rgba(240, 98, 146, 0.15); border-radius: 8px; border-left: 3px solid #F06292;">
-                                        <p style="margin: 0; font-weight: 700; font-size: 12px; color: #F06292; text-transform: uppercase; margin-bottom: 4px;">Локальные торговые точки</p>
-                                        <p style="margin: 0; font-size: 16px; font-weight: 700; color: white;" id="team-member-modal-local-stores">—</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="button" class="info-modal-close" onclick="closeTeamMemberModal()" style="margin-top: 20px;">Понятно</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1984,6 +1951,46 @@
             </ul>
             <p>Чем выше уровень, тем больше бонусов и наград.</p>
             <button type="button" class="info-modal-close" onclick="closeXpModal()">Понятно</button>
+        </div>
+    </div>
+    
+    <!-- Модальное окно достижения -->
+    <div id="achievement-modal" class="achievement-info-modal" onclick="if(event.target===this) closeAchievementModal()">
+        <div class="info-modal-content">
+            <h3 class="info-modal-title-with-icon"><span class="info-modal-title-icon">🏆</span> <span id="achievement-modal-title">Достижение</span></h3>
+            <p id="achievement-modal-description">Описание достижения.</p>
+            <p class="quest-modal-reward" id="achievement-modal-reward">Награда: —</p>
+            <p><span class="achievement-status" id="achievement-modal-status">Статус</span></p>
+            <button type="button" class="info-modal-close" onclick="closeAchievementModal()">Понятно</button>
+        </div>
+    </div>
+    
+    <!-- Модальное окно сотрудника команды -->
+    <div id="team-member-modal" class="achievement-info-modal" onclick="if(event.target===this) closeTeamMemberModal()">
+        <div class="info-modal-content">
+            <h3 class="info-modal-title-with-icon"><span class="info-modal-title-icon">👤</span> <span id="team-member-modal-name">Сотрудник</span></h3>
+            <div style="margin-bottom: 16px; padding: 12px; background: rgba(0, 0, 0, 0.3); border-radius: 10px;">
+                <p style="margin: 0 0 8px 0; font-size: 16px; font-weight: 700; color: rgba(255, 255, 255, 0.95);" id="team-member-modal-rank">Место: —</p>
+                <p style="margin: 0; font-size: 22px; font-weight: 700; color: #81C784;" id="team-member-modal-total">Всего продаж: —</p>
+            </div>
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
+                <p style="font-weight: 700; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; color: rgba(255, 255, 255, 0.9);">Продажи по сегментам:</p>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <div style="padding: 10px; background: rgba(79, 195, 247, 0.15); border-radius: 8px; border-left: 3px solid #4FC3F7;">
+                                        <p style="margin: 0; font-weight: 700; font-size: 12px; color: #4FC3F7; text-transform: uppercase; margin-bottom: 4px;">Заправки</p>
+                                        <p style="margin: 0; font-size: 20px; font-weight: 700; color: white;" id="team-member-modal-gas-stations">—</p>
+                                    </div>
+                                    <div style="padding: 10px; background: rgba(124, 179, 66, 0.15); border-radius: 8px; border-left: 3px solid #7CB342;">
+                                        <p style="margin: 0; font-weight: 700; font-size: 12px; color: #7CB342; text-transform: uppercase; margin-bottom: 4px;">Рынки</p>
+                                        <p style="margin: 0; font-size: 20px; font-weight: 700; color: white;" id="team-member-modal-markets">—</p>
+                                    </div>
+                                    <div style="padding: 10px; background: rgba(240, 98, 146, 0.15); border-radius: 8px; border-left: 3px solid #F06292;">
+                                        <p style="margin: 0; font-weight: 700; font-size: 12px; color: #F06292; text-transform: uppercase; margin-bottom: 4px;">Локальные торговые точки</p>
+                                        <p style="margin: 0; font-size: 20px; font-weight: 700; color: white;" id="team-member-modal-local-stores">—</p>
+                                    </div>
+                </div>
+            </div>
+            <button type="button" class="info-modal-close" onclick="closeTeamMemberModal()" style="margin-top: 20px;">Понятно</button>
         </div>
     </div>
     
@@ -2233,12 +2240,12 @@
                 ]
             },
             teamResults: [
-                { id: 'emp1', name: 'Иван Петров', sales: 245, rank: 1, segments: { gasStations: 120, markets: 85, localStores: 40 } },
-                { id: 'emp2', name: 'Мария Сидорова', sales: 198, rank: 2, segments: { gasStations: 95, markets: 70, localStores: 33 } },
-                { id: 'emp3', name: 'Алексей Козлов', sales: 187, rank: 3, segments: { gasStations: 88, markets: 65, localStores: 34 } },
-                { id: 'emp4', name: 'Елена Волкова', sales: 165, rank: 4, segments: { gasStations: 75, markets: 60, localStores: 30 } },
-                { id: 'emp5', name: 'Дмитрий Соколов', sales: 142, rank: 5, segments: { gasStations: 65, markets: 50, localStores: 27 } },
-                { id: 'emp6', name: 'Анна Морозова', sales: 128, rank: 6, segments: { gasStations: 58, markets: 45, localStores: 25 } },
+                { id: 'emp1', name: 'Иван Петров', sales: 27456, rank: 1, segments: { gasStations: 12986, markets: 10234, localStores: 4236 } },
+                { id: 'emp2', name: 'Мария Сидорова', sales: 22189, rank: 2, segments: { gasStations: 10876, markets: 8456, localStores: 2857 } },
+                { id: 'emp3', name: 'Алексей Козлов', sales: 19876, rank: 3, segments: { gasStations: 9234, markets: 7234, localStores: 3408 } },
+                { id: 'emp4', name: 'Елена Волкова', sales: 16543, rank: 4, segments: { gasStations: 8123, markets: 6234, localStores: 2186 } },
+                { id: 'emp5', name: 'Дмитрий Соколов', sales: 14234, rank: 5, segments: { gasStations: 7234, markets: 5234, localStores: 1766 } },
+                { id: 'emp6', name: 'Анна Морозова', sales: 12876, rank: 6, segments: { gasStations: 6123, markets: 4567, localStores: 2186 } },
             ],
             clothing: {
                 // Путь к изображениям одежды на GitHub: clothing/{тип}/{id}.png
@@ -2901,7 +2908,7 @@
                     <div class="team-result-rank rank-${emp.rank}">${emp.rank}</div>
                     <div class="team-result-info">
                         <div class="team-result-name">${emp.name}</div>
-                        <div class="team-result-sales">Продаж: <span class="team-result-sales-value">${emp.sales}</span></div>
+                        <div class="team-result-sales">Продаж: <span class="team-result-sales-value">${emp.sales.toLocaleString('ru-RU')}</span> руб.</div>
                     </div>
                 `;
                 li.onclick = () => openTeamMemberModal(emp);
@@ -2912,6 +2919,10 @@
         function openAchievementModal(achievement) {
             const modal = document.getElementById('achievement-modal');
             if (!modal) return;
+            
+            // Закрываем модальное окно сотрудника, если оно открыто
+            const teamModal = document.getElementById('team-member-modal');
+            if (teamModal) teamModal.classList.remove('active');
             
             const titleEl = document.getElementById('achievement-modal-title');
             const descriptionEl = document.getElementById('achievement-modal-description');
@@ -2941,6 +2952,10 @@
             const modal = document.getElementById('team-member-modal');
             if (!modal) return;
             
+            // Закрываем модальное окно достижения, если оно открыто
+            const achievementModal = document.getElementById('achievement-modal');
+            if (achievementModal) achievementModal.classList.remove('active');
+            
             const nameEl = document.getElementById('team-member-modal-name');
             const rankEl = document.getElementById('team-member-modal-rank');
             const totalEl = document.getElementById('team-member-modal-total');
@@ -2957,10 +2972,10 @@
             else if (member.rank === 3) rankText = '🥉 3 место';
             
             if (rankEl) rankEl.textContent = rankText;
-            if (totalEl) totalEl.textContent = 'Всего продаж: ' + member.sales;
-            if (gasStationsEl) gasStationsEl.textContent = member.segments.gasStations;
-            if (marketsEl) marketsEl.textContent = member.segments.markets;
-            if (localStoresEl) localStoresEl.textContent = member.segments.localStores;
+            if (totalEl) totalEl.textContent = 'Всего продаж: ' + member.sales.toLocaleString('ru-RU') + ' руб.';
+            if (gasStationsEl) gasStationsEl.textContent = member.segments.gasStations.toLocaleString('ru-RU') + ' руб.';
+            if (marketsEl) marketsEl.textContent = member.segments.markets.toLocaleString('ru-RU') + ' руб.';
+            if (localStoresEl) localStoresEl.textContent = member.segments.localStores.toLocaleString('ru-RU') + ' руб.';
             
             modal.classList.add('active');
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
