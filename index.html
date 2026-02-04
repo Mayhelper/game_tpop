@@ -494,9 +494,9 @@
             border: none;
             color: white;
             width: 36px;
-            height: 36px;
+            height: 39px;
             border-radius: 10px;
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 300;
             cursor: pointer;
             display: flex;
@@ -659,7 +659,6 @@
             -webkit-line-clamp: 2;
             line-clamp: 2;
             -webkit-box-orient: vertical;
-            font-style: italic;
         }
         .clothing-how-to-get {
             margin-top: 10px;
@@ -713,7 +712,7 @@
             min-width: 0;
         }
         .clothing-set-name {
-            font-size: 10px;
+            font-size: 13px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.3px;
@@ -933,8 +932,8 @@
         .clothing-remove-button {
             width: 100%;
             padding: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: #F06292;
+            border: none;
             border-radius: 12px;
             color: white;
             font-family: var(--font-main);
@@ -944,9 +943,11 @@
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
         .clothing-remove-button:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: #F06292;
+            opacity: 0.9;
             transform: translateY(-2px);
         }
         .clothing-remove-button:disabled {
@@ -1846,7 +1847,6 @@
                     { id: 'chain-gold', name: 'Золотая цепочка', description: 'Тонкий акцент делового образа', image: 'clothing/head/chain-gold.png', howToGet: 'Посетить 10 заправок партнёра' },
                     { id: 'cap-90', name: 'Бейсболка с символикой', description: 'Легендарный стиль девяностых', image: 'clothing/head/cap-90.png', howToGet: 'Посетить 5 гипермаркетов' },
                     { id: 'hat-spy', name: 'Шляпа шпиона', description: 'Классическая шляпа для стиля детектива', image: 'clothing/head/hat-spy.png', howToGet: 'Собрать 3 карты из одной серии' },
-                    { id: 'cap-1', name: 'Бейсболка', description: 'Спортивный стиль для неформальных встреч', image: 'clothing/head/cap-1.png', howToGet: 'Достичь 5 уровня' },
                     { id: 'helmet-1', name: 'Каска', description: 'Для работы на стройке', image: 'clothing/head/helmet-1.png', howToGet: 'Выполнить 5 заказов' },
                     { id: 'crown-sales-male', name: 'Корона короля продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/head/crown-sales-male.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
                     { id: 'crown-sales-female', name: 'Корона королевы продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/head/crown-sales-female.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
@@ -1855,9 +1855,7 @@
                     { id: 'suit-office', name: 'Офисный костюм', description: 'Безупречный крой для переговоров и карьеры', image: 'clothing/body/suit-office.png', howToGet: 'Получить 500 Май коинов' },
                     { id: 'jacket-sport', name: 'Спортивная куртка', description: 'Ветер девяностых в каждом шве', image: 'clothing/body/jacket-sport.png', howToGet: 'Посетить 7 АЗС в одном месяце' },
                     { id: 'coat-spy', name: 'Пальто шпиона', description: 'Длинное пальто для незаметности', image: 'clothing/body/coat-spy.png', howToGet: 'Достичь 10 уровня опыта' },
-                    { id: 'shirt-1', name: 'Рубашка', description: 'Официальная рубашка', image: 'clothing/body/shirt-1.png', howToGet: 'Посетить 3 магазина партнёра' },
                     { id: 'shirt-safari', name: 'Рубашка сафари', description: 'Прочная рубашка для походов и исследований', image: 'clothing/body/shirt-safari.png', howToGet: 'Достичь 7 уровня' },
-                    { id: 'hoodie-1', name: 'Толстовка', description: 'Неформальный стиль', image: 'clothing/body/hoodie-1.png', howToGet: 'Пригласить друга' },
                     { id: 'suit-sales-male', name: 'Костюм короля продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/body/suit-sales-male.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
                     { id: 'suit-sales-female', name: 'Костюм королевы продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/body/suit-sales-female.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
                 ],
@@ -1865,9 +1863,7 @@
                     { id: 'skirt-pencil', name: 'Юбка-карандаш', description: 'Классика офисного стиля и уверенности', image: 'clothing/legs/skirt-pencil.png', howToGet: 'Выполнить 5 заказов в приложении' },
                     { id: 'pants-sport', name: 'Спортивные штаны', description: 'Расслабленный дух эпохи 90-х', image: 'clothing/legs/pants-sport.png', howToGet: 'Посетить 3 разных магазина партнёра' },
                     { id: 'pants-spy', name: 'Штаны шпиона', description: 'Классические штаны под пальто', image: 'clothing/legs/pants-spy.png', howToGet: 'Активировать 10 промокодов' },
-                    { id: 'jeans-1', name: 'Джинсы', description: 'Удобные джинсы', image: 'clothing/legs/jeans-1.png', howToGet: 'Заработать 500 Май коинов' },
                     { id: 'pants-safari', name: 'Штаны сафари', description: 'Удобные штаны для походов', image: 'clothing/legs/pants-safari.png', howToGet: 'Посетить 8 разных магазинов партнёра' },
-                    { id: 'shorts-1', name: 'Шорты', description: 'Для жаркой погоды', image: 'clothing/legs/shorts-1.png', howToGet: 'Пригласить друга в программу' },
                     { id: 'pants-sales-male', name: 'Штаны короля продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/legs/pants-sales-male.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
                     { id: 'pants-sales-female', name: 'Юбка королевы продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/legs/pants-sales-female.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
                 ],
@@ -1875,8 +1871,6 @@
                     { id: 'heels', name: 'Туфли на каблуке', description: 'Элегантный шаг к успеху', image: 'clothing/shoes/heels.png', howToGet: 'Активировать 20 промокодов' },
                     { id: 'sneakers-white', name: 'Белые кроссовки', description: 'Чистый ретро-вид, как в лучшие годы', image: 'clothing/shoes/sneakers-white.png', howToGet: 'Заработать 1000 Май коинов' },
                     { id: 'boots-black', name: 'Черные ботинки', description: 'Строгие черные ботинки для образа шпиона', image: 'clothing/shoes/boots-black.png', howToGet: 'Посетить 15 заправок за месяц' },
-                    { id: 'sneakers-1', name: 'Кроссовки', description: 'Удобные кроссовки', image: 'clothing/shoes/sneakers-1.png', howToGet: 'Достичь 8 уровня' },
-                    { id: 'boots-1', name: 'Ботинки', description: 'Надежные ботинки', image: 'clothing/shoes/boots-1.png', howToGet: 'Выполнить 10 заказов' },
                     { id: 'boots-hiking', name: 'Походные ботинки', description: 'Надёжная обувь для походов', image: 'clothing/shoes/boots-hiking.png', howToGet: 'Выполнить 15 заказов' },
                     { id: 'shoes-sales-male', name: 'Туфли короля продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/shoes/shoes-sales-male.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
                     { id: 'shoes-sales-female', name: 'Туфли королевы продаж', description: 'Секретный комплект. Только у лидера по продажам в месяце.', image: 'clothing/shoes/shoes-sales-female.png', howToGet: 'Максимум продаж в месяце — один игрок.' },
@@ -2507,33 +2501,50 @@
         function fillClothingGridAndTitle(type) {
             const grid = document.getElementById('clothing-items-grid');
             grid.innerHTML = '';
-            const items = AppData.clothing[type] || [];
-            for (let i = 0; i < 9; i++) {
-                const itemDiv = document.createElement('div');
-                if (i < items.length) {
-                    const item = items[i];
-                    itemDiv.className = 'clothing-item';
-                    itemDiv.onclick = (e) => selectClothingItemPreview(item, itemDiv);
-                    if (selectedClothing[type] && selectedClothing[type].id === item.id) itemDiv.classList.add('active');
-                    const img = document.createElement('img');
-                    img.src = AppData.repoUrl + item.image;
-                    img.alt = item.name;
-                    img.onerror = function() {
-                        if (item.image && item.image.includes('-female')) {
-                            img.onerror = function() {
-                                itemDiv.innerHTML = '<div class="no-image-placeholder">Нет изображения</div>';
-                            };
-                            img.src = AppData.repoUrl + item.image.replace('-female', '-male');
-                        } else {
-                            itemDiv.innerHTML = '<div class="no-image-placeholder">Нет изображения</div>';
-                        }
-                    };
-                    itemDiv.appendChild(img);
-                } else {
-                    itemDiv.className = 'clothing-item locked';
-                }
-                grid.appendChild(itemDiv);
+            
+            // Собираем все ID предметов из наборов
+            const outfitItemIds = new Set();
+            AppData.outfitSets.forEach(set => {
+                if (set.head) outfitItemIds.add(set.head);
+                if (set.body) outfitItemIds.add(set.body);
+                if (set.legs) outfitItemIds.add(set.legs);
+                if (set.shoes) outfitItemIds.add(set.shoes);
+            });
+            
+            // Фильтруем одежду: только предметы из наборов
+            let items = (AppData.clothing[type] || []).filter(item => outfitItemIds.has(item.id));
+            
+            // Фильтруем по полу персонажа
+            if (selectedGender === 'female') {
+                // Для женщин исключаем предметы с -male
+                items = items.filter(item => !item.id.includes('-male'));
+            } else if (selectedGender === 'male') {
+                // Для мужчин исключаем предметы с -female
+                items = items.filter(item => !item.id.includes('-female'));
             }
+            
+            // Заполняем сетку только реальными предметами (без пустых ячеек)
+            items.forEach((item, i) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'clothing-item';
+                itemDiv.onclick = (e) => selectClothingItemPreview(item, itemDiv);
+                if (selectedClothing[type] && selectedClothing[type].id === item.id) itemDiv.classList.add('active');
+                const img = document.createElement('img');
+                img.src = AppData.repoUrl + item.image;
+                img.alt = item.name;
+                img.onerror = function() {
+                    if (item.image && item.image.includes('-female')) {
+                        img.onerror = function() {
+                            itemDiv.innerHTML = '<div class="no-image-placeholder">Нет изображения</div>';
+                        };
+                        img.src = AppData.repoUrl + item.image.replace('-female', '-male');
+                    } else {
+                        itemDiv.innerHTML = '<div class="no-image-placeholder">Нет изображения</div>';
+                    }
+                };
+                itemDiv.appendChild(img);
+                grid.appendChild(itemDiv);
+            });
             setTimeout(() => {
                 if (selectedClothing[type]) {
                     const selectedItem = selectedClothing[type];
