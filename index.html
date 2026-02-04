@@ -435,6 +435,25 @@
         }
         .info-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 1000; backdrop-filter: blur(5px); align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
         .info-modal.active { display: flex; }
+        .achievement-info-modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            background: rgba(0,0,0,0.75); 
+            z-index: 10000; 
+            backdrop-filter: blur(5px); 
+            align-items: center; 
+            justify-content: center; 
+            padding: 20px; 
+            box-sizing: border-box; 
+            border-radius: 0;
+        }
+        .achievement-info-modal.active { 
+            display: flex; 
+        }
         .info-modal-content { background: rgba(20, 30, 48, 0.98); border-radius: 16px; padding: 24px; max-width: 340px; width: 100%; max-height: 80vh; overflow-y: auto; border: 1px solid rgba(0,0,0,0.9); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .info-modal h3 { margin: 0 0 16px 0; font-size: 18px; color: white; text-transform: uppercase; }
         .info-modal-title-with-icon { display: flex; align-items: center; gap: 8px; }
@@ -1393,11 +1412,19 @@
             padding-top: 2px; /* Небольшой отступ сверху */
         }
         .tab-pane {
-            display: none; height: 100%;
-            align-items: center; justify-content: center;
+            display: none; 
+            height: 100%;
+            align-items: center; 
+            justify-content: center;
+            position: relative;
         }
         .tab-pane.active { display: flex; }
         .tab-pane#tab-quests { flex-direction: column; align-items: stretch; }
+        .tab-pane#tab-achievements { 
+            flex-direction: column; 
+            align-items: stretch; 
+            position: relative;
+        }
         .quest-sub-tabs {
             display: flex; gap: 6px; margin-bottom: 12px;
             background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 5px;
@@ -1577,20 +1604,159 @@
             aspect-ratio: 1; /* Квадратные значки */
             font-size: 32px; /* Увеличенный размер эмодзи */
         }
-        #achievements-list {
-            list-style: none; 
-            padding: 0 5px; 
-            margin: 0; 
-            width: 100%;
-            font-size: 14px; 
-            text-transform: none; 
-            text-align: left;
-            height: 100%; 
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch; /* Плавная прокрутка на iOS */
+        .achievements-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
         }
-        #achievements-list li { padding: 8px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-        #achievements-list li:last-child { border-bottom: none; }
+        .achievements-category-section {
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+        .achievements-category-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+            padding: 0 5px;
+            text-transform: uppercase;
+        }
+        .achievements-list {
+            display: none;
+            list-style: none; 
+            margin: 0; 
+            padding: 8px 0;
+            overflow-y: auto; 
+            -webkit-overflow-scrolling: touch; 
+            flex: 1;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .achievements-list.active {
+            display: block;
+        }
+        .achievements-list::-webkit-scrollbar {
+            display: none;
+        }
+        .achievements-list li { 
+            padding: 12px 10px; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .achievements-list li:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(4px);
+        }
+        .achievements-list li:last-child { 
+            border-bottom: none; 
+        }
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .achievement-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .achievement-content {
+            flex: 1;
+        }
+        .achievement-title {
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 4px;
+        }
+        .achievement-description {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 4px;
+        }
+        .achievement-reward {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            font-style: italic;
+        }
+        .achievement-status {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+        .achievement-status.completed {
+            background: rgba(129, 199, 132, 0.3);
+            color: #81C784;
+        }
+        .achievement-status.locked {
+            background: rgba(158, 158, 158, 0.3);
+            color: #9E9E9E;
+        }
+        .team-results-list {
+            display: none;
+            list-style: none;
+            margin: 0;
+            padding: 8px 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            flex: 1;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .team-results-list.active {
+            display: block;
+        }
+        .team-results-list::-webkit-scrollbar {
+            display: none;
+        }
+        .team-result-item {
+            padding: 14px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .team-result-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(4px);
+        }
+        .team-result-rank {
+            font-size: 18px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+            min-width: 30px;
+            text-align: center;
+        }
+        .team-result-rank.rank-1 { color: #FFD700; }
+        .team-result-rank.rank-2 { color: #C0C0C0; }
+        .team-result-rank.rank-3 { color: #CD7F32; }
+        .team-result-info {
+            flex: 1;
+        }
+        .team-result-name {
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 4px;
+        }
+        .team-result-sales {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .team-result-sales-value {
+            font-weight: 700;
+            color: #81C784;
+        }
         
         /* Медиа-запросы для маленьких экранов */
         @media (max-height: 600px) {
@@ -1726,7 +1892,48 @@
                     <div class="cards-grid" id="cards-grid"></div>
                 </div>
                 <div id="tab-achievements" class="tab-pane">
-                    <ul id="achievements-list"></ul>
+                    <div class="quest-sub-tabs">
+                        <button type="button" class="quest-sub-tab active" data-achievements-category="achievements" onclick="switchAchievementsSubTab('achievements', this)">Достижения</button>
+                        <button type="button" class="quest-sub-tab" data-achievements-category="team" onclick="switchAchievementsSubTab('team', this)">Рейтинг по команде</button>
+                    </div>
+                    <div class="quest-list-container">
+                        <div id="achievements-content-achievements" class="achievements-content-wrapper" style="display: flex;">
+                            <div class="achievements-category-section">
+                                <div class="achievements-category-title">Личные достижения</div>
+                                <ul id="achievements-list-personal" class="achievements-list active"></ul>
+                            </div>
+                            <div class="achievements-category-section">
+                                <div class="achievements-category-title">Командные достижения</div>
+                                <ul id="achievements-list-team" class="achievements-list active"></ul>
+                            </div>
+                        </div>
+                        <ul id="team-results-list" class="team-results-list"></ul>
+                    </div>
+                    <!-- Модальное окно достижения -->
+                    <div id="achievement-modal" class="achievement-info-modal" onclick="if(event.target===this) closeAchievementModal()">
+                        <div class="info-modal-content">
+                            <h3 class="info-modal-title-with-icon"><span class="info-modal-title-icon">🏆</span> <span id="achievement-modal-title">Достижение</span></h3>
+                            <p id="achievement-modal-description">Описание достижения.</p>
+                            <p class="quest-modal-reward" id="achievement-modal-reward">Награда: —</p>
+                            <p><span class="achievement-status" id="achievement-modal-status">Статус</span></p>
+                            <button type="button" class="info-modal-close" onclick="closeAchievementModal()">Понятно</button>
+                        </div>
+                    </div>
+                    <!-- Модальное окно сотрудника команды -->
+                    <div id="team-member-modal" class="achievement-info-modal" onclick="if(event.target===this) closeTeamMemberModal()">
+                        <div class="info-modal-content">
+                            <h3 class="info-modal-title-with-icon"><span class="info-modal-title-icon">👤</span> <span id="team-member-modal-name">Сотрудник</span></h3>
+                            <p id="team-member-modal-rank">Место: —</p>
+                            <p id="team-member-modal-total">Всего продаж: —</p>
+                            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
+                                <p style="font-weight: 700; margin-bottom: 8px;">Продажи по сегментам:</p>
+                                <p id="team-member-modal-gas-stations">Заправки: —</p>
+                                <p id="team-member-modal-markets">Рынки: —</p>
+                                <p id="team-member-modal-local-stores">Локальные торговые точки: —</p>
+                            </div>
+                            <button type="button" class="info-modal-close" onclick="closeTeamMemberModal()">Понятно</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1804,6 +2011,7 @@
             <button type="button" class="info-modal-close" onclick="closeQuestModal()">Понятно</button>
         </div>
     </div>
+    
     
     <!-- Модальное окно выбора одежды -->
     <div id="clothing-modal" class="clothing-modal">
@@ -1979,9 +2187,28 @@
                     { id: 'add-3', title: 'Пройдите обучение', instruction: 'Если вы новый пользователь — пройдите краткое обучение в приложении (подсказки при первом запуске). Если уже проходили — задание не засчитывается повторно.', reward: '+25 опыта, достижение «Первые шаги»' },
                 ],
             },
-            achievements: [
-                { text: '✅ Первые шаги: Завершить обучение' }, { text: '✅ Новатор: Предложить 5 идей' },
-                { text: '🔒 Командный игрок: Завершить проект' }, { text: '🔒 Лидер мнений: Выступить на встрече' },
+            achievements: {
+                personal: [
+                    { id: 'first-steps', title: 'Первые шаги', description: 'Завершить обучение в приложении', status: 'completed', reward: '+15 опыта, +50 Май коинов' },
+                    { id: 'innovator', title: 'Новатор', description: 'Предложить 5 идей по улучшению работы', status: 'completed', reward: '+25 опыта, +100 Май коинов' },
+                    { id: 'sales-master', title: 'Мастер продаж', description: 'Выполнить 50 успешных продаж', status: 'locked', reward: '+30 опыта, +150 Май коинов' },
+                    { id: 'level-up', title: 'Повышение уровня', description: 'Достичь 10 уровня', status: 'locked', reward: '+40 опыта, +200 Май коинов' },
+                    { id: 'card-collector', title: 'Коллекционер карт', description: 'Собрать 10 карточек', status: 'locked', reward: '+20 опыта, +80 Май коинов' },
+                ],
+                team: [
+                    { id: 'team-player', title: 'Командный игрок', description: 'Завершить командный проект', status: 'completed', reward: '+35 опыта, +150 Май коинов' },
+                    { id: 'opinion-leader', title: 'Лидер мнений', description: 'Выступить на командной встрече', status: 'locked', reward: '+30 опыта, +120 Май коинов' },
+                    { id: 'team-sales', title: 'Командные продажи', description: 'Команда достигла 1000 продаж', status: 'locked', reward: '+50 опыта, +250 Май коинов' },
+                    { id: 'team-goal', title: 'Командная цель', description: 'Выполнить месячную цель команды', status: 'locked', reward: '+45 опыта, +200 Май коинов' },
+                ]
+            },
+            teamResults: [
+                { id: 'emp1', name: 'Иван Петров', sales: 245, rank: 1, segments: { gasStations: 120, markets: 85, localStores: 40 } },
+                { id: 'emp2', name: 'Мария Сидорова', sales: 198, rank: 2, segments: { gasStations: 95, markets: 70, localStores: 33 } },
+                { id: 'emp3', name: 'Алексей Козлов', sales: 187, rank: 3, segments: { gasStations: 88, markets: 65, localStores: 34 } },
+                { id: 'emp4', name: 'Елена Волкова', sales: 165, rank: 4, segments: { gasStations: 75, markets: 60, localStores: 30 } },
+                { id: 'emp5', name: 'Дмитрий Соколов', sales: 142, rank: 5, segments: { gasStations: 65, markets: 50, localStores: 27 } },
+                { id: 'emp6', name: 'Анна Морозова', sales: 128, rank: 6, segments: { gasStations: 58, markets: 45, localStores: 25 } },
             ],
             clothing: {
                 // Путь к изображениям одежды на GitHub: clothing/{тип}/{id}.png
@@ -2300,10 +2527,8 @@
             }
             
             renderQuestLists();
-            const achievementsList = document.getElementById('achievements-list');
-            AppData.achievements.forEach(ach => {
-                achievementsList.innerHTML += `<li>${ach.text}</li>`;
-            });
+            renderAchievements();
+            renderTeamResults();
 
             areTabsInitialized = true;
             
@@ -2561,6 +2786,154 @@
             }
             const listEl = document.getElementById('quest-list-' + category);
             if (listEl) listEl.classList.add('active');
+        }
+        
+        function switchAchievementsSubTab(category, clickedButton) {
+            document.querySelectorAll('.quest-sub-tab[data-achievements-category]').forEach(btn => btn.classList.remove('active'));
+            const achievementsWrapper = document.getElementById('achievements-content-achievements');
+            const teamResultsList = document.getElementById('team-results-list');
+            const personalList = document.getElementById('achievements-list-personal');
+            const teamList = document.getElementById('achievements-list-team');
+            
+            if (clickedButton) clickedButton.classList.add('active');
+            
+            if (category === 'achievements') {
+                if (achievementsWrapper) achievementsWrapper.style.display = 'flex';
+                if (teamResultsList) teamResultsList.classList.remove('active');
+                if (personalList) personalList.classList.add('active');
+                if (teamList) teamList.classList.add('active');
+            } else if (category === 'team') {
+                if (achievementsWrapper) achievementsWrapper.style.display = 'none';
+                if (personalList) personalList.classList.remove('active');
+                if (teamList) teamList.classList.remove('active');
+                if (teamResultsList) teamResultsList.classList.add('active');
+            }
+        }
+        
+        function renderAchievements() {
+            const personalList = document.getElementById('achievements-list-personal');
+            const teamList = document.getElementById('achievements-list-team');
+            
+            if (personalList && AppData.achievements && AppData.achievements.personal) {
+                personalList.innerHTML = '';
+                AppData.achievements.personal.forEach(ach => {
+                    const li = document.createElement('li');
+                    li.className = 'achievement-item';
+                    const icon = ach.status === 'completed' ? '✅' : '🔒';
+                    const statusClass = ach.status === 'completed' ? 'completed' : 'locked';
+                    const statusText = ach.status === 'completed' ? 'Получено' : 'Не получено';
+                    li.innerHTML = `
+                        <div class="achievement-icon">${icon}</div>
+                        <div class="achievement-content">
+                            <div class="achievement-title">${ach.title}</div>
+                            <div class="achievement-description">${ach.description}</div>
+                            <div class="achievement-reward">Награда: ${ach.reward}</div>
+                        </div>
+                        <div class="achievement-status ${statusClass}">${statusText}</div>
+                    `;
+                    li.onclick = () => openAchievementModal(ach);
+                    personalList.appendChild(li);
+                });
+            }
+            
+            if (teamList && AppData.achievements && AppData.achievements.team) {
+                teamList.innerHTML = '';
+                AppData.achievements.team.forEach(ach => {
+                    const li = document.createElement('li');
+                    li.className = 'achievement-item';
+                    const icon = ach.status === 'completed' ? '✅' : '🔒';
+                    const statusClass = ach.status === 'completed' ? 'completed' : 'locked';
+                    const statusText = ach.status === 'completed' ? 'Получено' : 'Не получено';
+                    li.innerHTML = `
+                        <div class="achievement-icon">${icon}</div>
+                        <div class="achievement-content">
+                            <div class="achievement-title">${ach.title}</div>
+                            <div class="achievement-description">${ach.description}</div>
+                            <div class="achievement-reward">Награда: ${ach.reward}</div>
+                        </div>
+                        <div class="achievement-status ${statusClass}">${statusText}</div>
+                    `;
+                    li.onclick = () => openAchievementModal(ach);
+                    teamList.appendChild(li);
+                });
+            }
+        }
+        
+        function renderTeamResults() {
+            const list = document.getElementById('team-results-list');
+            if (!list || !AppData.teamResults) return;
+            list.innerHTML = '';
+            
+            AppData.teamResults.forEach(emp => {
+                const li = document.createElement('li');
+                li.className = 'team-result-item';
+                li.innerHTML = `
+                    <div class="team-result-rank rank-${emp.rank}">${emp.rank}</div>
+                    <div class="team-result-info">
+                        <div class="team-result-name">${emp.name}</div>
+                        <div class="team-result-sales">Продаж: <span class="team-result-sales-value">${emp.sales}</span></div>
+                    </div>
+                `;
+                li.onclick = () => openTeamMemberModal(emp);
+                list.appendChild(li);
+            });
+        }
+        
+        function openAchievementModal(achievement) {
+            const modal = document.getElementById('achievement-modal');
+            if (!modal) return;
+            
+            const titleEl = document.getElementById('achievement-modal-title');
+            const descriptionEl = document.getElementById('achievement-modal-description');
+            const rewardEl = document.getElementById('achievement-modal-reward');
+            const statusEl = document.getElementById('achievement-modal-status');
+            
+            if (titleEl) titleEl.textContent = achievement.title;
+            if (descriptionEl) descriptionEl.textContent = achievement.description;
+            if (rewardEl) rewardEl.textContent = 'Награда: ' + achievement.reward;
+            if (statusEl) {
+                statusEl.textContent = achievement.status === 'completed' ? 'Получено' : 'Не получено';
+                statusEl.className = 'achievement-status ' + (achievement.status === 'completed' ? 'completed' : 'locked');
+            }
+            
+            modal.classList.add('active');
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+                window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+            }
+        }
+        
+        function closeAchievementModal() {
+            const modal = document.getElementById('achievement-modal');
+            if (modal) modal.classList.remove('active');
+        }
+        
+        function openTeamMemberModal(member) {
+            const modal = document.getElementById('team-member-modal');
+            if (!modal) return;
+            
+            const nameEl = document.getElementById('team-member-modal-name');
+            const rankEl = document.getElementById('team-member-modal-rank');
+            const totalEl = document.getElementById('team-member-modal-total');
+            const gasStationsEl = document.getElementById('team-member-modal-gas-stations');
+            const marketsEl = document.getElementById('team-member-modal-markets');
+            const localStoresEl = document.getElementById('team-member-modal-local-stores');
+            
+            if (nameEl) nameEl.textContent = member.name;
+            if (rankEl) rankEl.textContent = 'Место: ' + member.rank;
+            if (totalEl) totalEl.textContent = 'Всего продаж: ' + member.sales;
+            if (gasStationsEl) gasStationsEl.textContent = 'Заправки: ' + member.segments.gasStations;
+            if (marketsEl) marketsEl.textContent = 'Рынки: ' + member.segments.markets;
+            if (localStoresEl) localStoresEl.textContent = 'Локальные торговые точки: ' + member.segments.localStores;
+            
+            modal.classList.add('active');
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+                window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+            }
+        }
+        
+        function closeTeamMemberModal() {
+            const modal = document.getElementById('team-member-modal');
+            if (modal) modal.classList.remove('active');
         }
         
         function formatRewardHtml(rewardStr) {
