@@ -562,7 +562,7 @@
             margin-bottom: 0;
         }
         .clothing-section-title {
-            font-size: 13px;
+            font-size: 16px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -571,14 +571,40 @@
         }
         .clothing-set-row .clothing-section-title,
         .clothing-grid-wrap .clothing-section-title {
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             padding: 0;
+        }
+        .clothing-section-hint {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 12px;
+            font-style: italic;
+            line-height: 1.4;
+        }
+        .clothing-set-hint {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 8px;
+            font-style: italic;
+            text-align: center;
+            padding: 6px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        .clothing-wear-set-button-hint {
+            font-size: 10px;
+            color: #E57373;
+            margin-top: 0;
+            text-align: center;
+            font-style: italic;
+            display: none;
+            padding: 4px;
         }
         .clothing-section-title-green {
             color: #81C784;
         }
         .clothing-section-title-purple {
-            color: #BA68C8;
+            color: #81C784;
         }
         .clothing-section-title-blue {
             color: #64B5F6;
@@ -638,12 +664,24 @@
             justify-content: flex-start;
             padding-bottom: 8px;
         }
-        .clothing-preview-info .clothing-preview-name {
+        .clothing-preview-info         .clothing-preview-name {
             font-size: 14px;
             font-weight: 700;
             margin: 0;
             text-align: left;
             line-height: 1.2;
+        }
+        .clothing-preview-status {
+            font-size: 10px;
+            font-weight: 600;
+            margin-top: 4px;
+            opacity: 0.8;
+        }
+        .clothing-preview-status.available {
+            color: #81C784;
+        }
+        .clothing-preview-status.unavailable {
+            color: #E57373;
         }
         .clothing-preview-info .clothing-preview-description {
             font-size: 11px;
@@ -675,21 +713,60 @@
             font-weight: 700;
             margin-bottom: 2px;
             opacity: 0.95;
+            text-transform: uppercase;
         }
         .clothing-how-to-get-text {
             opacity: 0.9;
         }
+        /* Кнопка показа набора */
+        .clothing-show-set-button {
+            width: 100%;
+            padding: 14px;
+            background: rgba(129, 199, 132, 0.3);
+            border: 2px solid #81C784;
+            border-radius: 14px;
+            color: #81C784;
+            font-family: var(--font-main);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(129, 199, 132, 0.2);
+        }
+        .clothing-show-set-button:hover {
+            background: rgba(129, 199, 132, 0.4);
+            border-color: #81C784;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(129, 199, 132, 0.3);
+        }
         .clothing-set-row {
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: stretch;
             gap: 12px;
             margin-top: 0;
             flex-wrap: nowrap;
-            padding: 12px;
-            background: rgba(0, 0, 0, 0.28);
-            border-radius: 14px;
-            border: 2px solid #BA68C8;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(129, 199, 132, 0.15) 0%, rgba(0, 0, 0, 0.35) 100%);
+            border-radius: 16px;
+            border: 2px solid #81C784;
+            box-shadow: 0 4px 20px rgba(129, 199, 132, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .clothing-set-row.active {
+            display: flex;
+        }
+        .clothing-set-row::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #81C784, transparent);
+            opacity: 0.6;
         }
         .clothing-set-row-inner {
             display: flex;
@@ -723,7 +800,29 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(129, 199, 132, 0.3);
+        }
+        /* Кнопка скрыть набор */
+        .clothing-hide-set-button {
+            width: 100%;
+            padding: 10px;
+            background: rgba(129, 199, 132, 0.2);
+            border: 1px solid rgba(129, 199, 132, 0.5);
+            border-radius: 10px;
+            color: #81C784;
+            font-family: var(--font-main);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+        }
+        .clothing-hide-set-button:hover {
+            background: rgba(129, 199, 132, 0.3);
+            border-color: #81C784;
         }
         .clothing-set-row-header .clothing-section-title {
             margin-bottom: 0;
@@ -760,6 +859,16 @@
         .clothing-set-slot.missing-item {
             border-color: rgba(244, 67, 54, 0.6);
             box-shadow: 0 0 8px rgba(244, 67, 54, 0.3);
+        }
+        .clothing-set-slot.unavailable-item {
+            border-color: rgba(158, 158, 158, 0.4);
+            box-shadow: 0 0 8px rgba(158, 158, 158, 0.2);
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+        .clothing-set-slot.unavailable-item img {
+            opacity: 0.3;
+            filter: grayscale(100%);
         }
         .clothing-set-slot .clothing-set-slot-img {
             width: 100%;
@@ -806,7 +915,6 @@
         .clothing-grid-wrap {
             flex: 1 1 auto;
             min-height: 200px;
-            max-height: 400px;
             overflow-y: auto;
             overflow-x: hidden;
             background: rgba(0, 0, 0, 0.3);
@@ -854,16 +962,33 @@
             box-shadow: 0 0 15px rgba(79, 195, 247, 0.5);
         }
         .clothing-item.locked {
-            cursor: not-allowed;
+            cursor: pointer;
             background: rgba(0, 0, 0, 0.5);
             border-color: rgba(255, 255, 255, 0.15);
+            opacity: 0.4;
+            filter: grayscale(100%);
+        }
+        .clothing-item.locked:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
         }
         .clothing-item.locked::after {
-            content: 'закрыто';
+            content: 'НЕ ПОЛУЧЕНО';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.7);
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 12px;
+            z-index: 2;
             bottom: 0;
             display: flex;
             align-items: center;
@@ -1700,7 +1825,10 @@
                                 <span class="clothing-preview-placeholder">Выберите вещь</span>
                             </div>
                             <div class="clothing-preview-info">
-                                <div class="clothing-preview-name" id="clothing-preview-name">—</div>
+                                <div>
+                                    <div class="clothing-preview-name" id="clothing-preview-name">—</div>
+                                    <div class="clothing-preview-status" id="clothing-preview-status"></div>
+                                </div>
                                 <div class="clothing-preview-description" id="clothing-preview-description">—</div>
                                 <div class="clothing-preview-actions">
                                     <button class="clothing-select-button" id="clothing-select-button" onclick="selectClothingItem()" disabled>Надеть</button>
@@ -1717,11 +1845,16 @@
                 
                 <!-- Блок 2: НАБОР ВЫБРАННОГО ПРЕДМЕТА -->
                 <div class="clothing-section">
+                    <!-- Кнопка показа набора (изначально видна) -->
+                    <button class="clothing-show-set-button" id="clothing-show-set-button" onclick="showClothingSet()">ПОКАЗАТЬ ВЕСЬ НАБОР</button>
+                    
+                    <!-- Блок набора (изначально скрыт) -->
                     <div class="clothing-set-row" id="clothing-set-row">
                         <div class="clothing-set-row-header">
                             <div class="clothing-section-title clothing-section-title-purple">НАБОР ВЫБРАННОГО ПРЕДМЕТА</div>
                             <div class="clothing-set-name" id="clothing-set-name">Соберите комплект</div>
                         </div>
+                        <div class="clothing-set-hint">Затемненные вещи еще не получены</div>
                         <div class="clothing-set-row-inner">
                             <div class="clothing-set-info">
                                 <div class="clothing-set-icons" id="clothing-set-icons">
@@ -1731,8 +1864,13 @@
                                     <div class="clothing-set-slot" data-slot="shoes" title="Обувь"><div class="clothing-set-slot-img"></div></div>
                                 </div>
                             </div>
-                            <button class="clothing-wear-set-button" id="clothing-wear-set-button" type="button" onclick="wearFullOutfitSet()" disabled>НАДЕТЬ ВЕСЬ НАБОР</button>
+                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                <button class="clothing-wear-set-button" id="clothing-wear-set-button" type="button" onclick="wearFullOutfitSet()" disabled>НАДЕТЬ ВЕСЬ НАБОР</button>
+                                <div class="clothing-wear-set-button-hint" id="clothing-wear-set-button-hint">Не хватает вещей для полного набора</div>
+                            </div>
                         </div>
+                        <!-- Кнопка скрыть набор -->
+                        <button class="clothing-hide-set-button" onclick="hideClothingSet()">СКРЫТЬ</button>
                     </div>
                 </div>
                 
@@ -1740,6 +1878,7 @@
                 <div class="clothing-section">
                     <div class="clothing-grid-wrap">
                         <div class="clothing-section-title clothing-section-title-blue">КОЛЛЕКЦИЯ ПРЕДМЕТОВ</div>
+                        <div class="clothing-section-hint">Выберите предмет из коллекции для просмотра и надевания</div>
                         <div class="clothing-items-grid" id="clothing-items-grid"></div>
                     </div>
                 </div>
@@ -1786,6 +1925,10 @@
         let selectedCharacter = {};
         let areTabsInitialized = false;
         var completedQuestIds = new Set(['daily-1', 'daily-2']);
+        
+        // Список недоступных предметов (еще не получены)
+        // Для набора "Первооткрыватель" затемняем 2 предмета: pants-safari и boots-hiking
+        const unavailableItems = new Set(['pants-safari', 'boots-hiking']);
 
         const AppData = {
             repoUrl: 'https://raw.githubusercontent.com/Mayhelper/game_tpop/main/images/',
@@ -2526,7 +2669,9 @@
             // Заполняем сетку только реальными предметами (без пустых ячеек)
             items.forEach((item, i) => {
                 const itemDiv = document.createElement('div');
-                itemDiv.className = 'clothing-item';
+                const isUnavailable = unavailableItems.has(item.id);
+                itemDiv.className = 'clothing-item' + (isUnavailable ? ' locked' : '');
+                // Все предметы кликабельны, даже недоступные
                 itemDiv.onclick = (e) => selectClothingItemPreview(item, itemDiv);
                 if (selectedClothing[type] && selectedClothing[type].id === item.id) itemDiv.classList.add('active');
                 const img = document.createElement('img');
@@ -2551,14 +2696,33 @@
                     const previewImage = document.getElementById('clothing-preview-image');
                     const previewName = document.getElementById('clothing-preview-name');
                     const previewDescription = document.getElementById('clothing-preview-description');
+                    const previewStatus = document.getElementById('clothing-preview-status');
                     const selectButton = document.getElementById('clothing-select-button');
                     const removeButton = document.getElementById('clothing-remove-button');
-                    previewImage.innerHTML = '<img src="' + AppData.repoUrl + selectedItem.image + '" alt="' + selectedItem.name + '">';
+                    const isUnavailable = unavailableItems.has(selectedItem.id);
+                    
+                    // Затемняем изображение если недоступно
+                    const imgStyle = isUnavailable ? 'style="opacity: 0.4; filter: grayscale(100%);"' : '';
+                    previewImage.innerHTML = '<img src="' + AppData.repoUrl + selectedItem.image + '" alt="' + selectedItem.name + '" ' + imgStyle + '>';
                     previewName.textContent = selectedItem.name;
                     previewDescription.textContent = selectedItem.description;
+                    
+                    // Показываем статус только для недоступных предметов
+                    if (previewStatus) {
+                        if (isUnavailable) {
+                            previewStatus.textContent = 'НЕ ПОЛУЧЕНО';
+                            previewStatus.className = 'clothing-preview-status unavailable';
+                            previewStatus.style.display = 'block';
+                        } else {
+                            // Для доступных предметов не показываем статус
+                            previewStatus.textContent = '';
+                            previewStatus.style.display = 'none';
+                        }
+                    }
+                    
                     const howToGetEl = document.getElementById('clothing-how-to-get-text');
                     if (howToGetEl) howToGetEl.textContent = selectedItem.howToGet || '—';
-                    selectButton.disabled = false;
+                    selectButton.disabled = isUnavailable;
                     if (removeButton) removeButton.disabled = false;
                     const activeItem = Array.from(grid.children).find(child => {
                         const im = child.querySelector('img');
@@ -2600,7 +2764,7 @@
         function selectClothingItemPreview(item, element) {
             currentSelectedClothingItem = item;
             
-            // Обновляем активный элемент в сетке
+            // Обновляем активный элемент в сетке (все предметы могут быть активными)
             document.querySelectorAll('.clothing-item').forEach(el => el.classList.remove('active'));
             if (element) {
                 element.classList.add('active');
@@ -2610,15 +2774,34 @@
             const previewImage = document.getElementById('clothing-preview-image');
             const previewName = document.getElementById('clothing-preview-name');
             const previewDescription = document.getElementById('clothing-preview-description');
+            const previewStatus = document.getElementById('clothing-preview-status');
             const selectButton = document.getElementById('clothing-select-button');
             const removeButton = document.getElementById('clothing-remove-button');
             
-            previewImage.innerHTML = `<img src="${AppData.repoUrl + item.image}" alt="${item.name}" onerror="this.parentElement.innerHTML='<div class=\'no-image-placeholder\'>Нет изображения</div>'">`;
+            const isUnavailable = unavailableItems.has(item.id);
+            
+            // Затемняем изображение если недоступно
+            const imgHtml = `<img src="${AppData.repoUrl + item.image}" alt="${item.name}" style="${isUnavailable ? 'opacity: 0.4; filter: grayscale(100%);' : ''}" onerror="this.parentElement.innerHTML='<div class=\'no-image-placeholder\'>Нет изображения</div>'">`;
+            previewImage.innerHTML = imgHtml;
             previewName.textContent = item.name;
             previewDescription.textContent = item.description;
+            
+            // Показываем статус только для недоступных предметов
+            if (previewStatus) {
+                if (isUnavailable) {
+                    previewStatus.textContent = 'НЕ ПОЛУЧЕНО';
+                    previewStatus.className = 'clothing-preview-status unavailable';
+                    previewStatus.style.display = 'block';
+                } else {
+                    // Для доступных предметов не показываем статус
+                    previewStatus.textContent = '';
+                    previewStatus.style.display = 'none';
+                }
+            }
+            
             const howToGetEl = document.getElementById('clothing-how-to-get-text');
             if (howToGetEl) howToGetEl.textContent = item.howToGet || '—';
-            selectButton.disabled = false;
+            selectButton.disabled = isUnavailable;
             
             // Показываем кнопку "Снять" если эта вещь уже выбрана
             const isCurrentlySelected = selectedClothing[currentClothingType] && selectedClothing[currentClothingType].id === item.id;
@@ -2807,12 +2990,62 @@
             return -1;
         }
         
+        function showClothingSet() {
+            const setRow = document.getElementById('clothing-set-row');
+            const showButton = document.getElementById('clothing-show-set-button');
+            if (setRow) setRow.classList.add('active');
+            if (showButton) showButton.style.display = 'none';
+            updateClothingSetIcons(); // Обновляем иконки набора при показе
+        }
+        
+        function hideClothingSet() {
+            const setRow = document.getElementById('clothing-set-row');
+            const showButton = document.getElementById('clothing-show-set-button');
+            if (setRow) setRow.classList.remove('active');
+            if (showButton) showButton.style.display = 'block';
+        }
+        
         function updateClothingWearSetButton() {
             const btn = document.getElementById('clothing-wear-set-button');
+            const hintEl = document.getElementById('clothing-wear-set-button-hint');
             if (!btn) return;
             const idxPreview = getSetIndexForCurrentPreview();
             const idxAny = getFirstApplicableSetIndex();
-            btn.disabled = idxPreview === -1 && idxAny === -1;
+            
+            // Проверяем доступность всех предметов в наборе
+            let missingCount = 0;
+            if (idxPreview >= 0 && AppData.outfitSets) {
+                const set = AppData.outfitSets[idxPreview];
+                const types = ['head', 'body', 'legs', 'shoes'];
+                types.forEach(slot => {
+                    const itemId = set[slot];
+                    if (itemId && unavailableItems.has(itemId)) {
+                        missingCount++;
+                    }
+                });
+            } else if (idxAny >= 0 && AppData.outfitSets) {
+                const set = AppData.outfitSets[idxAny];
+                const types = ['head', 'body', 'legs', 'shoes'];
+                types.forEach(slot => {
+                    const itemId = set[slot];
+                    if (itemId && unavailableItems.has(itemId)) {
+                        missingCount++;
+                    }
+                });
+            }
+            
+            const isDisabled = idxPreview === -1 && idxAny === -1 || missingCount >= 2;
+            btn.disabled = isDisabled;
+            
+            // Показываем подсказку если не хватает вещей
+            if (hintEl) {
+                if (isDisabled && missingCount >= 2) {
+                    hintEl.style.display = 'block';
+                } else {
+                    hintEl.style.display = 'none';
+                }
+            }
+            
             updateClothingSetIcons();
         }
         
@@ -2843,17 +3076,26 @@
                 const imgWrap = slotEl.querySelector('.clothing-set-slot-img');
                 const itemId = set[slot];
                 const item = itemId ? getClothingItem(slot, itemId) : null;
+                const isUnavailable = itemId && unavailableItems.has(itemId);
                 const hasEquipped = itemId == null
                     ? (selectedClothing[slot] == null)
                     : (selectedClothing[slot] && selectedClothing[slot].id === itemId);
-                slotEl.classList.remove('has-item', 'missing-item');
-                slotEl.classList.add(hasEquipped ? 'has-item' : 'missing-item');
+                slotEl.classList.remove('has-item', 'missing-item', 'unavailable-item');
+                if (isUnavailable) {
+                    slotEl.classList.add('unavailable-item');
+                } else {
+                    slotEl.classList.add(hasEquipped ? 'has-item' : 'missing-item');
+                }
                 if (imgWrap) {
                     imgWrap.innerHTML = '';
                     if (item && item.image) {
                         const img = document.createElement('img');
                         img.src = AppData.repoUrl + item.image;
                         img.alt = item.name;
+                        if (isUnavailable) {
+                            img.style.opacity = '0.3';
+                            img.style.filter = 'grayscale(100%)';
+                        }
                         img.onerror = function() { imgWrap.innerHTML = ''; };
                         imgWrap.appendChild(img);
                     }
