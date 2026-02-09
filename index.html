@@ -10,7 +10,6 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.1/dist/vanilla-tilt.min.js"></script>
     <style>
         :root {
             --font-main: 'Oswald', sans-serif;
@@ -1111,7 +1110,7 @@
             background: rgba(0, 0, 0, 0.8);
             z-index: 2000;
             backdrop-filter: blur(5px);
-            touch-action: pan-x pan-y;
+            touch-action: none;
             overflow: hidden;
         }
         .card-modal.active {
@@ -1158,21 +1157,17 @@
             aspect-ratio: 3/4;
             margin: 20px 0;
             perspective: 1000px;
-            position: relative;
         }
         .card-3d {
             width: 100%;
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
+            transition: transform 0.3s ease;
             cursor: grab;
-            touch-action: pan-x pan-y;
+            touch-action: none;
             -webkit-user-select: none;
             user-select: none;
-            -webkit-touch-callout: none;
-            -webkit-tap-highlight-color: transparent;
-            will-change: transform;
-            transform-origin: center center;
         }
         .card-3d.card-3d-dragging {
             transition: none;
@@ -1186,52 +1181,14 @@
             height: 100%;
             backface-visibility: hidden;
             border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
             transition: all 0.3s ease;
             overflow: hidden;
-            transform-style: preserve-3d;
-            will-change: transform;
-        }
-        /* Эффект светоотражающей пленки (без радужных переливов) */
-        .card-3d-face-front::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            pointer-events: none;
-            background: 
-                /* Светоотражающие полосы */
-                repeating-linear-gradient(
-                    45deg,
-                    transparent 0%,
-                    rgba(255, 255, 255, 0.03) 2%,
-                    transparent 4%,
-                    transparent 8%
-                ),
-                /* Основной блик */
-                radial-gradient(
-                    ellipse at 30% 30%,
-                    rgba(255, 255, 255, 0.2) 0%,
-                    transparent 50%
-                );
-            mix-blend-mode: overlay;
-            opacity: 0.7;
-            z-index: 1;
-            transition: opacity 0.3s ease;
-        }
-        /* Усиление эффекта при наведении/наклоне */
-        .card-3d:hover .card-3d-face-front::after,
-        .card-3d.tilted .card-3d-face-front::after {
-            opacity: 0.9;
-        }
-        .card-3d-face-front {
-            position: relative;
-        }
-        .card-3d-face-front img {
-            position: relative;
-            z-index: 0;
         }
         /* Лёгкая тень с противоположной от света стороны — усиливает ощущение направленного света при повороте */
         .card-3d-face-front::before {
@@ -1250,20 +1207,36 @@
             );
             transition: opacity 0.25s ease;
         }
-        
-        .card-3d-face {
-            border-radius: 16px;
-            overflow: hidden;
+        /* Глянцевый блик — всегда виден (статичный + смещается при повороте) */
+        .card-3d-face::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+            background: 
+                radial-gradient(
+                    circle at var(--gloss-x, 50%) var(--gloss-y, 50%),
+                    rgba(255, 255, 255, 0.4) 0%,
+                    rgba(255, 255, 255, 0.16) 18%,
+                    rgba(255, 255, 255, 0.05) 38%,
+                    transparent 55%
+                ),
+                radial-gradient(
+                    circle at 28% 28%,
+                    rgba(255, 255, 255, 0.25) 0%,
+                    rgba(255, 255, 255, 0.08) 25%,
+                    transparent 50%
+                );
+            transition: background 0.2s ease;
         }
+        
         .card-3d-face img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            border-radius: 16px;
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
+            object-fit: contain;
+            padding: 15px;
         }
         .card-3d-face-back {
             transform: rotateY(180deg);
@@ -1282,6 +1255,25 @@
             letter-spacing: 4px;
             color: rgba(255, 255, 255, 0.5);
             text-align: center;
+        }
+        .card-rotation-controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .card-rotation-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-family: var(--font-main);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .card-rotation-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
         .card-modal-name {
             font-size: 20px;
@@ -2143,6 +2135,10 @@
                     <div class="card-3d-face card-3d-face-back"></div>
                 </div>
             </div>
+            <div class="card-rotation-controls">
+                <button class="card-rotation-btn" onclick="rotateCard('left')">← Повернуть</button>
+                <button class="card-rotation-btn" onclick="rotateCard('right')">Повернуть →</button>
+            </div>
             <div class="card-modal-description" id="card-modal-description">Описание карты</div>
         </div>
     </div>
@@ -2582,6 +2578,8 @@
         // Функции для модального окна карточки
         let currentCardRotation = { x: 0, y: 0 };
         let currentCard = null;
+        let cardModalDragHandlers = null;
+        
         function openCardModal(card) {
             currentCard = card;
             currentCardRotation = { x: 0, y: 0 };
@@ -2608,8 +2606,8 @@
                 };
             }
             
-            // Сброс трансформации
-            card3d.style.transform = '';
+            card3d.style.transform = 'rotateX(0deg) rotateY(0deg)';
+            updateCardGloss(card3d);
             card3d.classList.remove('card-3d-dragging');
             
             if (card3dFace) {
@@ -2621,57 +2619,75 @@
             document.body.style.position = 'fixed';
             document.body.style.width = '100%';
             
-            // Инициализация vanilla-tilt с glare эффектом
-            setTimeout(() => {
-                // Удаляем предыдущий экземпляр, если есть
-                if (card3d.vanillaTilt) {
-                    card3d.vanillaTilt.destroy();
+            let isDragging = false;
+            let startX = 0;
+            let startY = 0;
+            
+            const handleMouseDown = (e) => {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                card3d.classList.add('card-3d-dragging');
+                e.preventDefault();
+            };
+            
+            const handleTouchStart = (e) => {
+                if (e.touches.length === 1) {
+                    isDragging = true;
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                    card3d.classList.add('card-3d-dragging');
+                    e.preventDefault();
                 }
-                
-                // Инициализируем vanilla-tilt с крутыми настройками и glare
-                if (typeof VanillaTilt !== 'undefined') {
-                    VanillaTilt.init(card3d, {
-                        max: 25,                    // Максимальный угол наклона
-                        speed: 1000,                // Скорость анимации
-                        glare: true,                // Включаем встроенный glare эффект
-                        "max-glare": 1.0,           // Максимальная яркость блика (1.0 = 100% для эффекта пленки)
-                        gyroscope: true,            // Поддержка гироскопа на мобильных
-                        scale: 1.05,                // Легкое увеличение при наведении
-                        perspective: 1000,           // Перспектива для 3D эффекта
-                        transition: true,            // Плавные переходы
-                        "mouse-event-element": card3d, // Элемент для отслеживания мыши
-                        reverse: false,              // Не инвертировать направление
-                        "full-page-listening": false, // Отслеживать только внутри элемента
-                        "reset-to-start": false,     // Не сбрасывать при отпускании
-                    });
-                    
-                    // Добавляем класс для CSS эффектов при наклоне
-                    const tiltInstance = card3d.vanillaTilt;
-                    if (tiltInstance) {
-                        const originalOnEnter = tiltInstance.onMouseEnter;
-                        const originalOnLeave = tiltInstance.onMouseLeave;
-                        
-                        tiltInstance.onMouseEnter = function() {
-                            if (originalOnEnter) originalOnEnter.call(this);
-                            card3d.classList.add('tilted');
-                        };
-                        
-                        tiltInstance.onMouseLeave = function() {
-                            if (originalOnLeave) originalOnLeave.call(this);
-                            card3d.classList.remove('tilted');
-                        };
-                        
-                        // Добавляем обработчики для touch событий
-                        card3d.addEventListener('touchstart', function(e) {
-                            card3d.classList.add('tilted');
-                        }, { passive: true });
-                        
-                        card3d.addEventListener('touchend', function(e) {
-                            // Не убираем класс сразу, чтобы эффект оставался
-                        }, { passive: true });
-                    }
+            };
+            
+            const handleMove = (clientX, clientY) => {
+                if (!isDragging) return;
+                const deltaX = clientX - startX;
+                const deltaY = clientY - startY;
+                currentCardRotation.y += deltaX * 0.5;
+                currentCardRotation.x -= deltaY * 0.5;
+                currentCardRotation.x = Math.max(-30, Math.min(30, currentCardRotation.x));
+                card3d.style.transform = `rotateX(${currentCardRotation.x}deg) rotateY(${currentCardRotation.y}deg)`;
+                updateCardGloss(card3d);
+                startX = clientX;
+                startY = clientY;
+            };
+            
+            const handleMouseMove = (e) => {
+                if (isDragging) {
+                    handleMove(e.clientX, e.clientY);
+                    e.preventDefault();
                 }
-            }, 200);
+            };
+            
+            const handleTouchMove = (e) => {
+                if (isDragging && e.touches[0]) {
+                    handleMove(e.touches[0].clientX, e.touches[0].clientY);
+                    e.preventDefault();
+                }
+            };
+            
+            const handleEnd = () => { 
+                isDragging = false;
+                card3d.classList.remove('card-3d-dragging');
+            };
+            
+            card3d.addEventListener('mousedown', handleMouseDown);
+            card3d.addEventListener('touchstart', handleTouchStart, { passive: false });
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('touchmove', handleTouchMove, { passive: false });
+            document.addEventListener('mouseup', handleEnd);
+            document.addEventListener('touchend', handleEnd);
+            document.addEventListener('touchcancel', handleEnd);
+            
+            cardModalDragHandlers = {
+                mouseDown: handleMouseDown,
+                touchStart: handleTouchStart,
+                mouseMove: handleMouseMove,
+                touchMove: handleTouchMove,
+                end: handleEnd
+            };
             
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
@@ -2679,12 +2695,17 @@
         function closeCardModal() {
             const modal = document.getElementById('card-modal');
             const card3d = document.getElementById('card-3d');
-            
-            // Уничтожаем vanilla-tilt при закрытии
-            if (card3d && card3d.vanillaTilt) {
-                card3d.vanillaTilt.destroy();
+            if (card3d) card3d.classList.remove('card-3d-dragging');
+            if (cardModalDragHandlers && card3d) {
+                card3d.removeEventListener('mousedown', cardModalDragHandlers.mouseDown);
+                card3d.removeEventListener('touchstart', cardModalDragHandlers.touchStart);
+                document.removeEventListener('mousemove', cardModalDragHandlers.mouseMove);
+                document.removeEventListener('touchmove', cardModalDragHandlers.touchMove);
+                document.removeEventListener('mouseup', cardModalDragHandlers.end);
+                document.removeEventListener('touchend', cardModalDragHandlers.end);
+                document.removeEventListener('touchcancel', cardModalDragHandlers.end);
+                cardModalDragHandlers = null;
             }
-            
             modal.classList.remove('active');
             currentCard = null;
             document.body.style.overflow = '';
@@ -2692,6 +2713,33 @@
             document.body.style.width = '';
         }
         
+        function rotateCard(direction) {
+            const card3d = document.getElementById('card-3d');
+            if (!card3d) return;
+            
+            if (direction === 'left') {
+                currentCardRotation.y -= 15;
+            } else {
+                currentCardRotation.y += 15;
+            }
+            
+            card3d.style.transform = `rotateX(${currentCardRotation.x}deg) rotateY(${currentCardRotation.y}deg)`;
+            updateCardGloss(card3d);
+        }
+        
+        function updateCardGloss(card3dEl) {
+            if (!card3dEl) return;
+            var rx = currentCardRotation.x, ry = currentCardRotation.y;
+            var glossX = 50 + ry * 0.55;
+            var glossY = 50 - rx * 0.55;
+            glossX = Math.max(10, Math.min(90, glossX));
+            glossY = Math.max(10, Math.min(90, glossY));
+            card3dEl.style.setProperty('--gloss-x', glossX + '%');
+            card3dEl.style.setProperty('--gloss-y', glossY + '%');
+            var tilt = (Math.abs(rx) + Math.abs(ry)) / 90;
+            var shadowStrength = Math.min(1, tilt * 1.4);
+            card3dEl.style.setProperty('--shadow-strength', shadowStrength.toFixed(2));
+        }
         
         // Функции для уведомления (остаётся до закрытия или смахивания)
         function showNotification() {
